@@ -18,7 +18,8 @@ public class OficinaTramites{
 		setConsejoPopular(consejoPopular);
 		fichas = new ArrayList<FichaTecnicaDO>();	
 		cubicaciones = new ArrayList<Cubicacion>();
-
+		materiales = new ArrayList<Material>();
+		plantillas = new ArrayList<Plantilla>();
 	}	
 
 	//Encapsulamiento
@@ -34,7 +35,7 @@ public class OficinaTramites{
 	public String getConsejoPopular(){
 		return consejoPopular;		
 	}	
-	
+
 	//Métodos
 	public void addPlantilla(Plantilla plantilla){
 		plantillas.add(plantilla);			
