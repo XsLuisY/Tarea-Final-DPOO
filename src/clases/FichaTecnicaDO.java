@@ -11,9 +11,10 @@ public class FichaTecnicaDO {
 
 	//Constructor
 	public FichaTecnicaDO(Vivienda vivienda, String fechaLevantamiento){
-		
+		afectaciones = new ArrayList<Afectacion>();
+		mueblesAfectados = new ArrayList<Mueble>();
 	}
-	
+
 	//Encapsulamiento
 	public void setVivienda(Vivienda vivienda){
 		this.vivienda= vivienda;		
@@ -27,15 +28,25 @@ public class FichaTecnicaDO {
 	public String getFechaLevantamiento(){
 		return fechaLevantamiento;		
 	}	
-	
+
 	//Métodos
 	public boolean addMueble(Mueble mueble){
 		boolean agregado=false;
-		if(mueble!=null)
+		if(mueble!=null){
 			mueblesAfectados.add(mueble);
+			agregado=true;
+		}
 		return agregado;
 	}
-	
+
+	public boolean addAfectacion(Afectacion afectacion){
+		boolean agregado=false;
+		if(afectacion!=null){
+			afectaciones.add(afectacion);
+			agregado=true;
+		}
+		return agregado;
+	}
 }
 
 
