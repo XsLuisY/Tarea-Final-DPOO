@@ -29,6 +29,17 @@ public class MICONS {
 	public void mostrarCantElementoAfectado(){		
 	}
 	//4.........................................
-	public void mostrarMaterialMasCaro(){		
+	public void mostrarMaterialMasCaro(){
+		OficinaTramites aux= new OficinaTramites();
+		for(OficinaTramites o: oficinas)
+		if(o.buscarMaterialMasCaro().calcularPrecioTotal()>aux.buscarMaterialMasCaro().calcularPrecioTotal())
+			aux=o;					
 	}
 }
+
+
+
+
+
+
+

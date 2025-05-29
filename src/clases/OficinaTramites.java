@@ -22,6 +22,16 @@ public class OficinaTramites{
 		plantillas = new ArrayList<Plantilla>();
 	}	
 
+	public OficinaTramites() {
+		id=null;
+		consejoPopular=null;
+		fichas = new ArrayList<FichaTecnicaDO>();	
+		cubicaciones = new ArrayList<Cubicacion>();
+		materiales = new ArrayList<Material>();
+		plantillas = new ArrayList<Plantilla>();
+	}	
+
+
 	//Encapsulamiento
 	public void setId(String id){
 		this.id= id;
@@ -48,6 +58,16 @@ public class OficinaTramites{
 	}
 	public void addFichaTecnicaDO(FichaTecnicaDO ficha){
 		fichas.add(ficha);	
+	}
+
+	public Plantilla buscarMaterialMasCaro(){
+		Plantilla aux= new Plantilla();
+
+		for(Plantilla p : plantillas)
+			if(p.calcularPrecioTotal()>aux.calcularPrecioTotal())
+				aux=p;
+
+		return aux;
 	}
 }
 

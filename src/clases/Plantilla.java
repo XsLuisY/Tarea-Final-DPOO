@@ -7,9 +7,14 @@ public class Plantilla {
 	private FichaTecnicaDO ficha;
 
 	//Constructor
-	public Plantilla(Cubicacion cubicacion, FichaTecnicaDO ficha, double precioTotal){
+	public Plantilla(Cubicacion cubicacion, FichaTecnicaDO ficha){
 		setCubicacion(cubicacion);
 		setFichaTecnicaDO(ficha);
+	}
+
+	public Plantilla() {
+		cubicacion=null;
+		ficha=null;
 	}
 
 	//Encapsulamiento

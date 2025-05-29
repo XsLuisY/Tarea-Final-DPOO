@@ -6,8 +6,8 @@ public class FichaTecnicaDO {
 	//Atributos
 	private Vivienda vivienda;
 	private String fechaLevantamiento;
-	private ArrayList<Mueble> mueblesAfectados;
 	private ArrayList<Afectacion> afectaciones;
+	private ArrayList<Mueble> mueblesAfectados;
 
 	//Constructor
 	public FichaTecnicaDO(Vivienda vivienda, String fechaLevantamiento){
