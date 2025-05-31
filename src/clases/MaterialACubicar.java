@@ -5,7 +5,7 @@ public class MaterialACubicar {
 	//Atributos
 	private	Material material;
 	private double cantidad;
-
+	private int id;
 	//Constructor
 	public MaterialACubicar(Material material, double cantidad){
 		setCantidad(cantidad);
@@ -29,6 +29,14 @@ public class MaterialACubicar {
 	//Métodos
 	public double calcularPrecioTotal(){
 		return material.getPrecioUnitario()*cantidad;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }
 

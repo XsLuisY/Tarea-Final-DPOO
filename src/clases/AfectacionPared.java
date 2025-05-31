@@ -5,7 +5,7 @@ public class AfectacionPared extends Afectacion{
 	private Boolean esDeCarga;
 
 	//Constructor
-	public AfectacionPared(Boolean esDerrumbeTotal, String materialPredominante, Boolean esDeCarga){
+	public AfectacionPared(boolean esDerrumbeTotal, String materialPredominante, boolean esDeCarga){
 		super(esDerrumbeTotal,materialPredominante);
 		setEsDeCarga(esDeCarga);
 	}

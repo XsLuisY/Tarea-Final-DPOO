@@ -6,7 +6,8 @@ public class Material {
 	private String nombre;
 	private String unidadMedida;
 	private double precioUnitario;
-
+	private int id;
+	
 	//Constructor
 	public Material(String nombre, String unidadMedida, double precioUnitario){
 		setNombre(nombre);
@@ -32,6 +33,14 @@ public class Material {
 	}
 	public double getPrecioUnitario(){
 		return precioUnitario;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	//Métodos
