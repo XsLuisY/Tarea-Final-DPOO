@@ -29,8 +29,10 @@ public class MICONS {
 	public void mostrarCantElementoAfectado(){		
 	}
 	//4.........................................
+	/*TODO:
+		Arreglar utilizando el metodo de busqueda mencionado en clase*/
 	public void mostrarMaterialMasCaro(){
-		OficinaTramites aux= new OficinaTramites();
+		OficinaTramites aux=null;
 		for(OficinaTramites o: oficinas)
 		if(o.buscarMaterialMasCaro().calcularPrecioTotal()>aux.buscarMaterialMasCaro().calcularPrecioTotal())
 			aux=o;					
