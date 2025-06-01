@@ -1,5 +1,6 @@
 package clases;
 import java.util.ArrayList;
+import java.util.UUID;
 
 
 public class FichaTecnicaDO {
@@ -11,8 +12,10 @@ public class FichaTecnicaDO {
 
 	//Constructor
 	public FichaTecnicaDO(Vivienda vivienda, String fechaLevantamiento){
-		afectaciones = new ArrayList<Afectacion>();
-		mueblesAfectados = new ArrayList<Mueble>();
+	    setVivienda(vivienda);
+		setFechaLevantamiento(fechaLevantamiento);
+		afectaciones = new ArrayList<>();
+		mueblesAfectados = new ArrayList<>();
 	}
 
 	//Encapsulamiento
@@ -29,24 +32,109 @@ public class FichaTecnicaDO {
 		return fechaLevantamiento;		
 	}	
 
-	//Métodos
-	public boolean addMueble(Mueble mueble){
-		boolean agregado=false;
+	//Métodos CRUD de Mueble
+	//Create
+	public Boolean addMueble(String nombre, int cantidad){
+		Mueble mueble= new Mueble(nombre,cantidad);
+		Boolean agregado=false;
 		if(mueble!=null){
 			mueblesAfectados.add(mueble);
 			agregado=true;
 		}
 		return agregado;
 	}
-
-	public boolean addAfectacion(Afectacion afectacion){
-		boolean agregado=false;
+	//Read
+    public Mueble readByNameMueble(String nombre){
+    	Mueble mueble= null;
+    	int i=0;
+		Boolean found= false;
+		while(i<mueblesAfectados.size() && !found){
+			if(mueblesAfectados.get(i).getNombre().equalsIgnoreCase(nombre)){
+				found= true;
+				mueble= mueblesAfectados.get(i);
+			}
+			i++;
+		}
+		return mueble;
+    }
+    //Update
+    public Boolean updtMueble(String nombre,int newCant){
+    	Boolean exit= false;
+    	Mueble mueble= readByNameMueble(nombre);
+    	if(mueble!=null){
+    		mueble.setCantidad(newCant);
+    		exit= true;
+    	}
+    	return exit;
+    }
+    //Delete
+    public Boolean delMueble(String nombre){
+    	Boolean exit= false;
+    	Mueble mueble= readByNameMueble(nombre);
+    	if(mueble!=null){
+    		mueblesAfectados.remove(mueble);
+    		exit= true;
+    	}
+    	return exit;
+    }
+    
+	//Métodos CRUD de Afectacion
+	//Create
+	public Boolean addAfectacionTecho(Boolean esDerrumbeTotal, String materialPredominante,UUID id){
+	    Afectacion afectacion= new AfectacionTecho(esDerrumbeTotal,materialPredominante,id);
+		Boolean agregado=false;
 		if(afectacion!=null){
 			afectaciones.add(afectacion);
 			agregado=true;
 		}
 		return agregado;
 	}
+	public Boolean addAfectacionPared(Boolean esDerrumbeTotal, String materialPredominante,UUID id, Boolean esDeCarga){
+	    Afectacion afectacion= new AfectacionPared(esDerrumbeTotal,materialPredominante,id,esDeCarga);
+		Boolean agregado=false;
+		if(afectacion!=null){
+			afectaciones.add(afectacion);
+			agregado=true;
+		}
+		return agregado;
+	}
+	//Read
+    public Afectacion readByIDAfectacion(UUID id){
+    	Afectacion afectacion= null;
+    	int i=0;
+		Boolean found= false;
+		while(i<afectaciones.size() && !found){
+			if(afectaciones.get(i).getId()==id){
+				found= true;
+				afectacion= afectaciones.get(i);
+			}
+			i++;
+		}
+		return afectacion;
+    }
+    //Update
+    public Boolean updtAfectacion(UUID id, Boolean newEsDerrumbeTotal, String newMaterialPredominante, Boolean newEsDeCarga){
+    	Boolean exit= false;
+        Afectacion afectacion= readByIDAfectacion(id);
+    	if(afectacion!=null){
+    		afectacion.setEsDerrumbeTotal(newEsDerrumbeTotal);
+    		afectacion.setMaterialPredominante(newMaterialPredominante);
+    		if(afectacion instanceof AfectacionPared)
+    			((AfectacionPared)afectacion).setEsDeCarga(newEsDeCarga);
+    		exit= true;
+    	}
+    	return exit;
+    }
+    //Delete
+    public Boolean delAfectacion(UUID id){
+    	Boolean exit= false;
+        Afectacion afectacion= readByIDAfectacion(id);
+    	if(afectacion!=null){
+    		afectaciones.remove(afectacion);
+    		exit= true;
+    	}
+    	return exit;
+    }
 }
 
 

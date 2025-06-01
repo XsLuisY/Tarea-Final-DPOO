@@ -1,12 +1,14 @@
 package clases;
+import java.util.UUID;
+
 
 public class AfectacionPared extends Afectacion{
 	//Atributos
 	private Boolean esDeCarga;
 
 	//Constructor
-	public AfectacionPared(Boolean esDerrumbeTotal, String materialPredominante, Boolean esDeCarga){
-		super(esDerrumbeTotal,materialPredominante);
+	public AfectacionPared(Boolean esDerrumbeTotal, String materialPredominante, UUID id, Boolean esDeCarga){
+		super(esDerrumbeTotal,materialPredominante,id);
 		setEsDeCarga(esDeCarga);
 	}
 
@@ -29,6 +31,11 @@ public class AfectacionPared extends Afectacion{
 	public String getMaterialPredominante(){
 		return materialPredominante;
 	}
-
+	public UUID getId(){
+		return id;
+	}
+	public void setId(UUID id){
+		this.id= id;
+	}
 
 }

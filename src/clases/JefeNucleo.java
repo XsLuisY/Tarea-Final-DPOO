@@ -1,11 +1,17 @@
 package clases;
 
 import interfaces.Identificable;
+import java.util.UUID;
 
 public class JefeNucleo implements Identificable{
 private String nombre;
-private String id;
+private UUID id;
 
+//Constructor
+public JefeNucleo(String nombre, UUID id) {
+	setNombre(nombre);
+	setId(id);
+}
 //Encapsulamiento
 public String getNombre() {
 	return nombre;
@@ -13,10 +19,10 @@ public String getNombre() {
 public void setNombre(String nombre) {
 	this.nombre = nombre;
 }
-public String getId() {
+public UUID getId() {
 	return id;
 }
-public void setId(String id) {
+public void setId(UUID id) {
 	this.id = id;
 }
 

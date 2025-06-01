@@ -1,5 +1,5 @@
 package clases;
-
+import java.util.UUID;
 
 public class Vivienda{
 	private	JefeNucleo jefeNucleo;
@@ -7,19 +7,42 @@ public class Vivienda{
 	private	String documentoLegal;
 	private String tipologiaHabitacional;
 	private String tipologiaConstructiva;
-	private boolean facilidadTemporal;
-	private Dimensiones dimensiones;
-	private int cantNinos;
+	private Boolean facilidadTemporal;
+	private double largo;
+	private double ancho;
+	private double altura;
+	private int cantNinios;
 	private int cantAncianos;
 	private int cantEmbarazadas;
 	private int totalHabitantes;
 
+
+    //Constructor
+	public Vivienda(String nombreJefeN, UUID idJefeN, String direccion,
+			String documentoLegal, String tipologiaHabitacional,
+			String tipologiaConstructiva, Boolean facilidadTemporal,
+			double largo, double ancho, double altura, int cantNinios, int cantAncianos,
+			int cantEmbarazadas, int totalHabitantes) {
+		setJefeNucleo(nombreJefeN,idJefeN);
+		setDireccion(direccion);
+		setDocumentoLegal(documentoLegal);
+		setTipologiaHabitacional(tipologiaHabitacional);
+		setTipologiaConstructiva(tipologiaConstructiva);
+		setFacilidadTemporal(facilidadTemporal);
+		setLargo(largo);
+		setAncho(ancho);
+		setAltura(altura);
+		setCantNinios(cantNinios);
+		setCantAncianos(cantAncianos);
+		setCantEmbarazadas(cantEmbarazadas);
+		setTotalHabitantes(totalHabitantes);
+	}
 	//Encapsulamiento
-	public JefeNucleo getJefeNucleo() {
+	public JefeNucleo getJefeNucleo(){
 		return jefeNucleo;
 	}
-	public void setJefeNucleo(JefeNucleo jefeNucleo) {
-		this.jefeNucleo = jefeNucleo;
+	public void setJefeNucleo(String nombreJefeN,UUID idJefeN){
+		jefeNucleo= new JefeNucleo(nombreJefeN, idJefeN);
 	}
 	public String getDireccion() {
 		return direccion;
@@ -45,23 +68,35 @@ public class Vivienda{
 	public void setTipologiaConstructiva(String tipologiaConstructiva) {
 		this.tipologiaConstructiva = tipologiaConstructiva;
 	}
-	public boolean isFacilidadTemporal() {
+	public Boolean getFacilidadTemporal() {
 		return facilidadTemporal;
 	}
-	public void setFacilidadTemporal(boolean facilidadTemporal) {
+	public void setFacilidadTemporal(Boolean facilidadTemporal) {
 		this.facilidadTemporal = facilidadTemporal;
 	}
-	public Dimensiones getDimensiones() {
-		return dimensiones;
+	public double getLargo() {
+		return largo;
 	}
-	public void setDimensiones(Dimensiones dimensiones) {
-		this.dimensiones = dimensiones;
+	public void setLargo(double largo) {
+		this.largo = largo;
+	}
+	public double getAncho() {
+		return ancho;
+	}
+	public void setAncho(double ancho) {
+		this.ancho = ancho;
+	}
+	public double getAltura() {
+		return altura;
+	}
+	public void setAltura(double altura) {
+		this.altura = altura;
 	}
 	public int getCantNinos() {
-		return cantNinos;
+		return cantNinios;
 	}
-	public void setCantNinos(int cantNinos) {
-		this.cantNinos = cantNinos;
+	public void setCantNinios(int cantNinios) {
+		this.cantNinios = cantNinios;
 	}
 	public int getCantAncianos() {
 		return cantAncianos;
