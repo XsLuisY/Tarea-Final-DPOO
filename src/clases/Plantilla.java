@@ -5,7 +5,7 @@ public class Plantilla {
 	//Atributos
 	private Cubicacion cubicacion;
 	private FichaTecnicaDO ficha;
-
+	private int id;
 	//Constructor
 	public Plantilla(Cubicacion cubicacion, FichaTecnicaDO ficha){
 		setCubicacion(cubicacion);
@@ -30,12 +30,19 @@ public class Plantilla {
 	public FichaTecnicaDO setFichaTecnicaDO(){
 		return ficha;
 	}
-
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	//Métodos
 	public double calcularPrecioTotal(){
 		double precioTotal=0;
 
 		return precioTotal;
 	}
+
 
 }
