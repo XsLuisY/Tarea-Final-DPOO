@@ -9,7 +9,8 @@ public class FichaTecnicaDO {
 	private String fechaLevantamiento;
 	private ArrayList<Afectacion> afectaciones;
 	private ArrayList<Mueble> mueblesAfectados;
-
+	private int id;
+	
 	//Constructor
 	public FichaTecnicaDO(Vivienda vivienda, String fechaLevantamiento){
 	    setVivienda(vivienda);
@@ -32,7 +33,7 @@ public class FichaTecnicaDO {
 		return fechaLevantamiento;		
 	}	
 
-	//Métodos CRUD de Mueble
+	//MÃ©todos CRUD de Mueble
 	//Create
 	public Boolean addMueble(String nombre, int cantidad){
 		Mueble mueble= new Mueble(nombre,cantidad);
@@ -42,7 +43,9 @@ public class FichaTecnicaDO {
 			agregado=true;
 		}
 		return agregado;
-	}
+	
+    }
+  
 	//Read
     public Mueble readByNameMueble(String nombre){
     	Mueble mueble= null;
@@ -78,17 +81,19 @@ public class FichaTecnicaDO {
     	return exit;
     }
     
-	//Métodos CRUD de Afectacion
+	//MÃ©todos CRUD de Afectacion
 	//Create
 	public Boolean addAfectacionTecho(Boolean esDerrumbeTotal, String materialPredominante,UUID id){
 	    Afectacion afectacion= new AfectacionTecho(esDerrumbeTotal,materialPredominante,id);
 		Boolean agregado=false;
+    
 		if(afectacion!=null){
 			afectaciones.add(afectacion);
 			agregado=true;
 		}
 		return agregado;
 	}
+  
 	public Boolean addAfectacionPared(Boolean esDerrumbeTotal, String materialPredominante,UUID id, Boolean esDeCarga){
 	    Afectacion afectacion= new AfectacionPared(esDerrumbeTotal,materialPredominante,id,esDeCarga);
 		Boolean agregado=false;
@@ -135,6 +140,3 @@ public class FichaTecnicaDO {
     	}
     	return exit;
     }
-}
-
-

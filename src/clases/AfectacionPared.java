@@ -7,8 +7,9 @@ public class AfectacionPared extends Afectacion{
 	private Boolean esDeCarga;
 
 	//Constructor
+ crudMICONSOficinaT
 	public AfectacionPared(Boolean esDerrumbeTotal, String materialPredominante, UUID id, Boolean esDeCarga){
-		super(esDerrumbeTotal,materialPredominante,id);
+		super(esDerrumbeTotal,materialPredominante
 		setEsDeCarga(esDeCarga);
 	}
 

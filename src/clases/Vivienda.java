@@ -15,6 +15,9 @@ public class Vivienda{
 	private int cantAncianos;
 	private int cantEmbarazadas;
 	private int totalHabitantes;
+	private double largo; 
+	private double ancho;
+	private double altura;
 
 
     //Constructor
@@ -116,6 +119,23 @@ public class Vivienda{
 	public void setTotalHabitantes(int totalHabitantes) {
 		this.totalHabitantes = totalHabitantes;
 	}
-
+	public double getLargo() {
+		return largo;
+	}
+	public void setLargo(double largo) {
+		this.largo = largo;
+	}
+	public double getAncho() {
+		return ancho;
+	}
+	public void setAncho(double ancho) {
+		this.ancho = ancho;
+	}
+	public double getAltura() {
+		return altura;
+	}
+	public void setAltura(double altura) {
+		this.altura = altura;
+	}
 }
 
