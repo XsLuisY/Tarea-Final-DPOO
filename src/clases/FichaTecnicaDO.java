@@ -9,7 +9,6 @@ public class FichaTecnicaDO {
 	private String fechaLevantamiento;
 	private ArrayList<Afectacion> afectaciones;
 	private ArrayList<Mueble> mueblesAfectados;
-	private int id;
 	
 	//Constructor
 	public FichaTecnicaDO(Vivienda vivienda, String fechaLevantamiento){
@@ -27,7 +26,16 @@ public class FichaTecnicaDO {
 		return vivienda;		
 	}
 	public void setFechaLevantamiento(String fechaLevantamiento){
+	  if (fechaLevantamiento == null) {
+    throw new NullPointerException("La fecha es null, algo raro pasó xD");
+}
+else{
+   if (fechaLevantamiento.trim().isEmpty()) {
+    throw new IllegalArgumentException("La fecha de levantamiento está vacía o solo tiene espacios. Por favor introduzca una fecha de levantamiento");
+}
+else
 		this.fechaLevantamiento= fechaLevantamiento;
+	}
 	}
 	public String getFechaLevantamiento(){
 		return fechaLevantamiento;		
@@ -140,3 +148,4 @@ public class FichaTecnicaDO {
     	}
     	return exit;
     }
+}

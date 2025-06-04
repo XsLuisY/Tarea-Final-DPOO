@@ -1,15 +1,17 @@
 package clases;
+import java.util.UUID;
 
 public class Plantilla {
 
 	//Atributos
 	private Cubicacion cubicacion;
 	private FichaTecnicaDO ficha;
-	private int id;
+	private UUID id;
 	//Constructor
 	public Plantilla(Cubicacion cubicacion, FichaTecnicaDO ficha){
 		setCubicacion(cubicacion);
 		setFichaTecnicaDO(ficha);
+		this.id= UUID.randomUUID();
 	}
 
 	public Plantilla() {
@@ -30,14 +32,14 @@ public class Plantilla {
 	public FichaTecnicaDO setFichaTecnicaDO(){
 		return ficha;
 	}
-	public int getId() {
+	public UUID getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 	
-	//Métodos
+	//Mï¿½todos
 	public double calcularPrecioTotal(){
 		double precioTotal=0;
 

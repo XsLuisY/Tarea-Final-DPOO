@@ -1,18 +1,19 @@
 package clases;
-
+import java.util.UUID;
 public class Material {
 	//Atributos
 
 	private String nombre;
 	private String unidadMedida;
 	private double precioUnitario;
-	private int id;
+	private UUID id;
 	
 	//Constructor
-	public Material(String nombre, String unidadMedida, double precioUnitario){
+	public Material(String nombre, String unidadMedida, double precioUnitario, UUID id){
 		setNombre(nombre);
 		setUnidadMedida(unidadMedida);
-		setPrecioUnitario(precioUnitario);				
+		setPrecioUnitario(precioUnitario);
+		this.id= UUID.randomUUID();
 	}
 
 	//Encapsulamiento
@@ -35,13 +36,13 @@ public class Material {
 		return precioUnitario;
 	}
 
-	public int getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 	
-	//Métodos
+	//Mï¿½todos
 }
