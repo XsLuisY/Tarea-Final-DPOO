@@ -1,42 +1,44 @@
 package clases;
 
+import java.util.UUID;
+
 public class Plantilla {
 
 	//Atributos
 	private Cubicacion cubicacion;
 	private FichaTecnicaDO ficha;
-	private int id;
+	private UUID id;
+	
 	//Constructor
 	public Plantilla(Cubicacion cubicacion, FichaTecnicaDO ficha){
 		setCubicacion(cubicacion);
 		setFichaTecnicaDO(ficha);
 	}
 
-	public Plantilla() {
-		cubicacion=null;
-		ficha=null;
-	}
-
 	//Encapsulamiento
 	public void setCubicacion(Cubicacion cubicacion){
-		this.cubicacion= cubicacion;
+		if(cubicacion!=null)
+			this.cubicacion= cubicacion;
+		else throw new IllegalArgumentException("La cubicación no puede ser nula");
 	}
 	public Cubicacion getCubicacion(){
 		return cubicacion;
 	}
 	public void setFichaTecnicaDO(FichaTecnicaDO ficha){
-		this.ficha= ficha;		
+		if(ficha!=null)
+			this.ficha= ficha;	
+		else throw new IllegalArgumentException("La Ficha Técnica de Daños Ocasionados no puede ser nula");
 	}
 	public FichaTecnicaDO setFichaTecnicaDO(){
 		return ficha;
 	}
-	public int getId() {
+	public UUID getId() {
 		return id;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setId() {
+		id=UUID.randomUUID();
 	}
-	
+
 	//Métodos
 	public double calcularPrecioTotal(){
 		double precioTotal=0;
