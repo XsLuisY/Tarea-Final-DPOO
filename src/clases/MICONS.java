@@ -1,6 +1,5 @@
 package clases;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class MICONS {
 	private ArrayList<OficinaTramites> oficinas;
@@ -11,9 +10,9 @@ public class MICONS {
 		oficinas = new ArrayList<>();
 		viviendas = new ArrayList<>();
 	}
-	//Métodos CRUD de OficinaTramites
+	//Mï¿½todos CRUD de OficinaTramites
 	//Create
-	public Boolean addOficinaTramites(UUID id,String consejoPopular){
+	public Boolean addOficinaTramites(String id,String consejoPopular){
 		Boolean agregado= false;
 		OficinaTramites oficinaT= new OficinaTramites(id,consejoPopular);
 		if(oficinaT!= null){
@@ -23,12 +22,12 @@ public class MICONS {
 		return agregado;
 	}
 	//Read
-	public OficinaTramites readByIDOficinaTramites(UUID id){
+	public OficinaTramites readByIDOficinaTramites(String id){
 		OficinaTramites oficina = null;
 		int i=0;
 		Boolean found= false;
 		while(i<oficinas.size() && !found){
-			if(oficinas.get(i).getId()==id){
+			if(oficinas.get(i).getId().equals(id)){
 				found= true;
 				oficina= oficinas.get(i);
 			}
@@ -37,7 +36,7 @@ public class MICONS {
 		return oficina;
 	}
 	//Update
-	public Boolean updateOficinaTramites(UUID id, String consejoPoular, String nuevoConsejo){
+	public Boolean updateOficinaTramites(String id, String consejoPoular, String nuevoConsejo){
 		OficinaTramites oficina= readByIDOficinaTramites(id);
 		Boolean exit= false;
 		if(oficina != null){
@@ -47,7 +46,7 @@ public class MICONS {
 		return exit;
 	}
 	//Delete
-	public Boolean deleteOficinaTramites(UUID id){
+	public Boolean deleteOficinaTramites(String id){
 		OficinaTramites oficina = readByIDOficinaTramites(id);
 		Boolean exit = false;
 		if(oficina != null){
@@ -57,9 +56,9 @@ public class MICONS {
 		return exit;
 	}
 
-	// Métodos CRUD de Vivienda
+	// Mï¿½todos CRUD de Vivienda
 	//Create
-	public Boolean addVivienda(String nombreJefeN, UUID idJefeN, String direccion, String documentoLegal, String tipologiaHabitacional, String tipologiaConstructiva, Boolean facilidadTemporal, double largo, double ancho, double altura, int cantNinios, int cantAncianos, int cantEmbarazadas, int totalHabitantes){
+	public Boolean addVivienda(String nombreJefeN, String idJefeN, String direccion, String documentoLegal, String tipologiaHabitacional, String tipologiaConstructiva, Boolean facilidadTemporal, double largo, double ancho, double altura, int cantNinios, int cantAncianos, int cantEmbarazadas, int totalHabitantes){
 		Boolean agg= false;
 		Vivienda vivienda= new Vivienda(nombreJefeN, idJefeN, direccion, documentoLegal, tipologiaHabitacional, tipologiaConstructiva, facilidadTemporal, largo, ancho, altura, cantNinios, cantAncianos, cantEmbarazadas, totalHabitantes);
 		if(vivienda!=null){
@@ -69,12 +68,12 @@ public class MICONS {
 		return agg;
 	}
 	//Read
-	public Vivienda readByIDVivienda(UUID id){
+	public Vivienda readByIDVivienda(String id){
 		Vivienda vivienda= null;
 		int i=0;
 		Boolean found= false;
 		while(i<viviendas.size() && !found){
-			if(viviendas.get(i).getJefeNucleo().getId() == id){
+			if(viviendas.get(i).getJefeNucleo().getId().equals(id)){
 				found= true;
 				vivienda= viviendas.get(i);
 			}

@@ -9,7 +9,7 @@ public class AfectacionTecho extends Afectacion{
 	}
 	public void setEsDerrumbeTotal(Boolean esDerrumbeTotal){
 	  if(esDerrumbeTotal==null)
-	    throw new NullPointerException("Algo raro pasó xd");
+	    throw new NullPointerException("La variable no puede ser null");
 	    else
 		this.esDerrumbeTotal = esDerrumbeTotal;	
 	}
@@ -20,16 +20,14 @@ public class AfectacionTecho extends Afectacion{
 	}
 
 	public void setMaterialPredominante(String materialPredominante){
-	  if (materialPredominante== null) {
-    throw new NullPointerException("El material es null, algo raro pasó xD");
-}
-else{
-   if (nombre.trim().isEmpty()) {
-    throw new IllegalArgumentException("El nombre del material está vacío o solo tiene espacios. Por favor introduzca un nombre para el material");
-}
-else
-		this.materialPredominante= materialPredominante;
-	}
+	  if (materialPredominante != null && !materialPredominante.trim().isEmpty()) {
+    if(materialPredominante.matches()("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"))
+      this.materialPredominante = materialPredominante.trim().replaceAll("\\s+", " ");
+    else
+      throw new IllegalArgumentException("El material predominante solo debe tener letras");
+   }
+   else
+		throw new IllegalArgumentException("El material predominante no puede estar vacío o ser null");
 	}
 
 	public String getMaterialPredominante(){

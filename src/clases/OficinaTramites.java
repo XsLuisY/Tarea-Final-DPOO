@@ -1,12 +1,11 @@
 package clases;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class OficinaTramites{
 
 	//Atributos
-	private UUID id;
+	private String id;
 	private String consejoPopular;
 	private ArrayList<Plantilla> plantillas;
 	private ArrayList<Material> materiales;
@@ -14,8 +13,8 @@ public class OficinaTramites{
 	private ArrayList<FichaTecnicaDO> fichas;
 
 	//Constructor
-	public OficinaTramites(UUID id, String consejoPopular){
-		this.id= UUID.randomUUID();
+	public OficinaTramites(String id, String consejoPopular){
+		setId(id);
 		setConsejoPopular(consejoPopular);
 		fichas = new ArrayList<FichaTecnicaDO>();	
 		cubicaciones = new ArrayList<Cubicacion>();
@@ -145,7 +144,7 @@ public class OficinaTramites{
 		return consejoPopular;		
 	}	
 
-	//Métodos
+	//Mï¿½todos
 	public void addPlantilla(Plantilla plantilla){
 		plantillas.add(plantilla);			
 	}

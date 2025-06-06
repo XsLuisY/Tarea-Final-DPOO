@@ -26,16 +26,11 @@ public class FichaTecnicaDO {
 		return vivienda;		
 	}
 	public void setFechaLevantamiento(String fechaLevantamiento){
-	  if (fechaLevantamiento == null) {
-    throw new NullPointerException("La fecha es null, algo raro pasó xD");
-}
-else{
-   if (fechaLevantamiento.trim().isEmpty()) {
-    throw new IllegalArgumentException("La fecha de levantamiento está vacía o solo tiene espacios. Por favor introduzca una fecha de levantamiento");
-}
-else
-		this.fechaLevantamiento= fechaLevantamiento;
-	}
+	  if (fechaLevantamiento != null && !fechaLevantamiento.trim().isEmpty()) {
+      this.fechaLevantamiento = fechaLevantamiento.trim().replaceAll("\\s+", " ");
+   }
+   else
+		throw new IllegalArgumentException("La fecha no puede estar vacía o ser null");
 	}
 	public String getFechaLevantamiento(){
 		return fechaLevantamiento;		
