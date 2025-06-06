@@ -1,45 +1,38 @@
 package clases;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Cubicacion  {
 
 	//Atributos	
 	private ArrayList<MaterialACubicar> materiales;
-	private int id;
-	
+	private UUID id;
+
 	//Constructor
 	public Cubicacion(){
 		materiales = new ArrayList<MaterialACubicar>();
-		setId(id);
+		setId();
 	}
 
 	//Encapsulamiento
-
-	public int getId() {
+	public UUID getId() {
 		return id;
 	}
-
-	public void setId(int id) {
-		this.id = id;
+	public void setId() {
+		id=UUID.randomUUID();
 	}
-	
 	public ArrayList<MaterialACubicar> getMateriales(){
 		return materiales;
 	}
 
-	public void setMateriales(ArrayList<MaterialACubicar> materiales){
-		this.materiales=materiales;	
-	}
-
+	//CRUD-MaterialACubicar
 	//Create	
 	public MaterialACubicar createMaterialACubicar(Material material, double cantidad){
-		MaterialACubicar newMaterial= new MaterialACubicar(material, cantidad); 
-		return newMaterial;
+		return new MaterialACubicar(material, cantidad); 
 	}
-	
 	//Read
-	public MaterialACubicar searchMaterialACubicar(int id){
+	public MaterialACubicar searchMaterialACubicar(UUID id){
 		boolean encontrado=false;
 		MaterialACubicar auxMaterial= null;
 		for(int i=0; i<materiales.size() && !encontrado; i++)
@@ -49,30 +42,33 @@ public class Cubicacion  {
 			}					
 		return auxMaterial; 			
 	}
-
 	//Update
-	public void updateMaterialACubicar(int id, Material material, double cantidad){
-		materiales.get(id).setMaterial(material);
-		materiales.get(id).setCantidad(cantidad);
+	public void updateMaterialACubicar(UUID id, Material material, double cantidad){
+		boolean encontrado=false;
+
+		for (int i=0;i<materiales.size() && !encontrado; i++)
+			if(materiales.get(i).getId()==id){
+				materiales.get(i).setMaterial(material);
+				materiales.get(i).setCantidad(cantidad);
+				encontrado=true;
+			}
 	}	
-	
 	//Delete
-	public void deleteMaterialACubicar(int id){
-		materiales.remove(id);
+	public void deleteMaterialACubicar(UUID id){
+		boolean encontrado=false;
+		for (int i=0;i<materiales.size() && !encontrado; i++)
+			if(materiales.get(i).getId()==id){
+				materiales.remove(i);		
+				encontrado=true;
+			}
 	}
 
 	//Métodos
-	public boolean addMaterialACubicar(MaterialACubicar material){
-		boolean agregado=false;
-		if(material!=null){
+	public void addMaterialACubicar(MaterialACubicar material){
+		if(material!=null)
 			materiales.add(material);
-			agregado=true;
-		}
-		//		else
-		//lanzar excepcion
-		return agregado;
+		else throw new IllegalArgumentException("El material no puede ser nulo");
 	}
-
 	public double calcularPrecioTotal(){
 		double precioTotal=0;
 		for(MaterialACubicar m: materiales){
@@ -81,6 +77,6 @@ public class Cubicacion  {
 		return precioTotal;
 	}
 
-	
+
 
 }
