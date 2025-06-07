@@ -18,16 +18,31 @@ public class AfectacionPared extends Afectacion{
 		return esDeCarga;
 	}
 	public void setEsDeCarga(Boolean esDeCarga) {
+	  if(esDeCarga==null)
+	    throw new NullPointerException("La variable no puede ser null");
+	    else
 		this.esDeCarga = esDeCarga;
 	}
+}
 	public void setEsDerrumbeTotal(Boolean esDerrumbeTotal){
+	  if(esDerrumbeTotal==null)
+	    throw new NullPointerException("La variable no puede ser null");
+	    else
 		this.esDerrumbeTotal = esDerrumbeTotal;	
 	}
+}
 	public Boolean getEsDerrumbeTotal(){
 		return esDerrumbeTotal;
 	}
 	public void setMaterialPredominante(String materialPredominante){
-		this.materialPredominante= materialPredominante;
+	  if (materialPredominante != null && !materialPredominante.trim().isEmpty()) {
+    if(materialPredominante.matches()("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"))
+      this.materialPredominante = materialPredominante.trim().replaceAll("\\s+", " ");
+    else
+      throw new IllegalArgumentException("El material predominante solo debe tener letras");
+   }
+   else
+		throw new IllegalArgumentException("El material predominante no puede estar vacío o ser null");
 	}
 	public String getMaterialPredominante(){
 		return materialPredominante;

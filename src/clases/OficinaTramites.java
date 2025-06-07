@@ -1,12 +1,11 @@
 package clases;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class OficinaTramites{
 
 	//Atributos
-	private UUID id;
+	private String id;
 	private String consejoPopular;
 	private ArrayList<Plantilla> plantillas;
 	private ArrayList<Material> materiales;
@@ -14,8 +13,8 @@ public class OficinaTramites{
 	private ArrayList<FichaTecnicaDO> fichas;
 
 	//Constructor
-	public OficinaTramites(UUID id, String consejoPopular){
-		this.id= UUID.randomUUID();
+	public OficinaTramites(String id, String consejoPopular){
+		setId(id);
 		setConsejoPopular(consejoPopular);
 		fichas = new ArrayList<FichaTecnicaDO>();	
 		cubicaciones = new ArrayList<Cubicacion>();
@@ -32,10 +31,10 @@ public class OficinaTramites{
 	}
 	public void setConsejoPopular(String consejoPopular){
 		if(consejoPopular!=null && !consejoPopular.trim().isEmpty())
-			if(consejoPopular.matches("[a-zA-Z·ÈÌÛ˙¡…Õ”⁄Ò— ]+"))
+			if(consejoPopular.matches("[a-zA-Z√°√©√≠√≥√∫√Å√â√ç√ì√ö√±√ë ]+"))
 				this.consejoPopular=consejoPopular.trim().replaceAll("\\s+", " ");		
-			else throw new IllegalArgumentException("El nombre del Consejo Popular no puede contiene n˙meros o caracteres no v·lidos.");
-		else throw new IllegalArgumentException("El nombre del Consejo Popular no puede estar vacÌo.");
+			else throw new IllegalArgumentException("El nombre del Consejo Popular no puede contiene n√∫meros o caracteres no v√°lidos.");
+		else throw new IllegalArgumentException("El nombre del Consejo Popular no puede estar vac√≠o.");
 	}
 	public String getConsejoPopular(){
 		return consejoPopular;		
@@ -46,6 +45,7 @@ public class OficinaTramites{
 	public FichaTecnicaDO createFichaTecnicaDO(Vivienda vivienda, String fechaLevantamiento){
 		FichaTecnicaDO newFicha= new FichaTecnicaDO(vivienda,fechaLevantamiento); 
 		return newFicha;
+
 	}
 	public void addFichaTecnicaDO(FichaTecnicaDO ficha){
 		fichas.add(ficha);	
@@ -181,7 +181,7 @@ public class OficinaTramites{
 	//-----------------------------------------------------------------
 
 
-	//MÈtodos
+	//M√©todos
 
 	public Plantilla buscarMaterialMasCaro(){
 		Plantilla aux= new Plantilla(null,null);

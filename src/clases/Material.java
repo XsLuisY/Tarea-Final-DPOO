@@ -1,5 +1,4 @@
 package clases;
-
 import java.util.UUID;
 
 public class Material {
@@ -8,21 +7,22 @@ public class Material {
 	private String unidadMedida;
 	private double precioUnitario;
 	private UUID id;
-
+  
 	//Constructor
-	public Material(String nombre, String unidadMedida, double precioUnitario){
+	public Material(String nombre, String unidadMedida, double precioUnitario, UUID id){
 		setNombre(nombre);
 		setUnidadMedida(unidadMedida);
-		setPrecioUnitario(precioUnitario);				
+		setPrecioUnitario(precioUnitario);
+		this.id= UUID.randomUUID();
 	}
 
 	//Encapsulamiento
 	public void setNombre(String nombre){
 		if(nombre!=null && !nombre.trim().isEmpty())
-			if(nombre.matches("[a-zA-Z·ÈÌÛ˙¡…Õ”⁄Ò— ]+"))
+			if(nombre.matches("[a-zA-Z√°√©√≠√≥√∫√Å√â√ç√ì√ö√±√ë ]+"))
 				this.nombre=nombre.trim().replaceAll("\\s+", " ");		
-			else throw new IllegalArgumentException("El nombre del Consejo Popular no puede contiene n˙meros o caracteres no v·lidos.");
-		else throw new IllegalArgumentException("El nombre del Consejo Popular no puede estar vacÌo.");		
+			else throw new IllegalArgumentException("El nombre del Consejo Popular no puede contiene n√∫meros o caracteres no v√°lidos.");
+		else throw new IllegalArgumentException("El nombre del Consejo Popular no puede estar vac√≠o.");		
 	}
 	public String getNombre(){
 		return nombre;		
@@ -43,6 +43,7 @@ public class Material {
 	public double getPrecioUnitario(){
 		return precioUnitario;
 	}
+
 	public UUID getId() {
 		return id;
 	}
@@ -50,5 +51,5 @@ public class Material {
 		id=UUID.randomUUID();
 	}
 
-	//MÈtodos
-}
+	//M√©todos
+ }

@@ -9,7 +9,6 @@ public class FichaTecnicaDO {
 	private String fechaLevantamiento;
 	private ArrayList<Afectacion> afectaciones;
 	private ArrayList<Mueble> mueblesAfectados;
-	private int id;
 	
 	//Constructor
 	public FichaTecnicaDO(Vivienda vivienda, String fechaLevantamiento){
@@ -27,7 +26,11 @@ public class FichaTecnicaDO {
 		return vivienda;		
 	}
 	public void setFechaLevantamiento(String fechaLevantamiento){
-		this.fechaLevantamiento= fechaLevantamiento;
+	  if (fechaLevantamiento != null && !fechaLevantamiento.trim().isEmpty()) {
+      this.fechaLevantamiento = fechaLevantamiento.trim().replaceAll("\\s+", " ");
+   }
+   else
+		throw new IllegalArgumentException("La fecha no puede estar vacía o ser null");
 	}
 	public String getFechaLevantamiento(){
 		return fechaLevantamiento;		
@@ -140,3 +143,4 @@ public class FichaTecnicaDO {
     	}
     	return exit;
     }
+}

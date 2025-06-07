@@ -13,7 +13,7 @@ public abstract class Afectacion {
 		setMaterialPredominante(materialPredominante);
 		this.id= UUID.randomUUID();
 	}
-	//Métodos
+	//Mï¿½todos
 	protected abstract void setEsDerrumbeTotal(Boolean esDerrumbeTotal);
 	protected abstract Boolean getEsDerrumbeTotal();
 	protected abstract void setMaterialPredominante(String materialPredominante);
