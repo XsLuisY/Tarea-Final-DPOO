@@ -1,44 +1,46 @@
 package clases;
 
+import java.util.UUID;
+
 public class MaterialACubicar {
 
 	//Atributos
 	private	Material material;
 	private double cantidad;
-	private int id;
+	private UUID id;
+	
 	//Constructor
 	public MaterialACubicar(Material material, double cantidad){
 		setCantidad(cantidad);
 		setMaterial(material);		
 	}
 
-	//Encapsulamient
+	//Encapsulamiento	
+	public void setMaterial(Material material){
+		if(material!=null)
+			this.material=material;
+		else throw new IllegalArgumentException("El material no puede ser nulo");
+	}
+	public Material getMaterial(){
+		return material;	
+	}
 	public void setCantidad(double cantidad){
-		this.cantidad=cantidad;
+		if(cantidad>0)
+			this.cantidad=cantidad;
+		else throw new IllegalArgumentException("La cantidad de material debe ser mayor a 0");
 	}
 	public double getCantidad(){
 		return cantidad;	
 	}
-	public void setMaterial(Material material){
-		this.material=material;
+	public UUID getId() {
+		return id;
 	}
-	public Material getMaterial(){
-		return material;	
+	public void setId() {
+		id = UUID.randomUUID();
 	}
 
 	//Métodos
 	public double calcularPrecioTotal(){
 		return material.getPrecioUnitario()*cantidad;
 	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 }
-
-
-
