@@ -13,7 +13,7 @@ public class AfectacionTecho extends Afectacion{
 	    else
 		this.esDerrumbeTotal = esDerrumbeTotal;	
 	}
-}
+
 
 	public Boolean getEsDerrumbeTotal(){
 		return esDerrumbeTotal;
@@ -21,7 +21,7 @@ public class AfectacionTecho extends Afectacion{
 
 	public void setMaterialPredominante(String materialPredominante){
 	  if (materialPredominante != null && !materialPredominante.trim().isEmpty()) {
-    if(materialPredominante.matches()("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"))
+    if(materialPredominante.matches("[a-zA-Z��1234567890 ]+"))
       this.materialPredominante = materialPredominante.trim().replaceAll("\\s+", " ");
     else
       throw new IllegalArgumentException("El material predominante solo debe tener letras");

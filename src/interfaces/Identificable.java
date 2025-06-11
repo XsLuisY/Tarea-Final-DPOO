@@ -1,6 +1,8 @@
 package interfaces;
 
+import java.util.UUID;
+
 public interface Identificable {
-	public String getId();
-	public void setId(String id);
+	public UUID getId();
+	public void setId();
 }
