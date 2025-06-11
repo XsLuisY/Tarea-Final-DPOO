@@ -1,5 +1,6 @@
 package clases;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class MICONS {
 	private ArrayList<OficinaTramites> oficinas;
@@ -7,14 +8,14 @@ public class MICONS {
 
 	//Constructor 
 	public MICONS(){
-		oficinas = new ArrayList<>();
-		viviendas = new ArrayList<>();
+		oficinas = new ArrayList<OficinaTramites>();
+		viviendas = new ArrayList<Vivienda>();
 	}
-	//M�todos CRUD de OficinaTramites
+	//Metodos CRUD de OficinaTramites
 	//Create
-	public Boolean addOficinaTramites(String id,String consejoPopular){
+	public Boolean addOficinaTramites(String consejoPopular){
 		Boolean agregado= false;
-		OficinaTramites oficinaT= new OficinaTramites(id,consejoPopular);
+		OficinaTramites oficinaT= new OficinaTramites(consejoPopular);
 		if(oficinaT!= null){
 		oficinas.add(oficinaT);
 		agregado= true;
@@ -56,7 +57,7 @@ public class MICONS {
 		return exit;
 	}
 
-	// M�todos CRUD de Vivienda
+	// Metodos CRUD de Vivienda
 	//Create
 	public Boolean addVivienda(String nombreJefeN, String idJefeN, String direccion, String documentoLegal, String tipologiaHabitacional, String tipologiaConstructiva, Boolean facilidadTemporal, double largo, double ancho, double altura, int cantNinios, int cantAncianos, int cantEmbarazadas, int totalHabitantes){
 		Boolean agg= false;
@@ -68,7 +69,7 @@ public class MICONS {
 		return agg;
 	}
 	//Read
-	public Vivienda readByIDVivienda(String id){
+	public Vivienda readByIDVivienda(UUID id){
 		Vivienda vivienda= null;
 		int i=0;
 		Boolean found= false;
@@ -114,6 +115,7 @@ public class MICONS {
 		return exit;
 	}
 
+	/*
 	//Reportes
 
 	//Anthony
@@ -124,14 +126,15 @@ public class MICONS {
 	public void mostrarCantElementoAfectado(){		
 	}
 	//4.........................................
-	/*TODO:
-		Arreglar utilizando el metodo de busqueda mencionado en clase*/
+		Arreglar utilizando el metodo de busqueda mencionado en clase
+	
 	public void mostrarMaterialMasCaro(){
 		OficinaTramites aux=null;
 		for(OficinaTramites o: oficinas)
 			if(o.buscarMaterialMasCaro().calcularPrecioTotal()>aux.buscarMaterialMasCaro().calcularPrecioTotal())
 				aux=o;					
 	}
+*/
 }
 
 

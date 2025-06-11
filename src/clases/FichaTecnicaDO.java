@@ -9,13 +9,14 @@ public class FichaTecnicaDO {
 	private String fechaLevantamiento;
 	private ArrayList<Afectacion> afectaciones;
 	private ArrayList<Mueble> mueblesAfectados;
+	private UUID id;
 	
 	//Constructor
 	public FichaTecnicaDO(Vivienda vivienda, String fechaLevantamiento){
 	    setVivienda(vivienda);
 		setFechaLevantamiento(fechaLevantamiento);
-		afectaciones = new ArrayList<>();
-		mueblesAfectados = new ArrayList<>();
+		afectaciones = new ArrayList<Afectacion>();
+		mueblesAfectados = new ArrayList<Mueble>();
 	}
 
 	//Encapsulamiento
@@ -35,6 +36,14 @@ public class FichaTecnicaDO {
 	public String getFechaLevantamiento(){
 		return fechaLevantamiento;		
 	}	
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId() {
+		id=UUID.randomUUID();
+	}
 
 	//Métodos CRUD de Mueble
 	//Create

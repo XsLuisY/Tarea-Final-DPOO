@@ -13,7 +13,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 
-public class UIPreguntarMatPredPared extends JFrame {
+public class PreguntarMatPredPared extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -26,7 +26,7 @@ public class UIPreguntarMatPredPared extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UIPreguntarMatPredPared frame = new UIPreguntarMatPredPared();
+					PreguntarMatPredPared frame = new PreguntarMatPredPared();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -38,7 +38,7 @@ public class UIPreguntarMatPredPared extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public UIPreguntarMatPredPared() {
+	public PreguntarMatPredPared() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 300, 140);
 		contentPane = new JPanel();

@@ -1,11 +1,12 @@
 package clases;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class OficinaTramites{
 
 	//Atributos
-	private String id;
+	private UUID id;
 	private String consejoPopular;
 	private ArrayList<Plantilla> plantillas;
 	private ArrayList<Material> materiales;
@@ -13,8 +14,8 @@ public class OficinaTramites{
 	private ArrayList<FichaTecnicaDO> fichas;
 
 	//Constructor
-	public OficinaTramites(String id, String consejoPopular){
-		setId(id);
+	public OficinaTramites(String consejoPopular){
+		setId();
 		setConsejoPopular(consejoPopular);
 		fichas = new ArrayList<FichaTecnicaDO>();	
 		cubicaciones = new ArrayList<Cubicacion>();
@@ -31,7 +32,7 @@ public class OficinaTramites{
 	}
 	public void setConsejoPopular(String consejoPopular){
 		if(consejoPopular!=null && !consejoPopular.trim().isEmpty())
-			if(consejoPopular.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"))
+			if(consejoPopular.matches("[a-zA-Z��1234567890 ]+"))
 				this.consejoPopular=consejoPopular.trim().replaceAll("\\s+", " ");		
 			else throw new IllegalArgumentException("El nombre del Consejo Popular no puede contiene números o caracteres no válidos.");
 		else throw new IllegalArgumentException("El nombre del Consejo Popular no puede estar vacío.");

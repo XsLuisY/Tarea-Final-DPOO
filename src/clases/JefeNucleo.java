@@ -2,7 +2,7 @@ package clases;
 
 import interfaces.Identificable;
 
-public class JefeNucleo implements Identificable{
+public class JefeNucleo{
 private String nombre;
 private String id;
 
@@ -17,7 +17,7 @@ public String getNombre() {
 }
 public void setNombre(String nombre) {
   if (nombre != null && !nombre.trim().isEmpty()) {
-    if(nombre.matches()("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"))
+    if(nombre.matches("[a-zA-Z��1234567890 ]+"))
       this.nombre = nombre.trim().replaceAll("\\s+", " ");
     else
       throw new IllegalArgumentException("El nombre solo debe tener letras");
