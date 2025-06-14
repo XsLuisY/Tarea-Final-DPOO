@@ -16,13 +16,30 @@ import javax.swing.JList;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import java.awt.Color;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.JPopupMenu;
+import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Window.Type;
 
 public class FormularioAfectaciones extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTable table;
-
+	
+	private String[] tipoDerrumbe={"Pared", "Techo"};
+	private final ButtonGroup buttonGroupEsDeCarga = new ButtonGroup();
+	private JTextField textFieldMaterialPredominante;
 	/**
 	 * Launch the application.
 	 */
@@ -32,6 +49,7 @@ public class FormularioAfectaciones extends JFrame {
 				try {
 					FormularioAfectaciones frame = new FormularioAfectaciones();
 					frame.setVisible(true);
+					frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -43,61 +61,45 @@ public class FormularioAfectaciones extends JFrame {
 	 * Create the frame.
 	 */
 	public FormularioAfectaciones() {
+		setTitle("Agregar afectaci\u00F3n");
+		setType(Type.UTILITY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 540, 431);
+		setBounds(100, 100, 280, 140);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(10, 11, 504, 216);
-		contentPane.add(panel);
-		panel.setLayout(null);
+		JPanel panelAfectaciones = new JPanel();
+		panelAfectaciones.setBackground(Color.ORANGE);
+		panelAfectaciones.setBounds(0, 0, 264, 101);
+		contentPane.add(panelAfectaciones);
+		panelAfectaciones.setLayout(null);
 		
-		JLabel label = new JLabel("Inmueble afectado:");
-		label.setHorizontalAlignment(SwingConstants.RIGHT);
-		label.setBounds(10, 14, 95, 17);
-		panel.add(label);
+		JComboBox comboBox = new JComboBox(tipoDerrumbe);
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Pared", "Pared de carga", "Techo"}));
+		comboBox.setBounds(139, 11, 115, 20);
+		panelAfectaciones.add(comboBox);
+		JLabel lblquTipoDe = new JLabel("Tipo de afectaci\u00F3n:");
+		lblquTipoDe.setHorizontalAlignment(SwingConstants.CENTER);
+		lblquTipoDe.setBounds(0, 13, 138, 17);
+		panelAfectaciones.add(lblquTipoDe);
 		
-		JLabel label_1 = new JLabel("Cantidad afectada:");
-		label_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_1.setBounds(10, 42, 95, 17);
-		panel.add(label_1);
+		JLabel labelMaterialPredominante = new JLabel("Material predominante:");
+		labelMaterialPredominante.setHorizontalAlignment(SwingConstants.CENTER);
+		labelMaterialPredominante.setBounds(10, 42, 140, 14);
+		panelAfectaciones.add(labelMaterialPredominante);
 		
-		JButton button = new JButton("Agregar");
-		button.setBounds(343, 110, 89, 23);
-		panel.add(button);
+		textFieldMaterialPredominante = new JTextField();
+		textFieldMaterialPredominante.setBounds(149, 42, 105, 17);
+		panelAfectaciones.add(textFieldMaterialPredominante);
+		textFieldMaterialPredominante.setColumns(10);
 		
-		JButton button_1 = new JButton("Eliminar");
-		button_1.setBounds(343, 144, 89, 23);
-		panel.add(button_1);
-		
-		JSpinner spinnerCantAfectada = new JSpinner();
-		spinnerCantAfectada.setBounds(115, 39, 40, 20);
-		panel.add(spinnerCantAfectada);
-		
-		textField = new JTextField();
-		textField.setBounds(115, 11, 119, 20);
-		panel.add(textField);
-		textField.setColumns(10);
-		
-		table = new JTable();
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Mueble", "Cantidad"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, Object.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
-		table.setBounds(190, 71, 128, 96);
-		panel.add(table);
+		JButton btnAgregar = new JButton("Agregar");
+		btnAgregar.setBounds(85, 67, 89, 23);
+		panelAfectaciones.add(btnAgregar);
+	
+	}
+	private static void addPopup(Component component, final JPopupMenu popup) {
 	}
 }

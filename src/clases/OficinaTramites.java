@@ -184,14 +184,21 @@ public class OficinaTramites{
 
 	//Métodos
 
-	public Plantilla buscarMaterialMasCaro(){
-		Plantilla aux= new Plantilla(null,null);
+	public ArrayList<Cubicacion> buscarCubicacioneslMayorCosto(){
+		double aux=0;
 
-		for(Plantilla p : plantillas)
-			if(p.calcularPrecioTotal()>aux.calcularPrecioTotal())
-				aux=p;
-
-		return aux;
+		ArrayList<Cubicacion> mayores = new ArrayList<Cubicacion>();		
+		
+		for(Cubicacion c : cubicaciones){
+			if(aux<c.calcularPrecioTotal()){
+				aux=c.calcularPrecioTotal();
+				mayores.clear();
+			}
+			
+			if(aux==c.calcularPrecioTotal())
+				mayores.add(c);
+		}
+		return mayores;
 	}
 }
 

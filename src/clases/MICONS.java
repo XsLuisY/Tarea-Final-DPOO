@@ -115,7 +115,7 @@ public class MICONS {
 		return exit;
 	}
 
-	/*
+	
 	//Reportes
 
 	//Anthony
@@ -126,13 +126,14 @@ public class MICONS {
 	public void mostrarCantElementoAfectado(){		
 	}
 	//4.........................................
-		Arreglar utilizando el metodo de busqueda mencionado en clase
+		/*Arreglar utilizando el metodo de busqueda mencionado en clase
 	
 	public void mostrarMaterialMasCaro(){
-		OficinaTramites aux=null;
+			int aux=0;
+			
 		for(OficinaTramites o: oficinas)
-			if(o.buscarMaterialMasCaro().calcularPrecioTotal()>aux.buscarMaterialMasCaro().calcularPrecioTotal())
-				aux=o;					
+			if(o.buscarCubicacionMayorCoste().calcularPrecioTotal()>aux.buscarMaterialMasCaro().calcularPrecioTotal()){
+				//UTILIZAR ARRAY Y COMPARAR EL PRIMER ELEMENTO DE CADA UNO
 	}
 */
 }

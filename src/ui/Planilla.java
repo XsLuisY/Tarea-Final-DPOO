@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JList;
 
-public class GUIPlanilla extends JFrame {
+public class Planilla extends JFrame {
 
 	private JPanel contentPane;
 
@@ -21,7 +21,7 @@ public class GUIPlanilla extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GUIPlanilla frame = new GUIPlanilla();
+					Planilla frame = new Planilla();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -33,7 +33,7 @@ public class GUIPlanilla extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public GUIPlanilla() {
+	public Planilla() {
 		setTitle("Plantilla");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 500, 430);
