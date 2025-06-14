@@ -69,6 +69,7 @@ public class Cubicacion  {
 			materiales.add(material);
 		else throw new IllegalArgumentException("El material no puede ser nulo");
 	}
+	
 	public double calcularPrecioTotal(){
 		double precioTotal=0;
 		for(MaterialACubicar m: materiales){

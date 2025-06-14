@@ -9,7 +9,7 @@ public class Plantilla {
 	private Cubicacion cubicacion;
 	private FichaTecnicaDO ficha;
 	private UUID id;
- 
+
 	//Constructor
 	public Plantilla(Cubicacion cubicacion, FichaTecnicaDO ficha){
 		setCubicacion(cubicacion);
@@ -44,9 +44,7 @@ public class Plantilla {
 
 	//Métodos
 	public double calcularPrecioTotal(){
-		double precioTotal=0;
-
-		return precioTotal;
+		return	cubicacion.calcularPrecioTotal();
 	}
 
 
