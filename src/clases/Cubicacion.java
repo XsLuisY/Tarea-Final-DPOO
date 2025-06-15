@@ -26,9 +26,10 @@ public class Cubicacion  {
 		return materiales;
 	}
 
-	//CRUD-MaterialACubicar
+	//CRUD-MaterialACubicar ARREGLAR
 	//Create	
 	public MaterialACubicar createMaterialACubicar(Material material, double cantidad){
+		
 		return new MaterialACubicar(material, cantidad); 
 	}
 	//Read
@@ -64,11 +65,6 @@ public class Cubicacion  {
 	}
 
 	//Métodos
-	public void addMaterialACubicar(MaterialACubicar material){
-		if(material!=null)
-			materiales.add(material);
-		else throw new IllegalArgumentException("El material no puede ser nulo");
-	}
 	
 	public double calcularPrecioTotal(){
 		double precioTotal=0;
@@ -77,7 +73,12 @@ public class Cubicacion  {
 		}
 		return precioTotal;
 	}
-
+/*public void addMaterialACubicar(MaterialACubicar material){
+		if(material!=null)
+			materiales.add(material);
+		else throw new IllegalArgumentException("El material no puede ser nulo");
+	}
+	*/
 
 
 }

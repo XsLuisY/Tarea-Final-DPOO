@@ -26,7 +26,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 
-public class FormularioInmuebleAfectado extends JFrame {
+public class CrearMueble extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -38,7 +38,7 @@ public class FormularioInmuebleAfectado extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FormularioInmuebleAfectado frame = new FormularioInmuebleAfectado();
+					CrearMueble frame = new CrearMueble();
 					frame.setVisible(true);
 					frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
@@ -51,11 +51,11 @@ public class FormularioInmuebleAfectado extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FormularioInmuebleAfectado() {
+	public CrearMueble() {
 		setType(Type.UTILITY);
 		setTitle("Agregar mueble");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 280, 140);
+		setBounds(100, 100, 280, 160);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.ORANGE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -81,11 +81,11 @@ public class FormularioInmuebleAfectado extends JFrame {
 		
 		JSpinner spinner = new JSpinner();
 		lblCantidadAfectada.setLabelFor(spinner);
-		spinner.setBounds(105, 53, 50, 20);
+		spinner.setBounds(170, 53, 50, 20);
 		contentPane.add(spinner);
 		
 		JButton buttonAgregar = new JButton("Agregar");
-		buttonAgregar.setBounds(165, 52, 89, 23);
+		buttonAgregar.setBounds(83, 83, 89, 23);
 		contentPane.add(buttonAgregar);
 	}
 	private static void addPopup(Component component, final JPopupMenu popup) {
