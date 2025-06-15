@@ -33,7 +33,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Window.Type;
 
-public class FormularioAfectaciones extends JFrame {
+public class CrearAfectacion extends JFrame {
 
 	private JPanel contentPane;
 	
@@ -47,7 +47,7 @@ public class FormularioAfectaciones extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FormularioAfectaciones frame = new FormularioAfectaciones();
+					CrearAfectacion frame = new CrearAfectacion();
 					frame.setVisible(true);
 					frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
@@ -60,7 +60,7 @@ public class FormularioAfectaciones extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FormularioAfectaciones() {
+	public CrearAfectacion() {
 		setTitle("Agregar afectaci\u00F3n");
 		setType(Type.UTILITY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -87,11 +87,11 @@ public class FormularioAfectaciones extends JFrame {
 		
 		JLabel labelMaterialPredominante = new JLabel("Material predominante:");
 		labelMaterialPredominante.setHorizontalAlignment(SwingConstants.CENTER);
-		labelMaterialPredominante.setBounds(10, 42, 140, 14);
+		labelMaterialPredominante.setBounds(0, 41, 140, 14);
 		panelAfectaciones.add(labelMaterialPredominante);
 		
 		textFieldMaterialPredominante = new JTextField();
-		textFieldMaterialPredominante.setBounds(149, 42, 105, 17);
+		textFieldMaterialPredominante.setBounds(139, 42, 115, 17);
 		panelAfectaciones.add(textFieldMaterialPredominante);
 		textFieldMaterialPredominante.setColumns(10);
 		

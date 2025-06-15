@@ -1,6 +1,7 @@
 package ui;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -10,11 +11,16 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
+
 import java.awt.Color;
+
 import javax.swing.UIManager;
 
-public class Principal extends JFrame {
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
+public class Principal extends JFrame {
+	private CardLayout cardLayout;
 	private JPanel contentPane;
 
 	/**
@@ -52,10 +58,17 @@ public class Principal extends JFrame {
 		gestion.setForeground(Color.ORANGE);
 		menuBar.add(gestion);
 		
+		JMenuItem mntmCrearLevantamiento = new JMenuItem("Crear Levantamiento");
+		mntmCrearLevantamiento.setHorizontalAlignment(SwingConstants.RIGHT);
+		gestion.add(mntmCrearLevantamiento);
+		
+		JMenuItem mnGestionarViviendas = new JMenuItem("Gestionar Viviendas");
+		mnGestionarViviendas.setHorizontalAlignment(SwingConstants.RIGHT);
+		gestion.add(mnGestionarViviendas);
+		
 		JMenu gestionOficinaTramites = new JMenu("Gestionar Oficinas de Tramites");
 		gestionOficinaTramites.setHorizontalAlignment(SwingConstants.RIGHT);
-		gestionOficinaTramites.setForeground(Color.ORANGE);
-		gestionOficinaTramites.setBackground(Color.DARK_GRAY);
+		gestionOficinaTramites.setForeground(Color.DARK_GRAY);
 		gestion.add(gestionOficinaTramites);
 		
 		JMenuItem crearOficinaTramites = new JMenuItem("Crear Oficina de Tramites");
@@ -84,8 +97,7 @@ public class Principal extends JFrame {
 		
 		JMenu gestionFichaTecnicaDO = new JMenu("Gestionar Ficha T\u00E9cnica de Da\u00F1os Ocacionados (FTDO)");
 		gestionFichaTecnicaDO.setHorizontalAlignment(SwingConstants.RIGHT);
-		gestionFichaTecnicaDO.setForeground(Color.ORANGE);
-		gestionFichaTecnicaDO.setBackground(Color.DARK_GRAY);
+		gestionFichaTecnicaDO.setForeground(Color.DARK_GRAY);
 		gestion.add(gestionFichaTecnicaDO);
 		
 		JMenuItem mntmCrearFtdo = new JMenuItem("Crear FTDO");
@@ -114,8 +126,7 @@ public class Principal extends JFrame {
 		
 		JMenu gestionCubicacion = new JMenu("Gestionar Cubicaciones");
 		gestionCubicacion.setHorizontalAlignment(SwingConstants.RIGHT);
-		gestionCubicacion.setBackground(Color.DARK_GRAY);
-		gestionCubicacion.setForeground(Color.ORANGE);
+		gestionCubicacion.setForeground(Color.DARK_GRAY);
 		gestion.add(gestionCubicacion);
 		
 		JMenuItem mntmCrearCubicacin = new JMenuItem("Crear Cubicaci\u00F3n");
@@ -142,31 +153,30 @@ public class Principal extends JFrame {
 		mntmEliminarCubicacin.setHorizontalAlignment(SwingConstants.RIGHT);
 		gestionCubicacion.add(mntmEliminarCubicacin);
 		
-		JMenu mnGestionarPlanillas = new JMenu("Gestionar Planillas");
+		JMenu mnGestionarPlanillas = new JMenu("Gestionar Plantillas");
 		mnGestionarPlanillas.setHorizontalAlignment(SwingConstants.RIGHT);
-		mnGestionarPlanillas.setForeground(Color.ORANGE);
-		mnGestionarPlanillas.setBackground(Color.DARK_GRAY);
+		mnGestionarPlanillas.setForeground(Color.DARK_GRAY);
 		gestion.add(mnGestionarPlanillas);
 		
-		JMenuItem mntmCrearPlanilla = new JMenuItem("Crear Planilla");
+		JMenuItem mntmCrearPlanilla = new JMenuItem("Crear Plantilla");
 		mntmCrearPlanilla.setForeground(Color.ORANGE);
 		mntmCrearPlanilla.setBackground(Color.DARK_GRAY);
 		mntmCrearPlanilla.setHorizontalAlignment(SwingConstants.RIGHT);
 		mnGestionarPlanillas.add(mntmCrearPlanilla);
 		
-		JMenuItem mntmBuscarPlanilla = new JMenuItem("Buscar Planilla");
+		JMenuItem mntmBuscarPlanilla = new JMenuItem("Buscar Plantilla");
 		mntmBuscarPlanilla.setForeground(Color.ORANGE);
 		mntmBuscarPlanilla.setBackground(Color.DARK_GRAY);
 		mntmBuscarPlanilla.setHorizontalAlignment(SwingConstants.RIGHT);
 		mnGestionarPlanillas.add(mntmBuscarPlanilla);
 		
-		JMenuItem mntmModificarPlanilla = new JMenuItem("Modificar Planilla");
+		JMenuItem mntmModificarPlanilla = new JMenuItem("Modificar Plantilla");
 		mntmModificarPlanilla.setForeground(Color.ORANGE);
 		mntmModificarPlanilla.setBackground(Color.DARK_GRAY);
 		mntmModificarPlanilla.setHorizontalAlignment(SwingConstants.RIGHT);
 		mnGestionarPlanillas.add(mntmModificarPlanilla);
 		
-		JMenuItem mntmEliminarPlanilla = new JMenuItem("Eliminar Planilla");
+		JMenuItem mntmEliminarPlanilla = new JMenuItem("Eliminar Plantilla");
 		mntmEliminarPlanilla.setForeground(Color.ORANGE);
 		mntmEliminarPlanilla.setBackground(Color.DARK_GRAY);
 		mntmEliminarPlanilla.setHorizontalAlignment(SwingConstants.RIGHT);

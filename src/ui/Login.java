@@ -1,40 +1,21 @@
 package ui;
 
-import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.FlowLayout;
-import javax.swing.SpringLayout;
-import javax.swing.BoxLayout;
 import java.awt.Color;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.factories.FormFactory;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.JToggleButton;
 import javax.swing.JPasswordField;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JButton;
-import javax.swing.JToolBar;
 import java.awt.Font;
 import javax.swing.SwingConstants;
-import javax.swing.JScrollPane;
-import javax.swing.JLayeredPane;
 import java.awt.Component;
-import javax.swing.Box;
-import java.awt.Choice;
 import javax.swing.JPopupMenu;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JMenuItem;
-import javax.swing.JMenu;
-import java.awt.Window.Type;
 
 public class Login extends JFrame {
 
