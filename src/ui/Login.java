@@ -43,17 +43,19 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		setTitle("Inicio de Sesión");
 		setType(Type.UTILITY);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.ORANGE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.GRAY);
-		panel.setBounds(311, 0, 123, 261);
+		panel.setBounds(321, 0, 123, 271);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
@@ -66,7 +68,7 @@ public class Login extends JFrame {
 		lblBienvenido.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		lblBienvenido.setForeground(Color.ORANGE);
 		lblBienvenido.setBackground(new Color(255, 255, 255));
-		lblBienvenido.setBounds(10, 11, 103, 14);
+		lblBienvenido.setBounds(10, 11, 103, 31);
 		panel.add(lblBienvenido);
 		
 		JLabel lblIntroduzcaSuContrasea = new JLabel("Contrase\u00F1a:");
@@ -75,11 +77,6 @@ public class Login extends JFrame {
 		panel.add(lblIntroduzcaSuContrasea);
 		
 		String[] usuarios ={"Cliente", "Administrador"};
-		JComboBox comboBox = new JComboBox(usuarios);
-		comboBox.setForeground(Color.BLACK);
-		comboBox.setBackground(Color.ORANGE);
-		comboBox.setBounds(10, 53, 103, 20);
-		panel.add(comboBox);
 		
 		JLabel lblUsuario = new JLabel("Usuario:");
 		lblUsuario.setHorizontalAlignment(SwingConstants.CENTER);
@@ -93,6 +90,8 @@ public class Login extends JFrame {
 		usuario.setColumns(10);
 		
 		JButton btnIniciar = new JButton("Iniciar");
+		btnIniciar.setBackground(Color.DARK_GRAY);
+		btnIniciar.setForeground(Color.ORANGE);
 		btnIniciar.setBounds(10, 227, 103, 23);
 		panel.add(btnIniciar);
 	}

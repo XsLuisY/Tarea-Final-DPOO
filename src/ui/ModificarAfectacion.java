@@ -34,7 +34,7 @@ import java.awt.event.ActionEvent;
 import java.awt.Window.Type;
 import javax.swing.JMenuBar;
 
-public class CrearAfectacion extends JFrame {
+public class ModificarAfectacion extends JFrame {
 
 	private JPanel contentPane;
 	
@@ -48,7 +48,7 @@ public class CrearAfectacion extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CrearAfectacion frame = new CrearAfectacion();
+					ModificarAfectacion frame = new ModificarAfectacion();
 					frame.setVisible(true);
 					frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
@@ -61,8 +61,8 @@ public class CrearAfectacion extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public CrearAfectacion() {
-		setTitle("Agregar afectaci\u00F3n");
+	public ModificarAfectacion() {
+		setTitle("Modificar afectaci\u00F3n");
 		setType(Type.UTILITY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 280, 170);
@@ -114,6 +114,11 @@ public class CrearAfectacion extends JFrame {
 		btnAgregar.setBackground(Color.DARK_GRAY);
 		btnAgregar.setBounds(165, 73, 89, 23);
 		panelAfectaciones.add(btnAgregar);
+		
+		JLabel lblId = new JLabel("ID: 4598-7857-9458-5854");
+		lblId.setHorizontalAlignment(SwingConstants.CENTER);
+		lblId.setBounds(0, 85, 159, 22);
+		panelAfectaciones.add(lblId);
 	
 	}
 	private static void addPopup(Component component, final JPopupMenu popup) {

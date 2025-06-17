@@ -39,6 +39,8 @@ import javax.swing.JComboBox;
 import java.awt.Choice;
 import javax.swing.JSpinner;
 import java.awt.Color;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 
 public class CrearVivienda extends JFrame {
@@ -91,7 +93,17 @@ public class CrearVivienda extends JFrame {
 		setResizable(false);
 		setTitle("Formulario de la Vivienda");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 300, 460);
+		setBounds(100, 100, 300, 490);
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBackground(Color.DARK_GRAY);
+		menuBar.setForeground(Color.ORANGE);
+		setJMenuBar(menuBar);
+		
+		JMenuItem mntmRegresar = new JMenuItem("Regresar");
+		mntmRegresar.setForeground(Color.ORANGE);
+		mntmRegresar.setBackground(Color.DARK_GRAY);
+		menuBar.add(mntmRegresar);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.ORANGE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -187,8 +199,9 @@ public class CrearVivienda extends JFrame {
 		textFieldCI.setColumns(10);
 		
 		JButton btnEnviar = new JButton("Enviar");
-		btnEnviar.setForeground(Color.BLACK);
-		btnEnviar.setBounds(175, 397, 89, 23);
+		btnEnviar.setBackground(Color.DARK_GRAY);
+		btnEnviar.setForeground(Color.ORANGE);
+		btnEnviar.setBounds(195, 403, 89, 23);
 		contentPane.add(btnEnviar);
 		
 		JComboBox comboBoxDocumentoLegal = new JComboBox(documentoLegal);

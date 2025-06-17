@@ -1,30 +1,22 @@
 package ui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
-import javax.swing.JList;
-import javax.swing.JScrollBar;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.ListSelectionModel;
-import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import javax.swing.JTextField;
-import javax.swing.JButton;
 import javax.swing.JPopupMenu;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JMenuBar;
-import java.awt.Window.Type;
 import java.awt.Color;
-import javax.swing.ScrollPaneConstants;
 
 public class GestionViviendas extends JFrame {
 
@@ -58,6 +50,7 @@ public class GestionViviendas extends JFrame {
 	 * Create the frame.
 	 */
 	public GestionViviendas() {
+		setTitle("Gesti\u00F3n de Viviendas");
 		setType(Type.UTILITY);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

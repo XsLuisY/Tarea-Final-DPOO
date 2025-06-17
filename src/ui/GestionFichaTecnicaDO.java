@@ -51,15 +51,21 @@ public class GestionFichaTecnicaDO extends JFrame {
 	 * Create the frame.
 	 */
 	public GestionFichaTecnicaDO() {
+		setTitle("Gesti\u00F3n de Fichas T\u00E9cnicas");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
 		
 		menuBar = new JMenuBar();
+		menuBar.setBackground(Color.DARK_GRAY);
+		menuBar.setForeground(Color.ORANGE);
 		setJMenuBar(menuBar);
 		
 		mntmRegresar = new JMenuItem("Regresar");
+		mntmRegresar.setBackground(Color.DARK_GRAY);
+		mntmRegresar.setForeground(Color.ORANGE);
 		menuBar.add(mntmRegresar);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.ORANGE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);

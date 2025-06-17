@@ -23,7 +23,7 @@ import javax.swing.JComboBox;
 import javax.swing.JMenuBar;
 import javax.swing.JButton;
 
-public class CrearFichaTecnicaDO extends JFrame {
+public class ModificarFichaTecnicaDO extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table_1;
@@ -36,7 +36,7 @@ public class CrearFichaTecnicaDO extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CrearFichaTecnicaDO frame = new CrearFichaTecnicaDO();
+					ModificarFichaTecnicaDO frame = new ModificarFichaTecnicaDO();
 					frame.setVisible(true);
 					frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
@@ -49,7 +49,7 @@ public class CrearFichaTecnicaDO extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public CrearFichaTecnicaDO() {
+	public ModificarFichaTecnicaDO() {
 		setType(Type.UTILITY);
 		setTitle("Ficha T\u00E9cnica de Da\u00F1os Ocacionados");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -170,11 +170,11 @@ public class CrearFichaTecnicaDO extends JFrame {
 		spinner_2.setBounds(242, 362, 50, 20);
 		contentPane.add(spinner_2);
 		
-		JButton button = new JButton("Enviar");
-		button.setForeground(Color.ORANGE);
-		button.setBackground(Color.DARK_GRAY);
-		button.setBounds(203, 403, 89, 23);
-		contentPane.add(button);
+		JButton btnModificar = new JButton("Modificar");
+		btnModificar.setForeground(Color.ORANGE);
+		btnModificar.setBackground(Color.DARK_GRAY);
+		btnModificar.setBounds(203, 403, 89, 23);
+		contentPane.add(btnModificar);
 	}
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
