@@ -13,24 +13,34 @@ import javax.swing.SwingConstants;
 import java.awt.Window.Type;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JList;
 import javax.swing.JTextPane;
 import javax.swing.JScrollBar;
 import javax.swing.ListSelectionModel;
+
 import java.awt.Scrollbar;
+
 import javax.swing.ScrollPaneConstants;
 import javax.swing.AbstractListModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JPopupMenu;
+
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JMenuItem;
+
 import java.awt.Color;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GestionOficinaTramites extends JFrame {
 
@@ -67,6 +77,11 @@ public class GestionOficinaTramites extends JFrame {
 		setJMenuBar(menuBar);
 		
 		JMenuItem mntmRegresar = new JMenuItem("Regresar");
+		mntmRegresar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		});
 		mntmRegresar.setBackground(Color.DARK_GRAY);
 		mntmRegresar.setForeground(Color.ORANGE);
 		menuBar.add(mntmRegresar);
@@ -91,21 +106,46 @@ public class GestionOficinaTramites extends JFrame {
 		addPopup(list, popupMenu);
 		
 		JMenuItem mntmAgregar = new JMenuItem("Agregar");
+		mntmAgregar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new CrearOficinaTramites().setVisible(true);
+			}
+		});
 		popupMenu.add(mntmAgregar);
 		
 		JMenu mntmGestionar = new JMenu("Gestionar");
 		popupMenu.add(mntmGestionar);
 		
 		JMenuItem mntmMateriales = new JMenuItem("Materiales");
+		mntmMateriales.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			new GestionMateriales().setVisible(true);
+			}
+		});
 		mntmGestionar.add(mntmMateriales);
 		
 		JMenuItem mntmFtdos = new JMenuItem("FTDOs");
+		mntmFtdos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new GestionFichaTecnicaDO().setVisible(true);
+			}
+		});
 		mntmGestionar.add(mntmFtdos);
 		
 		JMenuItem mntmPlantillas = new JMenuItem("Plantillas");
+		mntmPlantillas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new GestionPlantillas().setVisible(true);
+			}
+		});
 		mntmGestionar.add(mntmPlantillas);
 		
 		JMenuItem mntmModificar = new JMenuItem("Modificar");
+		mntmModificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			new ModificarOficinaTramites().setVisible(true);
+			}
+		});
 		popupMenu.add(mntmModificar);
 		
 		JMenuItem mntmEliminar = new JMenuItem("Eliminar");

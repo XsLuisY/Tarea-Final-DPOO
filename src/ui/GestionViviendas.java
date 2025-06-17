@@ -17,6 +17,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JMenuBar;
 import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GestionViviendas extends JFrame {
 
@@ -39,6 +41,7 @@ public class GestionViviendas extends JFrame {
 				try {
 					GestionViviendas frame = new GestionViviendas();
 					frame.setVisible(true);
+					frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -60,6 +63,11 @@ public class GestionViviendas extends JFrame {
 		setJMenuBar(menuBar);
 		
 		mntmRegresar = new JMenuItem("Regresar");
+		mntmRegresar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();				
+			}
+		});
 		mntmRegresar.setForeground(Color.ORANGE);
 		mntmRegresar.setBackground(Color.DARK_GRAY);
 		menuBar.add(mntmRegresar);
@@ -93,18 +101,33 @@ public class GestionViviendas extends JFrame {
 		popupMenu.setBackground(Color.DARK_GRAY);
 		
 		mntmAadir = new JMenuItem("A\u00F1adir");
+		mntmAadir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new CrearVivienda().setVisible(true);
+			}
+		});
 		mntmAadir.setBackground(Color.DARK_GRAY);
 		mntmAadir.setForeground(Color.ORANGE);
 		mntmAadir.setHorizontalAlignment(SwingConstants.RIGHT);
 		popupMenu.add(mntmAadir);
 		
 		mntmMostrar = new JMenuItem("Mostrar");
+		mntmMostrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			new MostrarVivienda().setVisible(true);
+			}
+		});
 		mntmMostrar.setBackground(Color.DARK_GRAY);
 		mntmMostrar.setForeground(Color.ORANGE);
 		mntmMostrar.setHorizontalAlignment(SwingConstants.RIGHT);
 		popupMenu.add(mntmMostrar);
 		
 		mntmModificar = new JMenuItem("Modificar");
+		mntmModificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new ModificarVivienda().setVisible(true);
+			}
+		});
 		mntmModificar.setBackground(Color.DARK_GRAY);
 		mntmModificar.setForeground(Color.ORANGE);
 		mntmModificar.setHorizontalAlignment(SwingConstants.RIGHT);

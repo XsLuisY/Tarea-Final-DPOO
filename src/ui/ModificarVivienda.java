@@ -11,6 +11,7 @@ import java.awt.GridLayout;
 
 //import net.miginfocom.swing.MigLayout;
 
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 
@@ -34,11 +35,17 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 
 import java.awt.Window.Type;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JComboBox;
+
 import java.awt.Choice;
+
 import javax.swing.JSpinner;
+
 import java.awt.Color;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
@@ -103,6 +110,12 @@ public class ModificarVivienda extends JFrame {
 		JMenuItem mntmRegresar = new JMenuItem("Regresar");
 		mntmRegresar.setBackground(Color.DARK_GRAY);
 		mntmRegresar.setForeground(Color.ORANGE);
+		mntmRegresar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		});
+		
 		menuBar.add(mntmRegresar);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.ORANGE);

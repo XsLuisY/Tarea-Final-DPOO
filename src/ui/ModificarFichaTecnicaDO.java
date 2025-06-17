@@ -22,6 +22,8 @@ import java.awt.Window.Type;
 import javax.swing.JComboBox;
 import javax.swing.JMenuBar;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ModificarFichaTecnicaDO extends JFrame {
 
@@ -59,6 +61,11 @@ public class ModificarFichaTecnicaDO extends JFrame {
 		setJMenuBar(menuBar);
 		
 		JMenuItem mntmRegresar = new JMenuItem("Regresar");
+		mntmRegresar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+				}
+		});
 		mntmRegresar.setForeground(Color.ORANGE);
 		mntmRegresar.setBackground(Color.DARK_GRAY);
 		menuBar.add(mntmRegresar);

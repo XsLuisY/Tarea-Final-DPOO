@@ -1,9 +1,6 @@
 package ui;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -11,19 +8,14 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
-
 import java.awt.Color;
-
-import javax.swing.UIManager;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 
 public class Principal extends JFrame {
-	private CardLayout cardLayout;
 	private JPanel contentPane;
-
+	
 	/**
 	 * Launch the application.
 	 */
@@ -45,6 +37,7 @@ public class Principal extends JFrame {
 	 * Create the frame.
 	 */
 	public Principal() {
+		
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 550, 350);
@@ -60,11 +53,21 @@ public class Principal extends JFrame {
 		menuBar.add(gestion);
 		
 		JMenuItem mnGestionarViviendas = new JMenuItem("Gestionar Viviendas");
+		mnGestionarViviendas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new GestionViviendas().setVisible(true);			
+			}
+		});
 		mnGestionarViviendas.setBackground(Color.DARK_GRAY);
 		mnGestionarViviendas.setForeground(Color.ORANGE);
 		gestion.add(mnGestionarViviendas);
 		
 		JMenuItem mntmGestionarOficinasDe = new JMenuItem("Gestionar Oficinas de Tr\u00E1mites");
+		mntmGestionarOficinasDe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new GestionOficinaTramites().setVisible(true);
+			}
+		});
 		mntmGestionarOficinasDe.setBackground(Color.DARK_GRAY);
 		mntmGestionarOficinasDe.setForeground(Color.ORANGE);
 		gestion.add(mntmGestionarOficinasDe);
@@ -94,6 +97,18 @@ public class Principal extends JFrame {
 		mntmCubicacionesConMayor.setForeground(Color.ORANGE);
 		mntmCubicacionesConMayor.setBackground(Color.DARK_GRAY);
 		reportes.add(mntmCubicacionesConMayor);
+		
+		JMenuItem mntmCerrarSesion = new JMenuItem("Cerrar Sesi\u00F3n");
+		mntmCerrarSesion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+				new Login().setVisible(true);
+			}
+		});
+		mntmCerrarSesion.setBackground(Color.DARK_GRAY);
+		mntmCerrarSesion.setForeground(Color.ORANGE);
+		mntmCerrarSesion.setHorizontalAlignment(SwingConstants.LEFT);
+		menuBar.add(mntmCerrarSesion);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.ORANGE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

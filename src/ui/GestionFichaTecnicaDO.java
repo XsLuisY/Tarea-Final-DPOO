@@ -18,6 +18,8 @@ import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
 import javax.swing.JMenuBar;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GestionFichaTecnicaDO extends JFrame {
 
@@ -61,6 +63,11 @@ public class GestionFichaTecnicaDO extends JFrame {
 		setJMenuBar(menuBar);
 		
 		mntmRegresar = new JMenuItem("Regresar");
+		mntmRegresar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		});
 		mntmRegresar.setBackground(Color.DARK_GRAY);
 		mntmRegresar.setForeground(Color.ORANGE);
 		menuBar.add(mntmRegresar);
@@ -94,18 +101,33 @@ public class GestionFichaTecnicaDO extends JFrame {
 		addPopup(table, popupMenu);
 		
 		menuItem = new JMenuItem("A\u00F1adir");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new CrearFichaTecnicaDO().setVisible(true);
+			}
+		});
 		menuItem.setHorizontalAlignment(SwingConstants.RIGHT);
 		menuItem.setForeground(Color.ORANGE);
 		menuItem.setBackground(Color.DARK_GRAY);
 		popupMenu.add(menuItem);
 		
 		menuItem_1 = new JMenuItem("Mostrar");
+		menuItem_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new MostrarFichaTecnicaDO().setVisible(true);
+			}
+		});
 		menuItem_1.setHorizontalAlignment(SwingConstants.RIGHT);
 		menuItem_1.setForeground(Color.ORANGE);
 		menuItem_1.setBackground(Color.DARK_GRAY);
 		popupMenu.add(menuItem_1);
 		
 		menuItem_2 = new JMenuItem("Modificar");
+		menuItem_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new ModificarFichaTecnicaDO().setVisible(true);
+			}
+		});
 		menuItem_2.setHorizontalAlignment(SwingConstants.RIGHT);
 		menuItem_2.setForeground(Color.ORANGE);
 		menuItem_2.setBackground(Color.DARK_GRAY);

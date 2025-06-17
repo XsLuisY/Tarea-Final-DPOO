@@ -7,40 +7,18 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import java.awt.GridLayout;
 
-//import net.miginfocom.swing.MigLayout;
-
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.factories.FormFactory;
-import com.jgoodies.forms.layout.RowSpec;
-
-import java.awt.FlowLayout;
-import java.awt.CardLayout;
-
-import javax.swing.ComboBoxModel;
-import javax.swing.SpringLayout;
-import javax.swing.BoxLayout;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-
-import java.awt.Window.Type;
-
 import javax.swing.JComboBox;
-import java.awt.Choice;
 import javax.swing.JSpinner;
 import java.awt.Color;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class CrearVivienda extends JFrame {
@@ -48,12 +26,9 @@ public class CrearVivienda extends JFrame {
 	private JPanel contentPane;
 	private JTextField textFieldDireccion;
 	private JLabel lblFacilidadTemporal;
-	private final ButtonGroup buttonGroupDocumentoLegal = new ButtonGroup();
-	private final ButtonGroup buttonGroupTipologiaConstructiva = new ButtonGroup();
 	private JRadioButton rdbtnSi;
 	private JRadioButton rdbtnNo;
 	private final ButtonGroup buttonGroupFacilidadTemporal = new ButtonGroup();
-	private final ButtonGroup buttonGroupTipologiaHabitacional = new ButtonGroup();
 	private JLabel lblDimensiones;
 	private JLabel lblLargo;
 	private JLabel lblAncho;
@@ -90,6 +65,7 @@ public class CrearVivienda extends JFrame {
 	 */
 	public CrearVivienda() {
 		setType(Type.UTILITY);
+		setAlwaysOnTop(true);
 		setResizable(false);
 		setTitle("Formulario de la Vivienda");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,6 +77,11 @@ public class CrearVivienda extends JFrame {
 		setJMenuBar(menuBar);
 		
 		JMenuItem mntmRegresar = new JMenuItem("Regresar");
+		mntmRegresar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		});
 		mntmRegresar.setForeground(Color.ORANGE);
 		mntmRegresar.setBackground(Color.DARK_GRAY);
 		menuBar.add(mntmRegresar);

@@ -22,14 +22,14 @@ import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
 import javax.swing.JMenuBar;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GestionPlantillas extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
 	private JPopupMenu popupMenu;
-	private JMenuItem menuItem;
-	private JMenuItem menuItem_2;
 	private JMenuItem menuItem_3;
 	private JMenuBar menuBar;
 	private JMenuItem mntmRegresar;
@@ -65,6 +65,11 @@ public class GestionPlantillas extends JFrame {
 		setJMenuBar(menuBar);
 		
 		mntmRegresar = new JMenuItem("Regresar");
+		mntmRegresar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		});
 		mntmRegresar.setForeground(Color.ORANGE);
 		mntmRegresar.setBackground(Color.DARK_GRAY);
 		menuBar.add(mntmRegresar);
@@ -97,23 +102,16 @@ public class GestionPlantillas extends JFrame {
 		popupMenu.setBackground(Color.DARK_GRAY);
 		addPopup(table, popupMenu);
 		
-		menuItem = new JMenuItem("A\u00F1adir");
-		menuItem.setHorizontalAlignment(SwingConstants.RIGHT);
-		menuItem.setForeground(Color.ORANGE);
-		menuItem.setBackground(Color.DARK_GRAY);
-		popupMenu.add(menuItem);
-		
 		mntmMostrar = new JMenuItem("Mostrar");
+		mntmMostrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new MostrarPlantilla().setVisible(true);
+			}
+		});
 		mntmMostrar.setHorizontalAlignment(SwingConstants.RIGHT);
 		mntmMostrar.setForeground(Color.ORANGE);
 		mntmMostrar.setBackground(Color.DARK_GRAY);
 		popupMenu.add(mntmMostrar);
-		
-		menuItem_2 = new JMenuItem("Modificar");
-		menuItem_2.setHorizontalAlignment(SwingConstants.RIGHT);
-		menuItem_2.setForeground(Color.ORANGE);
-		menuItem_2.setBackground(Color.DARK_GRAY);
-		popupMenu.add(menuItem_2);
 		
 		menuItem_3 = new JMenuItem("Eliminar");
 		menuItem_3.setHorizontalAlignment(SwingConstants.RIGHT);
