@@ -6,41 +6,12 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-
-import java.awt.GridLayout;
-
-//import net.miginfocom.swing.MigLayout;
-
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.factories.FormFactory;
-import com.jgoodies.forms.layout.RowSpec;
-
-import java.awt.FlowLayout;
-import java.awt.CardLayout;
-
-import javax.swing.ComboBoxModel;
-import javax.swing.SpringLayout;
-import javax.swing.BoxLayout;
-import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 
-import java.awt.Window.Type;
-
-import javax.swing.JComboBox;
-import java.awt.Choice;
-import javax.swing.JSpinner;
 import java.awt.Color;
-import java.awt.TextField;
-import javax.swing.JTextArea;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
@@ -50,20 +21,12 @@ public class MostrarVivienda extends JFrame {
 	private JPanel contentPane;
 	private JTextField textFieldDireccion;
 	private JLabel lblFacilidadTemporal;
-	private final ButtonGroup buttonGroupDocumentoLegal = new ButtonGroup();
-	private final ButtonGroup buttonGroupTipologiaConstructiva = new ButtonGroup();
-	private final ButtonGroup buttonGroupFacilidadTemporal = new ButtonGroup();
-	private final ButtonGroup buttonGroupTipologiaHabitacional = new ButtonGroup();
 	private JLabel lblDimensiones;
 	private JLabel lblLargo;
 	private JLabel lblAncho;
 	private JLabel lblAltura;
 	private JTextField textFieldNombre;
 	private JTextField textFieldCI;
-	
-	private String[] tipologiaConstructiva={"Tipo I","Tipo II","Tipo III","Tipo IV","Tipo V"};
-	private String[] tipologiaHabitacional={"Casa","Apartamento","Bohío","Otro"};
-	private String[] documentoLegal={"Propiedad","Usufructo","Vivienda vinculada","Arrendamiento","Providencia","No posee"};
 	private JTextField textFieldTipologiaHabitacional;
 	private JTextField textFieldTipologiaConstructiva;
 	private JLabel lblDatosDeLa;
@@ -103,6 +66,11 @@ public class MostrarVivienda extends JFrame {
 		JMenuItem mntmRegresar = new JMenuItem("Regresar");
 		mntmRegresar.setForeground(Color.ORANGE);
 		mntmRegresar.setBackground(Color.DARK_GRAY);
+		mntmRegresar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		});
 		menuBar.add(mntmRegresar);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.ORANGE);

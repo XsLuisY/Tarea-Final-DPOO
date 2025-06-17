@@ -1,5 +1,9 @@
 package clases;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -200,7 +204,42 @@ public class OficinaTramites{
 		}
 		return mayores;
 	}
+
+
+
+//------------------------------Inicializar Datos-------------------------------------
+
+//Inicializar materiales
+
+public void cargarMateriales(String txtMateriales){
+	try {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(txtMateriales), "UTF-8"));
+		String linea;
+
+		while ((linea = reader.readLine()) != null) {
+			String[] datos = linea.split(",");
+
+			if (datos.length == 3) {
+				
+				String nombre = datos[0].trim();	
+				String unidadMedida = datos[1].trim();
+				int precio = Integer.parseInt(datos[2].trim());
+				String ci = datos[3].trim();
+				String cargo = datos[4].trim(); //.substring(1));
+				Material material = new Material(nombre, unidadMedida, precio);
+				materiales.add(material);
+			}
+		}
+
+		reader.close();
+	} catch (IOException e) {
+		System.out.println("Error al leer el archivo: " + e.getMessage());
+	}
 }
+
+}
+
+
 
 
 

@@ -16,6 +16,8 @@ import java.awt.Color;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MostrarPlantilla extends JFrame {
 
@@ -55,6 +57,11 @@ public class MostrarPlantilla extends JFrame {
 		setJMenuBar(menuBar);
 		
 		JMenuItem mntmRegresar = new JMenuItem("Regresar");
+		mntmRegresar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		});
 		mntmRegresar.setBackground(Color.DARK_GRAY);
 		mntmRegresar.setForeground(Color.ORANGE);
 		menuBar.add(mntmRegresar);

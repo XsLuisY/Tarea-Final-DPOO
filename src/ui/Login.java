@@ -16,13 +16,15 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.Component;
 import javax.swing.JPopupMenu;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Login extends JFrame {
 
 	private JPanel contentPane;
 	private JPasswordField passwordField;
 	private JTextField usuario;
-
+	private Principal principal;
 	/**
 	 * Launch the application.
 	 */
@@ -32,6 +34,7 @@ public class Login extends JFrame {
 				try {
 					Login frame = new Login();
 					frame.setVisible(true);
+					frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -43,6 +46,10 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		principal= new Principal();
+		principal.setVisible(false);
+		this.setVisible(false);
+
 		setTitle("Inicio de Sesión");
 		setType(Type.UTILITY);
 		setResizable(false);
@@ -58,11 +65,11 @@ public class Login extends JFrame {
 		panel.setBounds(321, 0, 123, 271);
 		contentPane.add(panel);
 		panel.setLayout(null);
-		
+
 		passwordField = new JPasswordField();
 		passwordField.setBounds(10, 175, 103, 20);
 		panel.add(passwordField);
-		
+
 		JLabel lblBienvenido = new JLabel("Bienvenido");
 		lblBienvenido.setHorizontalAlignment(SwingConstants.CENTER);
 		lblBienvenido.setFont(new Font("Times New Roman", Font.BOLD, 14));
@@ -70,26 +77,30 @@ public class Login extends JFrame {
 		lblBienvenido.setBackground(new Color(255, 255, 255));
 		lblBienvenido.setBounds(10, 11, 103, 31);
 		panel.add(lblBienvenido);
-		
+
 		JLabel lblIntroduzcaSuContrasea = new JLabel("Contrase\u00F1a:");
 		lblIntroduzcaSuContrasea.setHorizontalAlignment(SwingConstants.CENTER);
 		lblIntroduzcaSuContrasea.setBounds(10, 159, 103, 14);
 		panel.add(lblIntroduzcaSuContrasea);
-		
-		String[] usuarios ={"Cliente", "Administrador"};
-		
+
 		JLabel lblUsuario = new JLabel("Usuario:");
 		lblUsuario.setHorizontalAlignment(SwingConstants.CENTER);
 		lblUsuario.setBounds(10, 115, 103, 14);
 		panel.add(lblUsuario);
-		
+
 		usuario = new JTextField();
 		usuario.setHorizontalAlignment(SwingConstants.CENTER);
 		usuario.setBounds(10, 128, 103, 20);
 		panel.add(usuario);
 		usuario.setColumns(10);
-		
+
 		JButton btnIniciar = new JButton("Iniciar");
+		btnIniciar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+				principal.setVisible(true);;
+			}
+		});
 		btnIniciar.setBackground(Color.DARK_GRAY);
 		btnIniciar.setForeground(Color.ORANGE);
 		btnIniciar.setBounds(10, 227, 103, 23);

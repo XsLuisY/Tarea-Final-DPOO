@@ -73,6 +73,11 @@ public class ModificarMaterial extends JFrame {
 		setJMenuBar(menuBar);
 		
 		JMenuItem mntmRegresar = new JMenuItem("Regresar");
+		mntmRegresar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		});
 		mntmRegresar.setBackground(Color.DARK_GRAY);
 		mntmRegresar.setForeground(Color.ORANGE);
 		mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
