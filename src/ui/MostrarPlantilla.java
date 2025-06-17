@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-public class MostrarPlanilla extends JFrame {
+public class MostrarPlantilla extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
@@ -31,8 +31,9 @@ public class MostrarPlanilla extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MostrarPlanilla frame = new MostrarPlanilla();
+					MostrarPlantilla frame = new MostrarPlantilla();
 					frame.setVisible(true);
+					frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -43,15 +44,19 @@ public class MostrarPlanilla extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MostrarPlanilla() {
+	public MostrarPlantilla() {
 		setTitle("Plantilla");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 870, 485);
 		
 		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBackground(Color.DARK_GRAY);
+		menuBar.setForeground(Color.ORANGE);
 		setJMenuBar(menuBar);
 		
 		JMenuItem mntmRegresar = new JMenuItem("Regresar");
+		mntmRegresar.setBackground(Color.DARK_GRAY);
+		mntmRegresar.setForeground(Color.ORANGE);
 		menuBar.add(mntmRegresar);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.ORANGE);

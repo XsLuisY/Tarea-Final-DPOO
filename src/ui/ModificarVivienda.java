@@ -39,6 +39,8 @@ import javax.swing.JComboBox;
 import java.awt.Choice;
 import javax.swing.JSpinner;
 import java.awt.Color;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 
 public class ModificarVivienda extends JFrame {
@@ -91,7 +93,17 @@ public class ModificarVivienda extends JFrame {
 		setResizable(false);
 		setTitle("Modificar Vivienda");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 300, 460);
+		setBounds(100, 100, 300, 490);
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBackground(Color.DARK_GRAY);
+		menuBar.setForeground(Color.ORANGE);
+		setJMenuBar(menuBar);
+		
+		JMenuItem mntmRegresar = new JMenuItem("Regresar");
+		mntmRegresar.setBackground(Color.DARK_GRAY);
+		mntmRegresar.setForeground(Color.ORANGE);
+		menuBar.add(mntmRegresar);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.ORANGE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -186,8 +198,9 @@ public class ModificarVivienda extends JFrame {
 		textFieldCI.setColumns(10);
 		
 		JButton btnModificar = new JButton("Modificar");
-		btnModificar.setForeground(Color.BLACK);
-		btnModificar.setBounds(195, 402, 89, 23);
+		btnModificar.setBackground(Color.DARK_GRAY);
+		btnModificar.setForeground(Color.ORANGE);
+		btnModificar.setBounds(195, 407, 89, 23);
 		contentPane.add(btnModificar);
 		
 		JComboBox comboBoxDocumentoLegal = new JComboBox(documentoLegal);
@@ -221,7 +234,7 @@ public class ModificarVivienda extends JFrame {
 		
 		JLabel label = new JLabel("Total:");
 		label.setHorizontalAlignment(SwingConstants.RIGHT);
-		label.setBounds(16, 382, 67, 14);
+		label.setBounds(26, 381, 67, 14);
 		contentPane.add(label);
 		
 		JSpinner spinner = new JSpinner();
@@ -234,12 +247,12 @@ public class ModificarVivienda extends JFrame {
 		
 		JLabel label_1 = new JLabel("Ancianos:");
 		label_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_1.setBounds(6, 349, 75, 20);
+		label_1.setBounds(16, 348, 75, 20);
 		contentPane.add(label_1);
 		
 		JLabel label_2 = new JLabel("Embarazadas:");
 		label_2.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_2.setBounds(-11, 318, 94, 20);
+		label_2.setBounds(-1, 317, 94, 20);
 		contentPane.add(label_2);
 		
 		JSpinner spinner_2 = new JSpinner();
@@ -252,7 +265,7 @@ public class ModificarVivienda extends JFrame {
 		
 		JLabel label_3 = new JLabel("Ni\u00F1os:");
 		label_3.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_3.setBounds(6, 287, 75, 20);
+		label_3.setBounds(16, 286, 75, 20);
 		contentPane.add(label_3);
 		
 		JLabel label_4 = new JLabel("Habitantes:");
@@ -260,12 +273,9 @@ public class ModificarVivienda extends JFrame {
 		label_4.setBounds(19, 261, 125, 14);
 		contentPane.add(label_4);
 		
-		JLabel label_5 = new JLabel("3943-2342-3448-2342");
-		label_5.setBounds(36, 406, 149, 14);
-		contentPane.add(label_5);
-		
-		JLabel label_6 = new JLabel("ID:");
-		label_6.setBounds(11, 406, 15, 14);
-		contentPane.add(label_6);
+		JLabel lblId = new JLabel("ID: 3943-2342-3448-2342");
+		lblId.setHorizontalAlignment(SwingConstants.CENTER);
+		lblId.setBounds(0, 417, 174, 20);
+		contentPane.add(lblId);
 	}
 }

@@ -23,7 +23,7 @@ import javax.swing.JComboBox;
 import javax.swing.JMenuBar;
 import javax.swing.JButton;
 
-public class CrearFichaTecnicaDO extends JFrame {
+public class MostrarFichaTecnicaDO extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table_1;
@@ -36,7 +36,7 @@ public class CrearFichaTecnicaDO extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CrearFichaTecnicaDO frame = new CrearFichaTecnicaDO();
+					MostrarFichaTecnicaDO frame = new MostrarFichaTecnicaDO();
 					frame.setVisible(true);
 					frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
@@ -49,11 +49,11 @@ public class CrearFichaTecnicaDO extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public CrearFichaTecnicaDO() {
+	public MostrarFichaTecnicaDO() {
 		setType(Type.UTILITY);
 		setTitle("Ficha T\u00E9cnica de Da\u00F1os Ocacionados");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 320, 500);
+		setBounds(100, 100, 320, 550);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -69,7 +69,7 @@ public class CrearFichaTecnicaDO extends JFrame {
 		contentPane.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 37, 282, 139);
+		scrollPane.setBounds(10, 117, 282, 139);
 		contentPane.add(scrollPane);
 		
 		table_2 = new JTable();
@@ -85,29 +85,8 @@ public class CrearFichaTecnicaDO extends JFrame {
 		table_2.setBackground(Color.DARK_GRAY);
 		scrollPane.setViewportView(table_2);
 		
-		JPopupMenu popupMenu = new JPopupMenu();
-		addPopup(table_2, popupMenu);
-		
-		JMenuItem mntmAgregar = new JMenuItem("Agregar");
-		mntmAgregar.setHorizontalAlignment(SwingConstants.RIGHT);
-		mntmAgregar.setBackground(Color.DARK_GRAY);
-		mntmAgregar.setForeground(Color.ORANGE);
-		popupMenu.add(mntmAgregar);
-		
-		JMenuItem mntmModificar = new JMenuItem("Modificar");
-		mntmModificar.setHorizontalAlignment(SwingConstants.RIGHT);
-		mntmModificar.setBackground(Color.DARK_GRAY);
-		mntmModificar.setForeground(Color.ORANGE);
-		popupMenu.add(mntmModificar);
-		
-		JMenuItem mntmEliminar = new JMenuItem("Eliminar");
-		mntmEliminar.setHorizontalAlignment(SwingConstants.RIGHT);
-		mntmEliminar.setBackground(Color.DARK_GRAY);
-		mntmEliminar.setForeground(Color.ORANGE);
-		popupMenu.add(mntmEliminar);
-		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(10, 212, 282, 139);
+		scrollPane_1.setBounds(10, 292, 282, 139);
 		contentPane.add(scrollPane_1);
 		
 		table_1 = new JTable();
@@ -123,58 +102,38 @@ public class CrearFichaTecnicaDO extends JFrame {
 		table_1.setBackground(Color.DARK_GRAY);
 		scrollPane_1.setViewportView(table_1);
 		
-		JPopupMenu popupMenu_1 = new JPopupMenu();
-		addPopup(table_1, popupMenu_1);
-		
-		JMenuItem mntmAgregar_1 = new JMenuItem("Agregar");
-		mntmAgregar_1.setBackground(Color.DARK_GRAY);
-		mntmAgregar_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		mntmAgregar_1.setForeground(Color.ORANGE);
-		popupMenu_1.add(mntmAgregar_1);
-		
-		JMenuItem mntmModificar_1 = new JMenuItem("Modificar");
-		mntmModificar_1.setBackground(Color.DARK_GRAY);
-		mntmModificar_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		mntmModificar_1.setForeground(Color.ORANGE);
-		popupMenu_1.add(mntmModificar_1);
-		
-		JMenuItem mntmEliminar_1 = new JMenuItem("Eliminar");
-		mntmEliminar_1.setBackground(Color.DARK_GRAY);
-		mntmEliminar_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		mntmEliminar_1.setForeground(Color.ORANGE);
-		popupMenu_1.add(mntmEliminar_1);
-		
 		JLabel lblAfectacinAlInmueble = new JLabel("Afectaci\u00F3n al Inmueble:");
 		lblAfectacinAlInmueble.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAfectacinAlInmueble.setBounds(10, 187, 292, 14);
+		lblAfectacinAlInmueble.setBounds(10, 267, 292, 14);
 		contentPane.add(lblAfectacinAlInmueble);
 		
 		JLabel lblAfectacinALa = new JLabel("Afectaci\u00F3n a la vivienda:");
 		lblAfectacinALa.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAfectacinALa.setBounds(10, 11, 284, 15);
+		lblAfectacinALa.setBounds(10, 91, 284, 15);
 		contentPane.add(lblAfectacinALa);
 		
 		JLabel label = new JLabel("Fecha Levantamiento:");
-		label.setBounds(10, 365, 133, 14);
+		label.setHorizontalAlignment(SwingConstants.TRAILING);
+		label.setBounds(10, 442, 282, 14);
 		contentPane.add(label);
 		
-		JSpinner spinner = new JSpinner();
-		spinner.setBounds(142, 362, 40, 20);
-		contentPane.add(spinner);
+		JLabel lblId = new JLabel("ID: 4587-4658-4958-4612");
+		lblId.setHorizontalAlignment(SwingConstants.CENTER);
+		lblId.setBounds(0, 467, 159, 20);
+		contentPane.add(lblId);
 		
-		JSpinner spinner_1 = new JSpinner();
-		spinner_1.setBounds(192, 362, 40, 20);
-		contentPane.add(spinner_1);
+		JLabel lblDatosDeLa = new JLabel("Datos de la vivienda asociada:");
+		lblDatosDeLa.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDatosDeLa.setBounds(10, 11, 284, 14);
+		contentPane.add(lblDatosDeLa);
 		
-		JSpinner spinner_2 = new JSpinner();
-		spinner_2.setBounds(242, 362, 50, 20);
-		contentPane.add(spinner_2);
+		JLabel lblJefeDeNcleo = new JLabel("Jefe de n\u00FAcleo:");
+		lblJefeDeNcleo.setBounds(10, 36, 282, 14);
+		contentPane.add(lblJefeDeNcleo);
 		
-		JButton button = new JButton("Enviar");
-		button.setForeground(Color.ORANGE);
-		button.setBackground(Color.DARK_GRAY);
-		button.setBounds(203, 403, 89, 23);
-		contentPane.add(button);
+		JLabel lblDireccin = new JLabel("Direcci\u00F3n:");
+		lblDireccin.setBounds(10, 61, 282, 14);
+		contentPane.add(lblDireccin);
 	}
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {

@@ -54,6 +54,7 @@ public class GestionMateriales extends JFrame {
 	 * Create the frame.
 	 */
 	public GestionMateriales() {
+		setTitle("Materiales");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
 		
@@ -61,8 +62,12 @@ public class GestionMateriales extends JFrame {
 		setJMenuBar(menuBar);
 		
 		mntmRegresar = new JMenuItem("Regresar");
+		mntmRegresar.setForeground(Color.ORANGE);
+		mntmRegresar.setBackground(Color.DARK_GRAY);
+		mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 		menuBar.add(mntmRegresar);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.ORANGE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);

@@ -26,8 +26,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JMenuBar;
+import java.awt.Label;
 
-public class CrearMueble extends JFrame {
+public class ModificarMueble extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -39,7 +40,7 @@ public class CrearMueble extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CrearMueble frame = new CrearMueble();
+					ModificarMueble frame = new ModificarMueble();
 					frame.setVisible(true);
 					frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
@@ -52,9 +53,9 @@ public class CrearMueble extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public CrearMueble() {
+	public ModificarMueble() {
 		setType(Type.UTILITY);
-		setTitle("Agregar mueble");
+		setTitle("Modificar mueble");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 280, 170);
 		
@@ -94,11 +95,11 @@ public class CrearMueble extends JFrame {
 		spinner.setBounds(96, 40, 50, 20);
 		contentPane.add(spinner);
 		
-		JButton buttonAgregar = new JButton("Agregar");
-		buttonAgregar.setBackground(Color.DARK_GRAY);
-		buttonAgregar.setForeground(Color.ORANGE);
-		buttonAgregar.setBounds(165, 73, 89, 23);
-		contentPane.add(buttonAgregar);
+		JButton buttonModificar = new JButton("Modificar");
+		buttonModificar.setForeground(Color.ORANGE);
+		buttonModificar.setBackground(Color.DARK_GRAY);
+		buttonModificar.setBounds(165, 71, 89, 23);
+		contentPane.add(buttonModificar);
 	}
 	private static void addPopup(Component component, final JPopupMenu popup) {
 	}

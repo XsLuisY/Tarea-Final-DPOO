@@ -33,14 +33,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Window.Type;
 import javax.swing.JMenuBar;
+import com.jgoodies.forms.factories.DefaultComponentFactory;
 
-public class CrearAfectacion extends JFrame {
+public class CrearMaterial extends JFrame {
 
 	private JPanel contentPane;
 	
 	private String[] tipoDerrumbe={"Pared", "Techo"};
 	private final ButtonGroup buttonGroupEsDeCarga = new ButtonGroup();
-	private JTextField textFieldMaterialPredominante;
+	private JTextField textFieldNombre;
+	private JTextField textField;
 	/**
 	 * Launch the application.
 	 */
@@ -48,7 +50,7 @@ public class CrearAfectacion extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CrearAfectacion frame = new CrearAfectacion();
+					CrearMaterial frame = new CrearMaterial();
 					frame.setVisible(true);
 					frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
@@ -61,11 +63,11 @@ public class CrearAfectacion extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public CrearAfectacion() {
-		setTitle("Agregar afectaci\u00F3n");
+	public CrearMaterial() {
+		setTitle("Agregar material");
 		setType(Type.UTILITY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 280, 170);
+		setBounds(100, 100, 280, 190);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -82,28 +84,14 @@ public class CrearAfectacion extends JFrame {
 		
 		JPanel panelAfectaciones = new JPanel();
 		panelAfectaciones.setBackground(Color.ORANGE);
-		panelAfectaciones.setBounds(0, 0, 264, 107);
+		panelAfectaciones.setBounds(0, 0, 264, 127);
 		contentPane.add(panelAfectaciones);
 		panelAfectaciones.setLayout(null);
 		
-		JComboBox comboBox = new JComboBox(tipoDerrumbe);
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Pared", "Pared de carga", "Techo"}));
-		comboBox.setBounds(139, 11, 115, 20);
-		panelAfectaciones.add(comboBox);
-		JLabel lblquTipoDe = new JLabel("Tipo de afectaci\u00F3n:");
-		lblquTipoDe.setHorizontalAlignment(SwingConstants.CENTER);
-		lblquTipoDe.setBounds(0, 13, 138, 17);
-		panelAfectaciones.add(lblquTipoDe);
-		
-		JLabel labelMaterialPredominante = new JLabel("Material predominante:");
-		labelMaterialPredominante.setHorizontalAlignment(SwingConstants.CENTER);
-		labelMaterialPredominante.setBounds(0, 41, 140, 14);
-		panelAfectaciones.add(labelMaterialPredominante);
-		
-		textFieldMaterialPredominante = new JTextField();
-		textFieldMaterialPredominante.setBounds(139, 42, 115, 17);
-		panelAfectaciones.add(textFieldMaterialPredominante);
-		textFieldMaterialPredominante.setColumns(10);
+		textFieldNombre = new JTextField();
+		textFieldNombre.setBounds(96, 11, 158, 20);
+		panelAfectaciones.add(textFieldNombre);
+		textFieldNombre.setColumns(10);
 		
 		JButton btnAgregar = new JButton("Agregar");
 		btnAgregar.addActionListener(new ActionListener() {
@@ -112,8 +100,29 @@ public class CrearAfectacion extends JFrame {
 		});
 		btnAgregar.setForeground(Color.ORANGE);
 		btnAgregar.setBackground(Color.DARK_GRAY);
-		btnAgregar.setBounds(165, 73, 89, 23);
+		btnAgregar.setBounds(165, 93, 89, 23);
 		panelAfectaciones.add(btnAgregar);
+		
+		JLabel lblMaterial = new JLabel("Material:");
+		lblMaterial.setBounds(10, 14, 76, 14);
+		panelAfectaciones.add(lblMaterial);
+		
+		JLabel lblUnidadDeMedida = new JLabel("Unidad de medida:");
+		lblUnidadDeMedida.setBounds(10, 39, 120, 14);
+		panelAfectaciones.add(lblUnidadDeMedida);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(140, 36, 114, 20);
+		panelAfectaciones.add(comboBox);
+		
+		JLabel lblPrecioUnitario = DefaultComponentFactory.getInstance().createLabel("Precio unitario:");
+		lblPrecioUnitario.setBounds(10, 64, 92, 14);
+		panelAfectaciones.add(lblPrecioUnitario);
+		
+		textField = new JTextField();
+		textField.setBounds(140, 61, 114, 20);
+		panelAfectaciones.add(textField);
+		textField.setColumns(10);
 	
 	}
 	private static void addPopup(Component component, final JPopupMenu popup) {

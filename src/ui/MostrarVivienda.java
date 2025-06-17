@@ -41,6 +41,8 @@ import javax.swing.JSpinner;
 import java.awt.Color;
 import java.awt.TextField;
 import javax.swing.JTextArea;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 
 public class MostrarVivienda extends JFrame {
@@ -91,7 +93,17 @@ public class MostrarVivienda extends JFrame {
 		setResizable(false);
 		setTitle("Formulario de la Vivienda");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 300, 412);
+		setBounds(100, 100, 300, 430);
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setForeground(Color.ORANGE);
+		menuBar.setBackground(Color.DARK_GRAY);
+		setJMenuBar(menuBar);
+		
+		JMenuItem mntmRegresar = new JMenuItem("Regresar");
+		mntmRegresar.setForeground(Color.ORANGE);
+		mntmRegresar.setBackground(Color.DARK_GRAY);
+		menuBar.add(mntmRegresar);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.ORANGE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -265,11 +277,6 @@ public class MostrarVivienda extends JFrame {
 		JLabel lblId = new JLabel("ID:");
 		lblId.setBounds(5, 358, 15, 14);
 		contentPane.add(lblId);
-		
-		JButton btnRegresar = new JButton("Regresar");
-		btnRegresar.setBounds(189, 349, 95, 23);
-		btnRegresar.setForeground(Color.BLACK);
-		contentPane.add(btnRegresar);
 		
 		JLabel lblUUID = new JLabel("New label");
 		lblUUID.setBounds(30, 358, 149, 14);

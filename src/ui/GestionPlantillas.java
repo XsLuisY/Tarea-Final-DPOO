@@ -60,11 +60,16 @@ public class GestionPlantillas extends JFrame {
 		setBounds(100, 100, 526, 300);
 		
 		menuBar = new JMenuBar();
+		menuBar.setForeground(Color.ORANGE);
+		menuBar.setBackground(Color.DARK_GRAY);
 		setJMenuBar(menuBar);
 		
 		mntmRegresar = new JMenuItem("Regresar");
+		mntmRegresar.setForeground(Color.ORANGE);
+		mntmRegresar.setBackground(Color.DARK_GRAY);
 		menuBar.add(mntmRegresar);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.ORANGE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);

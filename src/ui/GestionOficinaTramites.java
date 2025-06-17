@@ -61,7 +61,7 @@ public class GestionOficinaTramites extends JFrame {
 		setType(Type.UTILITY);
 		setTitle("Oficinas de Tramites");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 240, 270);
+		setBounds(100, 100, 400, 300);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -77,7 +77,7 @@ public class GestionOficinaTramites extends JFrame {
 		contentPane.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 214, 195);
+		scrollPane.setBounds(10, 11, 374, 225);
 		contentPane.add(scrollPane);
 		
 		//PONER ARRAY CON NOMBRES DE LOSCONSEJOS POPULARES
