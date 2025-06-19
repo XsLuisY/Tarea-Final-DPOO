@@ -1,5 +1,6 @@
 package ui;
 import java.awt.EventQueue;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -9,73 +10,95 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import clases.MICONS;
+
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 
 public class CrearOficinaTramites extends JFrame {
-
+	private MICONS micons;
 	private JPanel contentPane;
 	private JTextField textField;
+	private JMenuBar barraSuperior;
+	private JMenuItem mntmRegresar;
+	private JButton btnEnviar;
+	private JLabel lblConsejoPopular;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CrearOficinaTramites frame = new CrearOficinaTramites();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public CrearOficinaTramites() {
+	public CrearOficinaTramites(MICONS micons) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 200, 170);
-		
-		JMenuBar menuBar = new JMenuBar();
-		menuBar.setForeground(Color.ORANGE);
-		menuBar.setBackground(Color.DARK_GRAY);
-		setJMenuBar(menuBar);
-		
-		JMenuItem mntmRegresar = new JMenuItem("Regresar");
-		mntmRegresar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			dispose();
-			}
-		});
-		mntmRegresar.setForeground(Color.ORANGE);
-		mntmRegresar.setBackground(Color.DARK_GRAY);
-		menuBar.add(mntmRegresar);
-		contentPane = new JPanel();
-		contentPane.setBackground(Color.ORANGE);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JButton btnEnviar = new JButton("Enviar");
-		btnEnviar.setBackground(Color.DARK_GRAY);
-		btnEnviar.setForeground(Color.ORANGE);
-		btnEnviar.setBounds(85, 73, 89, 23);
-		contentPane.add(btnEnviar);
-		
-		JLabel lblConsejoPopular = new JLabel("Consejo Popular:");
-		lblConsejoPopular.setHorizontalAlignment(SwingConstants.CENTER);
-		lblConsejoPopular.setBounds(10, 11, 164, 14);
-		contentPane.add(lblConsejoPopular);
-		
-		textField = new JTextField();
-		textField.setBounds(10, 36, 164, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		this.micons=micons;
+		setContentPane(getContentPane());		
+		setJMenuBar(getBarraSuperior());
+
+	}
+
+	public JPanel getContentPane(){
+		if(contentPane==null){
+			contentPane = new JPanel();
+			contentPane.setBackground(Color.ORANGE);
+			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+			contentPane.setLayout(null);
+			contentPane.add(getBtnEnviar());
+			contentPane.add(getLblConsejoPopular());
+			contentPane.add(getTextField());
+		}
+		return contentPane;
+	}
+	public JMenuBar getBarraSuperior(){ 
+		if(barraSuperior==null){
+			barraSuperior = new JMenuBar();
+			barraSuperior.add(getMntmRegresar());
+		}
+		return barraSuperior;
+	}
+	public JMenuItem getMntmRegresar(){
+		if(mntmRegresar==null){
+			mntmRegresar = new JMenuItem("Regresar");
+			mntmRegresar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+					
+				}
+			});
+			mntmRegresar.setBackground(Color.DARK_GRAY);
+			mntmRegresar.setForeground(Color.ORANGE);
+			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
+			mntmRegresar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+				}
+			});
+		}
+		return mntmRegresar;
+	}
+	public JButton getBtnEnviar(){
+		if(btnEnviar==null){
+			btnEnviar = new JButton("Enviar");
+			btnEnviar.setBackground(Color.DARK_GRAY);
+			btnEnviar.setForeground(Color.ORANGE);
+			btnEnviar.setBounds(85, 73, 89, 23);
+		}
+		return btnEnviar;
+	}
+	public JLabel getLblConsejoPopular(){
+		if(lblConsejoPopular==null){
+			lblConsejoPopular= new JLabel("Consejo Popular:");
+			lblConsejoPopular.setHorizontalAlignment(SwingConstants.CENTER);
+			lblConsejoPopular.setBounds(10, 11, 164, 14);
+		}
+		return lblConsejoPopular;
+	}
+	public JTextField getTextField(){
+		if(textField ==null){
+			textField = new JTextField();
+			textField.setBounds(10, 36, 164, 20);			
+			textField.setColumns(10);
+		}
+		return textField ;
 	}
 }
+

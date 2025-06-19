@@ -22,114 +22,143 @@ import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
 import javax.swing.JMenuBar;
 import javax.swing.table.DefaultTableModel;
+
+import clases.MICONS;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class GestionMateriales extends JFrame {
-
+	private MICONS micons;
 	private JPanel contentPane;
-	private JTable table;
+	private JScrollPane scrollPaneMateriales;
+	private JTable tableMateriales;
 	private JPopupMenu popupMenu;
-	private JMenuItem menuItem;
-	private JMenuItem menuItem_2;
-	private JMenuItem menuItem_3;
-	private JMenuBar menuBar;
+	private JMenuItem menuItemAgregar;
+	private JMenuItem menuItemModificar;
+	private JMenuItem menuItemEliminar;
+	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GestionMateriales frame = new GestionMateriales();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the frame.
-	 */
-	public GestionMateriales() {
+	public GestionMateriales(MICONS micons) {
 		setTitle("Materiales");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
-		
-		menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-		
-		mntmRegresar = new JMenuItem("Regresar");
-		mntmRegresar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			dispose();
-			}
-		});
-		mntmRegresar.setForeground(Color.ORANGE);
-		mntmRegresar.setBackground(Color.DARK_GRAY);
-		mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
-		menuBar.add(mntmRegresar);
-		contentPane = new JPanel();
-		contentPane.setBackground(Color.ORANGE);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 364, 215);
-		contentPane.add(scrollPane);
-		
-		table = new JTable();
-		table.setModel(new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-						"Nombre", "u/medida", "Precio"
-				}
-			));
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setForeground(Color.ORANGE);
-		table.setFillsViewportHeight(true);
-		table.setBackground(Color.DARK_GRAY);
-		scrollPane.setViewportView(table);
-		
-		popupMenu = new JPopupMenu();
-		popupMenu.setForeground(Color.ORANGE);
-		popupMenu.setBackground(Color.DARK_GRAY);
-		addPopup(table, popupMenu);
-		
-		menuItem = new JMenuItem("A\u00F1adir");
-		menuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				new CrearMaterial().setVisible(true);
-			}
-		});
-		menuItem.setHorizontalAlignment(SwingConstants.RIGHT);
-		menuItem.setForeground(Color.ORANGE);
-		menuItem.setBackground(Color.DARK_GRAY);
-		popupMenu.add(menuItem);
-		
-		menuItem_2 = new JMenuItem("Modificar");
-		menuItem_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			new ModificarMaterial().setVisible(true);
-			}
-		});
-		menuItem_2.setHorizontalAlignment(SwingConstants.RIGHT);
-		menuItem_2.setForeground(Color.ORANGE);
-		menuItem_2.setBackground(Color.DARK_GRAY);
-		popupMenu.add(menuItem_2);
-		
-		menuItem_3 = new JMenuItem("Eliminar");
-		menuItem_3.setHorizontalAlignment(SwingConstants.RIGHT);
-		menuItem_3.setForeground(Color.ORANGE);
-		menuItem_3.setBackground(Color.DARK_GRAY);
-		popupMenu.add(menuItem_3);
+		this.micons=micons;
+		setJMenuBar(getBarraSuperior());
+		setContentPane(getContentPane());
+		addPopup(getTableMateriales(), getPopupMenu());
 	}
+	public JMenuBar getBarraSuperior(){ 
+		if(barraSuperior==null){
+			barraSuperior = new JMenuBar();
+			barraSuperior.add(getMntmRegresar());
+		}
+		return barraSuperior;
+	}
+	public JMenuItem getMntmRegresar(){
+		if(mntmRegresar==null){
+			mntmRegresar = new JMenuItem("Regresar");
+			mntmRegresar.setBackground(Color.DARK_GRAY);
+			mntmRegresar.setForeground(Color.ORANGE);
+			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
+			mntmRegresar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+					GestionOficinaTramites g =new GestionOficinaTramites(micons);
+					g.setVisible(true);
+				}
+			});
+		}
+		return mntmRegresar;
+	}
+	public JPanel getContentPane(){
+		if(contentPane==null){
+			contentPane = new JPanel();
+			contentPane.setBackground(Color.ORANGE);
+			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+			contentPane.setLayout(null);
+			contentPane.add(getScrollPaneMateriales());
+		}
+		return contentPane ;
+	}
+	public JScrollPane getScrollPaneMateriales(){	
+		if(scrollPaneMateriales==null){
+			scrollPaneMateriales = new JScrollPane();
+			scrollPaneMateriales.setBounds(10, 11, 364, 215);
+			scrollPaneMateriales.setViewportView(getTableMateriales());
+		}
+		return scrollPaneMateriales ;
+	}
+	public JTable getTableMateriales(){
+		if(tableMateriales==null){
+			tableMateriales = new JTable();
+			tableMateriales.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			tableMateriales.setForeground(Color.ORANGE);
+			tableMateriales.setFillsViewportHeight(true);
+			tableMateriales.setBackground(Color.DARK_GRAY);
+			tableMateriales.setModel(new DefaultTableModel(
+					new Object[][] {
+					},
+					new String[] {
+							"Nombre", "u/medida", "Precio"
+					}
+					));
+		}
+		return tableMateriales;
+	}
+	public JPopupMenu getPopupMenu(){
+		if(popupMenu==null){
+			popupMenu = new JPopupMenu();
+			popupMenu.setForeground(Color.ORANGE);
+			popupMenu.setBackground(Color.DARK_GRAY);
+			popupMenu.add(getMenuItemAgregar());			
+			popupMenu.add(getMenuItemModificar());
+			popupMenu.add(getMenuItemEliminar());
+		}
+		return popupMenu;
+	}	
+	public JMenuItem getMenuItemAgregar(){
+		if(menuItemAgregar==null){
+			menuItemAgregar = new JMenuItem("Agregar");
+			menuItemAgregar.setHorizontalAlignment(SwingConstants.RIGHT);
+			menuItemAgregar.setForeground(Color.ORANGE);
+			menuItemAgregar.setBackground(Color.DARK_GRAY);
+			menuItemAgregar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					 CrearMaterial c = new CrearMaterial(micons);
+					 c.setVisible(true);
+				}
+			});
+		}
+		return menuItemAgregar;
+	}
+
+	public JMenuItem getMenuItemModificar(){
+		if(menuItemModificar==null){
+			menuItemModificar = new JMenuItem("Modificar");
+			menuItemModificar.setHorizontalAlignment(SwingConstants.RIGHT);
+			menuItemModificar.setForeground(Color.ORANGE);
+			menuItemModificar.setBackground(Color.DARK_GRAY);
+			menuItemModificar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					 ModificarMaterial c = new ModificarMaterial(micons);
+					 c.setVisible(true);
+				}
+			});
+		}
+		return menuItemModificar;
+	}
+	public JMenuItem getMenuItemEliminar(){
+		if(menuItemEliminar==null){
+			menuItemEliminar = new JMenuItem("Eliminar");
+			menuItemEliminar.setHorizontalAlignment(SwingConstants.RIGHT);
+			menuItemEliminar.setForeground(Color.ORANGE);
+			menuItemEliminar.setBackground(Color.DARK_GRAY);
+		}
+		return menuItemEliminar;
+	}
+
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {

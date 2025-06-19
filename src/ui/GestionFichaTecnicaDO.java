@@ -9,136 +9,176 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JPopupMenu;
+
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Color;
+
 import javax.swing.ListSelectionModel;
 import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
 import javax.swing.JMenuBar;
 import javax.swing.table.DefaultTableModel;
+
+import clases.MICONS;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class GestionFichaTecnicaDO extends JFrame {
-
+	private MICONS micons;
+	private JMenuBar barraSuperior;
 	private JPanel contentPane;
+	private JScrollPane scrollPane;
 	private JTable table;
-	private JPopupMenu popupMenu;
-	private JMenuItem menuItem;
-	private JMenuItem menuItem_1;
-	private JMenuItem menuItem_2;
-	private JMenuItem menuItem_3;
-	private JMenuBar menuBar;
 	private JMenuItem mntmRegresar;
+	private JPopupMenu popupMenu;
+	private JMenuItem menuItemAgregar;
+	private JMenuItem menuItemMostrar;
+	private JMenuItem menuItemModificar;
+	private JMenuItem menuItemEliminar;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GestionFichaTecnicaDO frame = new GestionFichaTecnicaDO();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public GestionFichaTecnicaDO() {
+	public GestionFichaTecnicaDO(MICONS micons) {
 		setTitle("Gesti\u00F3n de Fichas T\u00E9cnicas");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
-		
-		menuBar = new JMenuBar();
-		menuBar.setBackground(Color.DARK_GRAY);
-		menuBar.setForeground(Color.ORANGE);
-		setJMenuBar(menuBar);
-		
-		mntmRegresar = new JMenuItem("Regresar");
-		mntmRegresar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				dispose();
-			}
-		});
-		mntmRegresar.setBackground(Color.DARK_GRAY);
-		mntmRegresar.setForeground(Color.ORANGE);
-		menuBar.add(mntmRegresar);
-		contentPane = new JPanel();
-		contentPane.setBackground(Color.ORANGE);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 364, 215);
-		contentPane.add(scrollPane);
-		
-		table = new JTable();
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-					 "Direcci\u00F3n", "Fecha Levantamiento","ID"
-			}
-		));
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setForeground(Color.ORANGE);
-		table.setFillsViewportHeight(true);
-		table.setBackground(Color.DARK_GRAY);
-		scrollPane.setViewportView(table);
-		
-		popupMenu = new JPopupMenu();
-		popupMenu.setForeground(Color.ORANGE);
-		popupMenu.setBackground(Color.DARK_GRAY);
-		addPopup(table, popupMenu);
-		
-		menuItem = new JMenuItem("A\u00F1adir");
-		menuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				new CrearFichaTecnicaDO().setVisible(true);
-			}
-		});
-		menuItem.setHorizontalAlignment(SwingConstants.RIGHT);
-		menuItem.setForeground(Color.ORANGE);
-		menuItem.setBackground(Color.DARK_GRAY);
-		popupMenu.add(menuItem);
-		
-		menuItem_1 = new JMenuItem("Mostrar");
-		menuItem_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				new MostrarFichaTecnicaDO().setVisible(true);
-			}
-		});
-		menuItem_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		menuItem_1.setForeground(Color.ORANGE);
-		menuItem_1.setBackground(Color.DARK_GRAY);
-		popupMenu.add(menuItem_1);
-		
-		menuItem_2 = new JMenuItem("Modificar");
-		menuItem_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				new ModificarFichaTecnicaDO().setVisible(true);
-			}
-		});
-		menuItem_2.setHorizontalAlignment(SwingConstants.RIGHT);
-		menuItem_2.setForeground(Color.ORANGE);
-		menuItem_2.setBackground(Color.DARK_GRAY);
-		popupMenu.add(menuItem_2);
-		
-		menuItem_3 = new JMenuItem("Eliminar");
-		menuItem_3.setHorizontalAlignment(SwingConstants.RIGHT);
-		menuItem_3.setForeground(Color.ORANGE);
-		menuItem_3.setBackground(Color.DARK_GRAY);
-		popupMenu.add(menuItem_3);
+		this.micons=micons;
+		setJMenuBar(getBarraSuperior());
+		setContentPane(getContentPane());
+		addPopup(getTable(), getPopupMenu());
+
 	}
+
+	public JMenuBar getBarraSuperior(){ 
+		if(barraSuperior==null){
+			barraSuperior = new JMenuBar();
+			barraSuperior.add(getMntmRegresar());
+		}
+		return barraSuperior;
+	}
+	public JMenuItem getMntmRegresar(){
+		if(mntmRegresar==null){
+			mntmRegresar = new JMenuItem("Regresar");
+			mntmRegresar.setBackground(Color.DARK_GRAY);
+			mntmRegresar.setForeground(Color.ORANGE);
+			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
+			mntmRegresar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+					GestionOficinaTramites g = new GestionOficinaTramites(micons);
+					g.setVisible(true);
+				}
+			});
+		}
+		return mntmRegresar;
+	}
+	public JPanel getContentPane(){
+		if(contentPane==null){
+			contentPane = new JPanel();
+			contentPane.setBackground(Color.ORANGE);
+			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+			contentPane.setLayout(null);
+			contentPane.add(getScrollPane());
+
+		}
+		return contentPane;
+	}
+	public JScrollPane getScrollPane(){
+		if(scrollPane==null){
+			scrollPane = new JScrollPane();
+			scrollPane.setBounds(10, 11, 364, 215);
+			scrollPane.setViewportView(getTable());
+		}
+		return scrollPane;
+	}
+	public JTable getTable(){
+		if(table==null){
+			table = new JTable();
+			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			table.setForeground(Color.ORANGE);
+			table.setFillsViewportHeight(true);
+			table.setBackground(Color.DARK_GRAY);
+			table.setModel(new DefaultTableModel(
+					new Object[][] {
+					},
+					new String[] {
+							"Direcci\u00F3n", "Fecha Levantamiento","ID"
+					}
+					));
+		}
+		return table;
+	}
+	public JPopupMenu getPopupMenu(){	
+		if(popupMenu==null){
+			popupMenu = new JPopupMenu();
+			popupMenu.setForeground(Color.ORANGE);
+			popupMenu.setBackground(Color.DARK_GRAY);
+			popupMenu.add(getMenuItemAgregar());
+			popupMenu.add(getMenuItemMostrar());
+			popupMenu.add(getMenuItemModificar());
+			popupMenu.add(getMenuItemEliminar());
+		}
+		return popupMenu;
+	}
+	public JMenuItem getMenuItemAgregar(){
+		if(menuItemAgregar==null){
+			menuItemAgregar = new JMenuItem("Agregar");
+			menuItemAgregar.setHorizontalAlignment(SwingConstants.RIGHT);
+			menuItemAgregar.setForeground(Color.ORANGE);
+			menuItemAgregar.setBackground(Color.DARK_GRAY);
+			menuItemAgregar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+					CrearFichaTecnicaDO c =new CrearFichaTecnicaDO(micons);
+					c.setVisible(true);
+				}
+			});
+		}
+		return menuItemAgregar;
+	}
+	public JMenuItem getMenuItemMostrar(){
+		if(menuItemMostrar==null){
+			menuItemMostrar = new JMenuItem("Mostrar");
+			menuItemMostrar.setHorizontalAlignment(SwingConstants.RIGHT);
+			menuItemMostrar.setForeground(Color.ORANGE);
+			menuItemMostrar.setBackground(Color.DARK_GRAY);
+			menuItemMostrar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+					MostrarFichaTecnicaDO m = new MostrarFichaTecnicaDO(micons);
+					m.setVisible(true);
+				}
+			});
+		}
+		return menuItemMostrar;
+	}
+	public JMenuItem getMenuItemModificar(){
+		if(menuItemModificar==null){
+			menuItemModificar = new JMenuItem("Modificar");
+			menuItemModificar.setHorizontalAlignment(SwingConstants.RIGHT);
+			menuItemModificar.setForeground(Color.ORANGE);
+			menuItemModificar.setBackground(Color.DARK_GRAY);
+			menuItemModificar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+					CrearFichaTecnicaDO c = new CrearFichaTecnicaDO(micons);
+					c.setVisible(true);
+				}
+			});
+		}
+		return menuItemModificar;
+	}
+	public JMenuItem getMenuItemEliminar(){
+		if(menuItemEliminar==null){
+			menuItemEliminar = new JMenuItem("Eliminar");
+			menuItemEliminar.setHorizontalAlignment(SwingConstants.RIGHT);
+			menuItemEliminar.setForeground(Color.ORANGE);
+			menuItemEliminar.setBackground(Color.DARK_GRAY);
+		}
+		return menuItemEliminar;
+	}
+
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {

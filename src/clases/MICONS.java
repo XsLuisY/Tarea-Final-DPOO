@@ -1,15 +1,18 @@
 package clases;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class MICONS {
 	private ArrayList<OficinaTramites> oficinas;
 	private ArrayList<Vivienda> viviendas;
-
+	
+	
+	
 	//Constructor 
 	public MICONS(){
 		oficinas = new ArrayList<OficinaTramites>();
-		viviendas = new ArrayList<Vivienda>();
+		viviendas = new ArrayList<Vivienda>();		
 	}
 	//Metodos CRUD de OficinaTramites
 	//Create
@@ -17,8 +20,8 @@ public class MICONS {
 		Boolean agregado= false;
 		OficinaTramites oficinaT= new OficinaTramites(consejoPopular);
 		if(oficinaT!= null){
-		oficinas.add(oficinaT);
-		agregado= true;
+			oficinas.add(oficinaT);
+			agregado= true;
 		}
 		return agregado;
 	}
@@ -63,8 +66,8 @@ public class MICONS {
 		Boolean agg= false;
 		Vivienda vivienda= new Vivienda(nombreJefeN, idJefeN, direccion, documentoLegal, tipologiaHabitacional, tipologiaConstructiva, facilidadTemporal, largo, ancho, altura, cantNinios, cantAncianos, cantEmbarazadas, totalHabitantes);
 		if(vivienda!=null){
-		viviendas.add(vivienda);
-		agg= true;
+			viviendas.add(vivienda);
+			agg= true;
 		}
 		return agg;
 	}
@@ -115,7 +118,7 @@ public class MICONS {
 		return exit;
 	}
 
-	
+
 	//Reportes
 
 	//Anthony
@@ -126,21 +129,41 @@ public class MICONS {
 	public void mostrarCantElementoAfectado(){		
 	}
 	//4.........................................
-		/*Arreglar utilizando el metodo de busqueda mencionado en clase
-	
+
 	public void mostrarMaterialMasCaro(){
-			int aux=0;
-			
-		for(OficinaTramites o: oficinas)
-			if(o.buscarCubicacionMayorCoste().calcularPrecioTotal()>aux.buscarMaterialMasCaro().calcularPrecioTotal()){
-				//UTILIZAR ARRAY Y COMPARAR EL PRIMER ELEMENTO DE CADA UNO
+		double costoM=0;			
+		double auxCostoM;
+		ArrayList<Cubicacion> cubicaciones = new ArrayList<Cubicacion>();
+		ArrayList<Cubicacion> auxCubicaciones = new ArrayList<Cubicacion>();
+
+		for(OficinaTramites o: oficinas){
+			auxCubicaciones=o.buscarCubicacionesMayorCosto();
+			auxCostoM=auxCubicaciones.get(0).calcularPrecioTotal();
+
+			if(auxCostoM>costoM){							
+				costoM=auxCostoM;
+				cubicaciones.clear();
+			}
+			if(costoM==auxCostoM)
+				cubicaciones.addAll(auxCubicaciones);
+		}
 	}
-*/
+
+	
+//-------------------------------------Inicializar Datos-----------------------------------------------------
+//----------Oficinas de Tramites
+public void inicializarOficinaTramites(){
+	oficinas.add(new OficinaTramites("Arroyo Naranjo"));	
+	oficinas.add(new OficinaTramites("Boyeros"));	
+	oficinas.add(new OficinaTramites("Vedado"));	
+	oficinas.add(new OficinaTramites("10 de Octubre"));	
+	oficinas.add(new OficinaTramites("Cotorro"));	
+	oficinas.add(new OficinaTramites("Cerro"));	
+	oficinas.add(new OficinaTramites("La Lisa"));		
 }
 
 
-
-
+}
 
 
 

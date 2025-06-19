@@ -1,5 +1,0 @@
-Cemento, saco, 300
-Bloque, unidad, 25
-Arena, saco, 250
-Grava, saco, 400
-Cabilla, metro, 100

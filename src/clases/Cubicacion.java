@@ -28,10 +28,19 @@ public class Cubicacion  {
 
 	//CRUD-MaterialACubicar ARREGLAR
 	//Create	
-	public void addMaterialACubicar(Material material, double cantidad){
-		materiales.add(new MaterialACubicar(material, cantidad)); 
+
+	public MaterialACubicar createMaterialACubicar(Material material, double cantidad){
+		return new MaterialACubicar(material, cantidad);
+
 	}
-	
+
+	public void addMaterialACubicar(MaterialACubicar material){
+		if(!materiales.contains(material))
+			materiales.add(material);
+		else
+			throw new IllegalArgumentException("Este material ya fue cubicado");
+	}
+
 	//Read
 	public MaterialACubicar searchMaterialACubicar(UUID id){
 		boolean encontrado=false;
@@ -65,7 +74,7 @@ public class Cubicacion  {
 	}
 
 	//Métodos
-	
+
 	public double calcularPrecioTotal(){
 		double precioTotal=0;
 		for(MaterialACubicar m: materiales){
@@ -73,7 +82,26 @@ public class Cubicacion  {
 		}
 		return precioTotal;
 	}
-	
+
 	//Metodos para cargar los datos desde el .txt
 
+
+
+
+	//----------------------------------------------------------------------
+
+	public void inicializarDatos(){
+
+
+
+
+	}
+
+
+
+	//----------------------------------------------------------------------
+
+
 }
+
+
