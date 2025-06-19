@@ -12,45 +12,30 @@ import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+
 import java.awt.Color;
+
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+
+import clases.MICONS;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class MostrarPlantilla extends JFrame {
-
+	private MICONS micons;
 	private JPanel contentPane;
 	private JTable table;
 	private JTable table_1;
 	private JTable table_2;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MostrarPlantilla frame = new MostrarPlantilla();
-					frame.setVisible(true);
-					frame.setLocationRelativeTo(null);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public MostrarPlantilla() {
+	public MostrarPlantilla(MICONS micons) {
 		setTitle("Plantilla");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 870, 485);
-		
+		this.micons=micons;
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(Color.DARK_GRAY);
 		menuBar.setForeground(Color.ORANGE);

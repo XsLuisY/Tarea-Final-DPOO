@@ -15,9 +15,11 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import clases.MICONS;
+
 
 public class MostrarVivienda extends JFrame {
-
+	private MICONS micons;
 	private JPanel contentPane;
 	private JTextField textFieldDireccion;
 	private JLabel lblFacilidadTemporal;
@@ -31,32 +33,14 @@ public class MostrarVivienda extends JFrame {
 	private JTextField textFieldTipologiaConstructiva;
 	private JLabel lblDatosDeLa;
 	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MostrarVivienda frame = new MostrarVivienda();
-					frame.setVisible(true);
-					frame.setLocationRelativeTo(null);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the frame.
-	 */
-	public MostrarVivienda() {
+	public MostrarVivienda(MICONS micons) {
 		setType(Type.UTILITY);
 		setResizable(false);
 		setTitle("Formulario de la Vivienda");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 300, 430);
+		this.micons=micons;
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setForeground(Color.ORANGE);
