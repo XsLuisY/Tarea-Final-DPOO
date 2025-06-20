@@ -38,12 +38,12 @@ public class CrearMueble extends JFrame {
 	private JButton buttonAgregar;
 
 
-	public CrearMueble(MICONS micons) {
+	public CrearMueble() {
 		setType(Type.UTILITY);
 		setTitle("Agregar mueble");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 280, 170);
-		this.micons=micons;
+		micons=MICONS.getMICONS();	
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 	}

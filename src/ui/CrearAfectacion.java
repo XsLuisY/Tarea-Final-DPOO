@@ -58,12 +58,12 @@ public class CrearAfectacion extends JFrame {
 	private JButton btnAgregar;
 
 
-	public CrearAfectacion(MICONS micons) {
+	public CrearAfectacion() {
 		setTitle("Agregar afectaci\u00F3n");
 		setType(Type.UTILITY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 280, 170);
-		this.micons=micons;
+		micons=MICONS.getMICONS();	
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		setContentPane(getContentPane());

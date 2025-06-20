@@ -40,11 +40,11 @@ public class GestionMateriales extends JFrame {
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
 
-	public GestionMateriales(MICONS micons) {
+	public GestionMateriales() {
 		setTitle("Materiales");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
-		this.micons=micons;
+		micons=MICONS.getMICONS();	
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 		addPopup(getTableMateriales(), getPopupMenu());
@@ -65,7 +65,7 @@ public class GestionMateriales extends JFrame {
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					GestionOficinaTramites g =new GestionOficinaTramites(micons);
+					GestionOficinaTramites g = new GestionOficinaTramites();
 					g.setVisible(true);
 				}
 			});
@@ -126,8 +126,8 @@ public class GestionMateriales extends JFrame {
 			menuItemAgregar.setBackground(Color.DARK_GRAY);
 			menuItemAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					 CrearMaterial c = new CrearMaterial(micons);
-					 c.setVisible(true);
+					CrearMaterial c = new CrearMaterial();
+					c.setVisible(true);
 				}
 			});
 		}
@@ -142,8 +142,8 @@ public class GestionMateriales extends JFrame {
 			menuItemModificar.setBackground(Color.DARK_GRAY);
 			menuItemModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					 ModificarMaterial c = new ModificarMaterial(micons);
-					 c.setVisible(true);
+					ModificarMaterial c = new ModificarMaterial();
+					c.setVisible(true);
 				}
 			});
 		}

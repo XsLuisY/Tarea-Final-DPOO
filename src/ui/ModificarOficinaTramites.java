@@ -8,10 +8,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import clases.MICONS;
+import clases.OficinaTramites;
 
 import java.awt.Color;
 import java.awt.event.ActionListener;
@@ -26,11 +28,15 @@ public class ModificarOficinaTramites extends JFrame {
 	private JMenuItem mntmRegresar;
 	private JButton btnModificar;
 	private JLabel lblConsejoPopular;
+	private OficinaTramites oficina;
+	private GestionOficinaTramites gestion;
 
-	public ModificarOficinaTramites(MICONS micons) {
+	public ModificarOficinaTramites( OficinaTramites oficina, GestionOficinaTramites gestion) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 200, 170);
-		this.micons=micons;
+		micons=MICONS.getMICONS();	
+		this.oficina=oficina;
+		this.gestion=gestion;
 		setContentPane(getContentPane());
 		setJMenuBar(getBarraSuperior());
 
@@ -75,6 +81,19 @@ public class ModificarOficinaTramites extends JFrame {
 			btnModificar.setBackground(Color.DARK_GRAY);
 			btnModificar.setForeground(Color.ORANGE);
 			btnModificar.setBounds(85, 73, 89, 23);
+			btnModificar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String oficinaModificar = oficina.getConsejoPopular();
+					String newConsejoPopular = textField.getText().trim();
+					if (!newConsejoPopular.isEmpty()) {
+						micons.updateOficinaTramites(oficinaModificar, newConsejoPopular);						
+						gestion.actualizarListaOficinas();
+						dispose();
+					} 
+					else 
+						JOptionPane.showMessageDialog(null, "El nombre no puede estar vacío.");
+				}
+			});
 		}
 		return btnModificar;
 	}

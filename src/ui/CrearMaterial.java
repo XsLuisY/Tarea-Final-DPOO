@@ -44,12 +44,12 @@ public class CrearMaterial extends JFrame {
 	private JComboBox comboBox;
 	private JLabel lblPrecioUnitario;
 
-	public CrearMaterial(MICONS micons) {
+	public CrearMaterial() {
 		setTitle("Agregar material");
 		setType(Type.UTILITY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 280, 190);
-		this.micons=micons;
+		micons=MICONS.getMICONS();	
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 

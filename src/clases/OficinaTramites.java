@@ -44,7 +44,9 @@ public class OficinaTramites{
 	public String getConsejoPopular(){
 		return consejoPopular;		
 	}	
-
+	public ArrayList<Plantilla> getPlantillas(){
+		return plantillas;
+	}
 	//CRUD-FichaTecnicaDO
 	//Create
 	public FichaTecnicaDO createFichaTecnicaDO(Vivienda vivienda, String fechaLevantamiento){

@@ -39,13 +39,13 @@ public class GestionViviendas extends JFrame {
 	private JMenuItem menuItemModificar;
 	private JMenuItem menuItemEliminar;
 
-	public GestionViviendas(MICONS micons) {
+	public GestionViviendas() {
 		setTitle("Gesti\u00F3n de Viviendas");
 		setType(Type.UTILITY);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 390, 300);
-		this.micons=micons;
+		micons=MICONS.getMICONS();	
 		setJMenuBar(getBarraSuperior());		
 		setContentPane(getContentPane());
 		addPopup(getTable(), getPopupMenu());
@@ -67,7 +67,7 @@ public class GestionViviendas extends JFrame {
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					Principal p=new Principal(micons);
+					Principal p=new Principal();
 					p.setVisible(true);
 				}
 			});
@@ -130,7 +130,7 @@ public class GestionViviendas extends JFrame {
 			menuItemAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					CrearVivienda v = new CrearVivienda(micons);
+					CrearVivienda v = new CrearVivienda();
 					v.setVisible(true);
 				}
 			});
@@ -146,7 +146,7 @@ public class GestionViviendas extends JFrame {
 			menuItemMostrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					MostrarVivienda v =new MostrarVivienda(micons);
+					MostrarVivienda v =new MostrarVivienda();
 					v.setVisible(true);
 				}
 			});
@@ -162,7 +162,7 @@ public class GestionViviendas extends JFrame {
 			menuItemModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					ModificarVivienda v =new ModificarVivienda(micons);
+					ModificarVivienda v =new ModificarVivienda();
 					v.setVisible(true);
 				}
 			});
@@ -177,7 +177,7 @@ public class GestionViviendas extends JFrame {
 			menuItemEliminar.setBackground(Color.DARK_GRAY);
 			menuItemEliminar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					CrearFichaTecnicaDO c = new CrearFichaTecnicaDO(micons);
+					CrearFichaTecnicaDO c = new CrearFichaTecnicaDO();
 					c.setVisible(true);
 				}
 			});

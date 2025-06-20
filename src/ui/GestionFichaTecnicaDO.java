@@ -39,11 +39,11 @@ public class GestionFichaTecnicaDO extends JFrame {
 	private JMenuItem menuItemModificar;
 	private JMenuItem menuItemEliminar;
 
-	public GestionFichaTecnicaDO(MICONS micons) {
+	public GestionFichaTecnicaDO() {
 		setTitle("Gesti\u00F3n de Fichas T\u00E9cnicas");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
-		this.micons=micons;
+		micons=MICONS.getMICONS();	
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 		addPopup(getTable(), getPopupMenu());
@@ -66,7 +66,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					GestionOficinaTramites g = new GestionOficinaTramites(micons);
+					GestionOficinaTramites g = new GestionOficinaTramites();
 					g.setVisible(true);
 				}
 			});
@@ -130,7 +130,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 			menuItemAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					CrearFichaTecnicaDO c =new CrearFichaTecnicaDO(micons);
+					CrearFichaTecnicaDO c =new CrearFichaTecnicaDO();
 					c.setVisible(true);
 				}
 			});
@@ -146,7 +146,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 			menuItemMostrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					MostrarFichaTecnicaDO m = new MostrarFichaTecnicaDO(micons);
+					MostrarFichaTecnicaDO m = new MostrarFichaTecnicaDO( );
 					m.setVisible(true);
 				}
 			});
@@ -162,7 +162,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 			menuItemModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					CrearFichaTecnicaDO c = new CrearFichaTecnicaDO(micons);
+					CrearFichaTecnicaDO c = new CrearFichaTecnicaDO();
 					c.setVisible(true);
 				}
 			});

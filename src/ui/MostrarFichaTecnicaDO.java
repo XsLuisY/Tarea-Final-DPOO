@@ -26,7 +26,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class MostrarFichaTecnicaDO extends JFrame {
-	private MICONS micons;
 	private JPanel contentPane;
 	private JTable tableMuebles;
 	private JTable tableAfectaciones;
@@ -50,12 +49,11 @@ public class MostrarFichaTecnicaDO extends JFrame {
 	private JLabel lblJefeNucleo;
 	private JLabel lblDireccion;
 
-	public MostrarFichaTecnicaDO(MICONS micons) {
+	public MostrarFichaTecnicaDO( ) {
 		setType(Type.UTILITY);
 		setTitle("Ficha T\u00E9cnica de Da\u00F1os Ocacionados");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 320, 550);
-		this.micons=micons;
 		setContentPane(getContentPane());
 		setJMenuBar(getBarraSuperior());
 		addPopup(getTableAfectaciones(), getPopupMenuAfectaciones());
@@ -140,12 +138,7 @@ public class MostrarFichaTecnicaDO extends JFrame {
 			mntmAgregar.setHorizontalAlignment(SwingConstants.RIGHT);
 			mntmAgregar.setBackground(Color.DARK_GRAY);
 			mntmAgregar.setForeground(Color.ORANGE);
-			mntmAgregar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					CrearAfectacion c = new CrearAfectacion(micons);
-					c.setVisible(true);
-				}
-			});
+		
 		}
 		return mntmAgregar;
 	}
@@ -155,12 +148,6 @@ public class MostrarFichaTecnicaDO extends JFrame {
 			mntmModificar.setHorizontalAlignment(SwingConstants.RIGHT);
 			mntmModificar.setBackground(Color.DARK_GRAY);
 			mntmModificar.setForeground(Color.ORANGE);
-			mntmModificar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					ModificarAfectacion m=new ModificarAfectacion(micons);
-					m.setVisible(true);
-				}
-			});
 		}
 		return mntmModificar;
 	}
@@ -212,12 +199,6 @@ public class MostrarFichaTecnicaDO extends JFrame {
 			mntmAgregarMueble.setBackground(Color.DARK_GRAY);
 			mntmAgregarMueble.setHorizontalAlignment(SwingConstants.RIGHT);
 			mntmAgregarMueble.setForeground(Color.ORANGE);
-			mntmAgregarMueble.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					CrearMueble c =new CrearMueble(micons);
-					c.setVisible(true);
-				}
-			});
 		}
 		return mntmAgregarMueble;
 	}
@@ -227,12 +208,7 @@ public class MostrarFichaTecnicaDO extends JFrame {
 			mntmModificarMueble.setBackground(Color.DARK_GRAY);
 			mntmModificarMueble.setHorizontalAlignment(SwingConstants.RIGHT);
 			mntmModificarMueble.setForeground(Color.ORANGE);
-			mntmModificarMueble.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					ModificarMueble m =new ModificarMueble(micons);
-					m.setVisible(true);
-				}
-			});
+
 		}
 		return mntmModificarMueble;
 	}

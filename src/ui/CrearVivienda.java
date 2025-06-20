@@ -83,14 +83,14 @@ public class CrearVivienda extends JFrame {
 	private JSpinner spinnerEmbarazadas;
 	private JSpinner spinnerNinos;
 
-	public CrearVivienda(MICONS micons) {
+	public CrearVivienda() {
 		setType(Type.UTILITY);
 		setAlwaysOnTop(true);
 		setResizable(false);
 		setTitle("Formulario de la Vivienda");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 300, 490);
-		this.micons=micons;
+		micons=MICONS.getMICONS();	
 		setJMenuBar(getBarraSuperior());	
 		setContentPane(getContentPane());
 		buttonGroupFacilidadTemporal.add(getRdbtnNo());

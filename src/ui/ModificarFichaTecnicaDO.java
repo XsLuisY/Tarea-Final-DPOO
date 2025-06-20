@@ -59,12 +59,12 @@ public class ModificarFichaTecnicaDO extends JFrame {
 	private JLabel lblId;
 
 
-	public ModificarFichaTecnicaDO(MICONS micons) {
+	public ModificarFichaTecnicaDO() {
 		setType(Type.UTILITY);
 		setTitle("Ficha T\u00E9cnica de Da\u00F1os Ocacionados");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 320, 500);
-		this.micons=micons;
+		micons=MICONS.getMICONS();	
 		setContentPane(getContentPane());
 		setJMenuBar(getBarraSuperior());
 		addPopup(getTableAfectaciones(), getPopupMenuAfectaciones());
@@ -107,7 +107,7 @@ public class ModificarFichaTecnicaDO extends JFrame {
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					GestionFichaTecnicaDO g= new GestionFichaTecnicaDO(micons);
+					GestionFichaTecnicaDO g= new GestionFichaTecnicaDO();
 			
 				}
 			});
@@ -155,7 +155,7 @@ public class ModificarFichaTecnicaDO extends JFrame {
 			mntmAgregar.setForeground(Color.ORANGE);
 			mntmAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					CrearAfectacion c = new CrearAfectacion(micons);
+					CrearAfectacion c = new CrearAfectacion();
 					c.setVisible(true);
 				}
 			});
@@ -170,7 +170,7 @@ public class ModificarFichaTecnicaDO extends JFrame {
 			mntmModificar.setForeground(Color.ORANGE);
 			mntmModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					ModificarAfectacion m = new ModificarAfectacion(micons);
+					ModificarAfectacion m = new ModificarAfectacion();
 					m.setVisible(true);
 				}
 			});
@@ -227,7 +227,7 @@ public class ModificarFichaTecnicaDO extends JFrame {
 			mntmAgregarMueble.setForeground(Color.ORANGE);
 			mntmAgregarMueble.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					CrearMueble c = new CrearMueble(micons);
+					CrearMueble c = new CrearMueble();
 					c.setVisible(true);
 				}
 			});
@@ -242,7 +242,7 @@ public class ModificarFichaTecnicaDO extends JFrame {
 			mntmModificarMueble.setForeground(Color.ORANGE);
 			mntmModificarMueble.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					ModificarMueble m = new ModificarMueble(micons);
+					ModificarMueble m = new ModificarMueble();
 					m.setVisible(true);
 				}
 			});

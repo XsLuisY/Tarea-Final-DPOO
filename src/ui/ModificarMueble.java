@@ -38,12 +38,12 @@ public class ModificarMueble extends JFrame {
 	private JMenuBar barraSuperior;
 
 
-	public ModificarMueble(MICONS micons) {
+	public ModificarMueble( ) {
 		setType(Type.UTILITY);
 		setTitle("Modificar mueble");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 280, 170);
-		this.micons=micons;
+		micons=MICONS.getMICONS();	
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 	}

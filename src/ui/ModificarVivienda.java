@@ -82,14 +82,14 @@ public class ModificarVivienda extends JFrame {
 	private JSpinner spinnerNinos;
 
 
-	public ModificarVivienda(MICONS micons) {
+	public ModificarVivienda( ) {
 		setType(Type.UTILITY);
 		setAlwaysOnTop(true);
 		setResizable(false);
 		setTitle("Modificar Vivienda");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 300, 490);
-		this.micons=micons;
+		micons=MICONS.getMICONS();	
 		setContentPane(getContentPane());
 		setJMenuBar(getBarraSuperior());	
 		buttonGroupFacilidadTemporal.add(getRdbtnNo());

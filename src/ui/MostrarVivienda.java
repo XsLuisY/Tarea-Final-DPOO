@@ -6,233 +6,286 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+
+import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JSpinner;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import clases.MICONS;
 
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 
 public class MostrarVivienda extends JFrame {
+
 	private MICONS micons;
+
 	private JPanel contentPane;
-	private JTextField textFieldDireccion;
+
+	private JMenuBar barraSuperior;
+
+	private JMenuItem mntmRegresar;
+
+	private final ButtonGroup buttonGroupFacilidadTemporal = new ButtonGroup();
+
+	private String[] tipologiaConstructiva={"Tipo I","Tipo II","Tipo III","Tipo IV","Tipo V"};
+	private String[] tipologiaHabitacional={"Casa","Apartamento","Bohío","Otro"};
+	private String[] documentoLegal={"Propiedad","Usufructo","Vivienda vinculada","Arrendamiento","Providencia","No posee"};
+
 	private JLabel lblFacilidadTemporal;
 	private JLabel lblDimensiones;
 	private JLabel lblLargo;
 	private JLabel lblAncho;
 	private JLabel lblAltura;
-	private JTextField textFieldNombre;
-	private JTextField textFieldCI;
-	private JTextField textFieldTipologiaHabitacional;
-	private JTextField textFieldTipologiaConstructiva;
-	private JLabel lblDatosDeLa;
-	
+	private JLabel lblDatosJefeNucleo;
+	private JLabel lblDatosVivienda;
+	private JLabel lblDireccion;
+	private JLabel lblDocumentoLegal;
+	private JLabel lblTipologiaHabitacional;
+	private JLabel lblTipologiaConstructiva;
+	private JLabel lblNombre;
+	private JLabel lblCI;
+	private JLabel lblTotal;
+	private JLabel lblAncianos;
+	private JLabel lblEmbarazadas;
+	private JLabel lblNinos;
+	private JLabel lblHabitantes;
+	private JLabel lblId;
+	private JLabel lblHabitantes_1;
 
-	public MostrarVivienda(MICONS micons) {
+	public MostrarVivienda() {
 		setType(Type.UTILITY);
+		setAlwaysOnTop(true);
 		setResizable(false);
 		setTitle("Formulario de la Vivienda");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 300, 430);
-		this.micons=micons;
-		
-		JMenuBar menuBar = new JMenuBar();
-		menuBar.setForeground(Color.ORANGE);
-		menuBar.setBackground(Color.DARK_GRAY);
-		setJMenuBar(menuBar);
-		
-		JMenuItem mntmRegresar = new JMenuItem("Regresar");
-		mntmRegresar.setForeground(Color.ORANGE);
-		mntmRegresar.setBackground(Color.DARK_GRAY);
-		mntmRegresar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				dispose();
-			}
-		});
-		menuBar.add(mntmRegresar);
-		contentPane = new JPanel();
-		contentPane.setBackground(Color.ORANGE);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		textFieldDireccion = new JTextField();
-		textFieldDireccion.setBounds(99, 100, 151, 20);
-		textFieldDireccion.setEditable(false);
-		textFieldDireccion.setColumns(10);
-		contentPane.add(textFieldDireccion);
-		
-		JLabel lblDireccion = new JLabel("Direcci\u00F3n:");
-		lblDireccion.setBounds(5, 103, 94, 14);
-		lblDireccion.setHorizontalAlignment(SwingConstants.RIGHT);
-		contentPane.add(lblDireccion);
-		
-		JLabel lblDocumentoLegal = new JLabel("Documento Legal:");
-		lblDocumentoLegal.setBounds(5, 195, 150, 20);
-		lblDocumentoLegal.setHorizontalAlignment(SwingConstants.RIGHT);
-		contentPane.add(lblDocumentoLegal);
-		
-		JLabel lblTipologiaHabitacional = new JLabel("Tipologia Habitacional:");
-		lblTipologiaHabitacional.setBounds(5, 175, 150, 20);
-		lblTipologiaHabitacional.setHorizontalAlignment(SwingConstants.RIGHT);
-		contentPane.add(lblTipologiaHabitacional);
-		
-		JLabel lblL = new JLabel("Tipolog\u00EDa Constructiva:");
-		lblL.setBounds(5, 155, 150, 20);
-		lblL.setHorizontalAlignment(SwingConstants.RIGHT);
-		contentPane.add(lblL);
-		
-		lblFacilidadTemporal = new JLabel("Facilidad Temporal:");
-		lblFacilidadTemporal.setBounds(5, 135, 150, 20);
-		lblFacilidadTemporal.setHorizontalAlignment(SwingConstants.RIGHT);
-		contentPane.add(lblFacilidadTemporal);
-		
-		JLabel lblDatosDelJefe = new JLabel("Datos del Jefe de N\u00FAcleo:");
-		lblDatosDelJefe.setBounds(5, 5, 286, 20);
-		lblDatosDelJefe.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(lblDatosDelJefe);
-		
-		lblDimensiones = new JLabel("Dimensiones (m):");
-		lblDimensiones.setBounds(155, 230, 136, 14);
-		lblDimensiones.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(lblDimensiones);
-		
-		lblLargo = new JLabel("Largo:");
-		lblLargo.setBounds(175, 250, 47, 20);
-		lblLargo.setHorizontalAlignment(SwingConstants.RIGHT);
-		contentPane.add(lblLargo);
-		
-		JTextField textFieldLargo = new JTextField();
-		textFieldLargo.setBounds(222, 250, 28, 20);
-		textFieldLargo.setEditable(false);
-		contentPane.add(textFieldLargo);
-		
-		lblAncho = new JLabel("Ancho:");
-		lblAncho.setBounds(175, 270, 47, 20);
-		lblAncho.setHorizontalAlignment(SwingConstants.RIGHT);
-		contentPane.add(lblAncho);
-		
-		JTextField textFieldAncho = new JTextField();
-		textFieldAncho.setBounds(222, 270, 28, 20);
-		textFieldAncho.setEditable(false);
-		contentPane.add(textFieldAncho);
-		
-		lblAltura = new JLabel("Altura:");
-		lblAltura.setBounds(175, 290, 47, 20);
-		lblAltura.setHorizontalAlignment(SwingConstants.RIGHT);
-		contentPane.add(lblAltura);
-		
-		JLabel lblNombre = new JLabel("Nombre:");
-		lblNombre.setBounds(5, 28, 94, 14);
-		lblNombre.setHorizontalAlignment(SwingConstants.RIGHT);
-		contentPane.add(lblNombre);
-		
-		textFieldNombre = new JTextField();
-		textFieldNombre.setBounds(99, 25, 151, 20);
-		textFieldNombre.setEditable(false);
-		contentPane.add(textFieldNombre);
-		textFieldNombre.setColumns(10);
-		
-		JLabel lblCI = new JLabel("CI:");
-		lblCI.setBounds(5, 48, 94, 14);
-		lblCI.setHorizontalAlignment(SwingConstants.RIGHT);
-		contentPane.add(lblCI);
-		
-		textFieldCI = new JTextField();
-		textFieldCI.setBounds(99, 45, 151, 20);
-		textFieldCI.setEditable(false);
-		textFieldCI.setHorizontalAlignment(SwingConstants.RIGHT);
-		contentPane.add(textFieldCI);
-		textFieldCI.setColumns(10);
-		
-		JTextField textFieldAltura = new JTextField();
-		textFieldAltura.setBounds(222, 290, 28, 20);
-		textFieldAltura.setEditable(false);
-		contentPane.add(textFieldAltura);
-		
-		JTextField textFieldDocumentoLegal = new JTextField();
-		textFieldDocumentoLegal.setBounds(155, 195, 95, 20);
-		textFieldDocumentoLegal.setEditable(false);
-		contentPane.add(textFieldDocumentoLegal);
-		
-		textFieldTipologiaHabitacional = new JTextField();
-		textFieldTipologiaHabitacional.setBounds(155, 175, 95, 20);
-		textFieldTipologiaHabitacional.setEditable(false);
-		contentPane.add(textFieldTipologiaHabitacional);
-		
-		textFieldTipologiaConstructiva = new JTextField();
-		textFieldTipologiaConstructiva.setBounds(155, 155, 95, 20);
-		textFieldTipologiaConstructiva.setEditable(false);
-		contentPane.add(textFieldTipologiaConstructiva);
-		
-		lblDatosDeLa = new JLabel("Datos de la Vivienda:");
-		lblDatosDeLa.setBounds(5, 80, 286, 20);
-		lblDatosDeLa.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(lblDatosDeLa);
-		
-		JLabel label = new JLabel("Total:");
-		label.setBounds(5, 316, 94, 14);
-		label.setHorizontalAlignment(SwingConstants.RIGHT);
-		contentPane.add(label);
-		
-		JTextField textFieldTotal = new JTextField();
-		textFieldTotal.setBounds(99, 310, 56, 20);
-		textFieldTotal.setEditable(false);
-		contentPane.add(textFieldTotal);
-		
-		JTextField textFieldAncianos = new JTextField();
-		textFieldAncianos.setBounds(99, 290, 56, 20);
-		textFieldAncianos.setEditable(false);
-		contentPane.add(textFieldAncianos);
-		
-		JLabel label_1 = new JLabel("Ancianos:");
-		label_1.setBounds(5, 290, 94, 20);
-		label_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		contentPane.add(label_1);
-		
-		JLabel label_2 = new JLabel("Embarazadas:");
-		label_2.setBounds(5, 270, 94, 20);
-		label_2.setHorizontalAlignment(SwingConstants.RIGHT);
-		contentPane.add(label_2);
-		
-		JTextField textFieldEmbarazadas = new JTextField();
-		textFieldEmbarazadas.setBounds(99, 270, 56, 20);
-		textFieldEmbarazadas.setEditable(false);
-		contentPane.add(textFieldEmbarazadas);
-		
-		JTextField textFieldNinos = new JTextField();
-		textFieldNinos.setBounds(99, 250, 56, 20);
-		textFieldNinos.setEditable(false);
-		contentPane.add(textFieldNinos);
-		
-		JLabel label_3 = new JLabel("Ni\u00F1os:");
-		label_3.setBounds(5, 250, 94, 20);
-		label_3.setHorizontalAlignment(SwingConstants.RIGHT);
-		contentPane.add(label_3);
-		
-		JLabel label_4 = new JLabel("Habitantes:");
-		label_4.setBounds(5, 230, 150, 14);
-		label_4.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(label_4);
-		
-		JTextField textFieldFacilidadTemporal = new JTextField();
-		textFieldFacilidadTemporal.setBounds(155, 135, 24, 20);
-		textFieldFacilidadTemporal.setEditable(false);
-		contentPane.add(textFieldFacilidadTemporal);
-		
-		JLabel lblId = new JLabel("ID:");
-		lblId.setBounds(5, 358, 15, 14);
-		contentPane.add(lblId);
-		
-		JLabel lblUUID = new JLabel("New label");
-		lblUUID.setBounds(30, 358, 149, 14);
-		contentPane.add(lblUUID);
-		lblUUID.setText("3943-2342-3448-2342");
+		setBounds(100, 100, 300, 490);
+		micons=MICONS.getMICONS();	
+		setJMenuBar(getBarraSuperior());	
+		setContentPane(getContentPane());
+	}
+	public JPanel getContentPane(){
+		if(contentPane==null){		
+			contentPane = new JPanel();
+			contentPane.setBackground(Color.ORANGE);
+			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+			contentPane.setLayout(null);
+			contentPane.add(getLblDireccion());
+			contentPane.add(getLblDocumentoLegal());
+			contentPane.add(getLblTipologiaHabitacional());
+			contentPane.add(getLblTipologiaConstructiva());
+			contentPane.add(getLblFacilidadTemporal());
+			contentPane.add(getLblDatosJefeNucleo());
+			contentPane.add(getLblDimensiones());
+			contentPane.add(getLblLargo());
+			contentPane.add(getLblAncho());
+			contentPane.add(getLblAltura());
+			contentPane.add(getLblNombre());
+			contentPane.add(getLblCI());
+			contentPane.add(getLblDatosVivienda());	
+			contentPane.add(getLblTotal());
+			contentPane.add(getLblAncianos());
+			contentPane.add(getLblEmbarazadas());
+			contentPane.add(getLblNinos());
+			contentPane.add(getLblHabitantes());
+			contentPane.add(getLblId());
+			contentPane.add(getLblHabitantes_1());
+
+
+		}
+		return contentPane;
+	}
+
+	public JMenuBar getBarraSuperior(){ 
+		if(barraSuperior==null){
+			barraSuperior = new JMenuBar();
+			barraSuperior.add(getMntmRegresar());
+		}
+		return barraSuperior;
+	}
+	public JMenuItem getMntmRegresar(){
+		if(mntmRegresar==null){
+			mntmRegresar = new JMenuItem("Regresar");
+			mntmRegresar.setBackground(Color.DARK_GRAY);
+			mntmRegresar.setForeground(Color.ORANGE);
+			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
+			mntmRegresar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+				}
+			});
+		}
+		return mntmRegresar;
+	}
+	public JLabel getLblDireccion(){
+		if(lblDireccion==null){
+			lblDireccion = new JLabel("Direcci\u00F3n:");
+			lblDireccion.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblDireccion.setBounds(11, 129, 67, 16);
+		}
+		return lblDireccion;
+	}
+	public JLabel getLblDocumentoLegal(){ 
+		if(lblDocumentoLegal==null){
+			lblDocumentoLegal = new JLabel("Documento Legal:");
+			lblDocumentoLegal.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblDocumentoLegal.setBounds(0, 236, 144, 19);
+		}
+		return lblDocumentoLegal;
+	}
+	public JLabel getLblTipologiaHabitacional(){
+		if(lblTipologiaHabitacional==null){
+			lblTipologiaHabitacional = new JLabel("Tipologia Habitacional:");
+			lblTipologiaHabitacional.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblTipologiaHabitacional.setBounds(0, 214, 144, 22);
+		}
+		return lblTipologiaHabitacional;
+	}
+	public JLabel getLblTipologiaConstructiva(){
+		if(lblTipologiaConstructiva==null){
+			lblTipologiaConstructiva = new JLabel("Tipolog\u00EDa Constructiva:");
+			lblTipologiaConstructiva.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblTipologiaConstructiva.setBounds(0, 191, 144, 20);
+		}
+		return lblTipologiaConstructiva;
+	}
+	public JLabel getLblFacilidadTemporal(){
+		if(lblFacilidadTemporal==null){
+			lblFacilidadTemporal = new JLabel("Facilidad Temporal:");
+			lblFacilidadTemporal.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblFacilidadTemporal.setBounds(11, 157, 125, 23);
+		}
+		return lblFacilidadTemporal;
+	}
+	public JLabel getLblDatosJefeNucleo(){
+		if(lblDatosJefeNucleo==null){
+
+			lblDatosJefeNucleo = new JLabel("Datos del Jefe de N\u00FAcleo:");
+			lblDatosJefeNucleo.setHorizontalAlignment(SwingConstants.CENTER);
+			lblDatosJefeNucleo.setBounds(11, 21, 273, 14);
+		}
+		return lblDatosJefeNucleo;
+	}
+	public JLabel getLblDimensiones(){
+		if(lblDimensiones==null){
+			lblDimensiones = new JLabel("Dimensiones (m):");
+			lblDimensiones.setHorizontalAlignment(SwingConstants.CENTER);
+			lblDimensiones.setBounds(158, 283, 126, 14);
+		}
+		return lblDimensiones;
+	}
+	public JLabel getLblLargo(){
+		if(lblLargo==null){
+			lblLargo = new JLabel("Largo:");
+			lblLargo.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblLargo.setBounds(194, 308, 39, 20);
+		}
+		return lblLargo;
+	}
+	public JLabel getLblAncho(){
+		if(lblAncho==null){			
+			lblAncho = new JLabel("Ancho:");
+			lblAncho.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblAncho.setBounds(194, 327, 39, 20);
+		}
+		return lblAncho;
+	}	
+	public JLabel getLblAltura(){
+		if(lblAltura==null){
+			lblAltura = new JLabel("Altura:");
+			lblAltura.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblAltura.setBounds(194, 350, 39, 20);
+		}
+		return lblAltura;
+	}
+	public JLabel getLblNombre(){
+		if(lblNombre==null){
+			lblNombre = new JLabel("Nombre:");
+			lblNombre.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblNombre.setBounds(11, 44, 67, 14);
+		}
+		return lblNombre;
+	}
+	public JLabel getLblCI(){
+		if(lblCI==null){
+			lblCI = new JLabel("CI:");
+			lblCI.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblCI.setBounds(11, 69, 67, 14);
+		}
+		return lblCI;
+	}
+	public JLabel getLblDatosVivienda(){
+		if(lblDatosVivienda==null){
+			lblDatosVivienda = new JLabel("Datos de la Vivienda:");
+			lblDatosVivienda.setHorizontalAlignment(SwingConstants.CENTER);
+			lblDatosVivienda.setBounds(10, 101, 274, 17);
+		}
+		return lblDatosVivienda;
+	}
+	public JLabel getLblTotal(){
+		if(lblTotal==null){
+			lblTotal = new JLabel("Total:");
+			lblTotal.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblTotal.setBounds(40, 381, 67, 20);
+		}
+		return lblTotal;
+	}
+	public JLabel getLblAncianos(){
+		if(lblAncianos==null){
+			lblAncianos= new JLabel("Ancianos:");
+			lblAncianos.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblAncianos.setBounds(30, 350, 75, 20);
+		}return lblAncianos;
+	}
+	public JLabel getLblEmbarazadas(){
+		if(lblEmbarazadas==null){
+			lblEmbarazadas= new JLabel("Embarazadas:");
+			lblEmbarazadas.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblEmbarazadas.setBounds(10, 327, 94, 20);
+		}
+		return lblEmbarazadas;
+	}
+	public JLabel getLblNinos(){
+		if(lblNinos==null){
+			lblNinos= new JLabel("Ni\u00F1os:");
+			lblNinos.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblNinos.setBounds(28, 308, 75, 20);
+		}
+		return lblNinos;
+	}
+	public JLabel getLblHabitantes(){
+		if(lblHabitantes==null){
+			lblHabitantes= new JLabel("Habitantes:");
+			lblHabitantes.setHorizontalAlignment(SwingConstants.CENTER);
+			lblHabitantes.setBounds(19, 261, 125, 14);
+		}
+		return lblNinos;
+	}
+	public JLabel getLblId(){
+		if(lblId==null){
+			lblId = new JLabel("ID:");
+			lblId.setBounds(11, 412, 169, 14);
+		}
+		return lblId;
+	}
+
+	private JLabel getLblHabitantes_1() {
+		if (lblHabitantes_1 == null) {
+			lblHabitantes_1 = new JLabel("Habitantes:");
+			lblHabitantes_1.setHorizontalAlignment(SwingConstants.CENTER);
+			lblHabitantes_1.setBounds(21, 283, 133, 14);
+		}
+		return lblHabitantes_1;
 	}
 }
+

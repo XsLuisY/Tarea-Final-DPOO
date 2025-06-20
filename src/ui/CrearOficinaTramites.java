@@ -8,10 +8,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import clases.MICONS;
+import clases.OficinaTramites;
 
 import java.awt.Color;
 import java.awt.event.ActionListener;
@@ -20,17 +22,19 @@ import java.awt.event.ActionEvent;
 
 public class CrearOficinaTramites extends JFrame {
 	private MICONS micons;
+	private GestionOficinaTramites gestion;
 	private JPanel contentPane;
 	private JTextField textField;
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
 	private JButton btnEnviar;
 	private JLabel lblConsejoPopular;
-
-	public CrearOficinaTramites(MICONS micons) {
+	
+	public CrearOficinaTramites(GestionOficinaTramites gestion) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 200, 170);
-		this.micons=micons;
+		micons=MICONS.getMICONS();	
+		this.gestion=gestion;
 		setContentPane(getContentPane());		
 		setJMenuBar(getBarraSuperior());
 
@@ -81,6 +85,19 @@ public class CrearOficinaTramites extends JFrame {
 			btnEnviar.setBackground(Color.DARK_GRAY);
 			btnEnviar.setForeground(Color.ORANGE);
 			btnEnviar.setBounds(85, 73, 89, 23);
+			btnEnviar.addActionListener(new ActionListener() {
+			    public void actionPerformed(ActionEvent e) {
+			        String consejoPopular=textField.getText().trim();
+			        if (!consejoPopular.isEmpty()) {		
+			            micons.addOficinaTramites(consejoPopular);
+			            JOptionPane.showMessageDialog(null, "Oficina agregada exitosamente.");			            
+			            gestion.actualizarListaOficinas();
+			            dispose();
+			        } else {
+			            JOptionPane.showMessageDialog(null, "Por favor ingresa un Consejo Popular.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+			        }
+			    }
+			});
 		}
 		return btnEnviar;
 	}

@@ -45,12 +45,12 @@ public class ModificarMaterial extends JFrame {
 	private JLabel lblPrecioUnitario;
 	private JLabel lblId; 
 
-	public ModificarMaterial(MICONS micons) {
+	public ModificarMaterial() {
 		setTitle("Modificar material");
 		setType(Type.UTILITY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 280, 190);
-		this.micons=micons;
+		micons=MICONS.getMICONS();	
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 

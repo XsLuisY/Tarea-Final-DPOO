@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 
 import java.awt.Color;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JComboBox;
@@ -40,12 +41,12 @@ public class Login extends JFrame {
 	private JButton btnIniciar;
 	private MICONS micons;
 
-	public Login(MICONS micons) {
+	public Login() {
 		setTitle("Inicio de Sesión");
 		setType(Type.UTILITY);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.micons=micons;
+		micons=MICONS.getMICONS();	
 
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -121,14 +122,21 @@ public class Login extends JFrame {
 			btnIniciar.setForeground(Color.ORANGE);
 			btnIniciar.setBounds(10, 227, 103, 23);
 			btnIniciar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-					Principal p= new Principal(micons);
-					p.setVisible(true);
-				}
-			});	
-		}
-		return btnIniciar;
+				public void actionPerformed(ActionEvent e) {
+					String usuario = getUsuario().getText().trim();
+					String password = new String(getPassword().getPassword()).trim();
 
+					if (usuario.equals("admin") && password.equals("1234")){
+						JOptionPane.showMessageDialog(null, "¡Bienvenido administrador!");
+						dispose();
+						new Principal().setVisible(true);
+					}
+					else 
+						JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.");
+				}
+			});
+		}			
+		return btnIniciar;
 	}
 }
+

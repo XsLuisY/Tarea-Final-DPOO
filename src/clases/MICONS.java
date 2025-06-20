@@ -4,15 +4,24 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class MICONS {
+	private static MICONS micons = null;
 	private ArrayList<OficinaTramites> oficinas;
 	private ArrayList<Vivienda> viviendas;
-	
-	
-	
+
+	//Singleton
+	public static MICONS getMICONS() {
+	    if (micons == null)
+	        micons = new MICONS();
+	    return micons;
+	}
 	//Constructor 
-	public MICONS(){
+	private MICONS(){
 		oficinas = new ArrayList<OficinaTramites>();
 		viviendas = new ArrayList<Vivienda>();		
+	}
+	//Encapsulamiento
+	public ArrayList<OficinaTramites> getOficinaTramites(){
+		return oficinas;
 	}
 	//Metodos CRUD de OficinaTramites
 	//Create
@@ -26,12 +35,12 @@ public class MICONS {
 		return agregado;
 	}
 	//Read
-	public OficinaTramites readByIDOficinaTramites(String id){
+	public OficinaTramites readOficinaTramites(String consejoPopular){
 		OficinaTramites oficina = null;
 		int i=0;
 		Boolean found= false;
 		while(i<oficinas.size() && !found){
-			if(oficinas.get(i).getId().equals(id)){
+			if(oficinas.get(i).getId().equals(consejoPopular)){
 				found= true;
 				oficina= oficinas.get(i);
 			}
@@ -40,18 +49,26 @@ public class MICONS {
 		return oficina;
 	}
 	//Update
-	public Boolean updateOficinaTramites(String id, String consejoPoular, String nuevoConsejo){
-		OficinaTramites oficina= readByIDOficinaTramites(id);
-		Boolean exit= false;
+	public Boolean updateOficinaTramites(String consejoPopular, String nuevoConsejo){
+		OficinaTramites oficina=readOficinaTramites(consejoPopular);
+		Boolean updt= false;
+		Boolean exist=false;
+
 		if(oficina != null){
-			oficina.setConsejoPopular(nuevoConsejo);
-			exit=true;
+			for(int i=0; !exist && i<oficinas.size(); i++)
+				if(oficinas.get(i).getConsejoPopular().equalsIgnoreCase(nuevoConsejo))
+					exist=true;
 		}
-		return exit;
+		if(!exist){
+			updt=true;			
+			oficina.setConsejoPopular(nuevoConsejo);
+		}
+
+		return updt;
 	}
 	//Delete
-	public Boolean deleteOficinaTramites(String id){
-		OficinaTramites oficina = readByIDOficinaTramites(id);
+	public Boolean deleteOficinaTramites(String consejoPopular){
+		OficinaTramites oficina = readOficinaTramites(consejoPopular);
 		Boolean exit = false;
 		if(oficina != null){
 			oficinas.remove(oficina);
@@ -149,18 +166,18 @@ public class MICONS {
 		}
 	}
 
-	
-//-------------------------------------Inicializar Datos-----------------------------------------------------
-//----------Oficinas de Tramites
-public void inicializarOficinaTramites(){
-	oficinas.add(new OficinaTramites("Arroyo Naranjo"));	
-	oficinas.add(new OficinaTramites("Boyeros"));	
-	oficinas.add(new OficinaTramites("Vedado"));	
-	oficinas.add(new OficinaTramites("10 de Octubre"));	
-	oficinas.add(new OficinaTramites("Cotorro"));	
-	oficinas.add(new OficinaTramites("Cerro"));	
-	oficinas.add(new OficinaTramites("La Lisa"));		
-}
+
+	//-------------------------------------Inicializar Datos-----------------------------------------------------
+	//----------Oficinas de Tramites
+	public void inicializarOficinaTramites(){
+		oficinas.add(new OficinaTramites("Arroyo Naranjo"));	
+		oficinas.add(new OficinaTramites("Boyeros"));	
+		oficinas.add(new OficinaTramites("Vedado"));	
+		oficinas.add(new OficinaTramites("10 de Octubre"));	
+		oficinas.add(new OficinaTramites("Cotorro"));	
+		oficinas.add(new OficinaTramites("Cerro"));	
+		oficinas.add(new OficinaTramites("La Lisa"));		
+	}
 
 
 }

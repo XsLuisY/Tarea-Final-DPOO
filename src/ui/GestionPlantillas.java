@@ -24,11 +24,14 @@ import javax.swing.JMenuBar;
 import javax.swing.table.DefaultTableModel;
 
 import clases.MICONS;
+import clases.OficinaTramites;
+import clases.Plantilla;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class GestionPlantillas extends JFrame {
+	private OficinaTramites actualOficinaTramites;
 	private MICONS micons;
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
@@ -40,11 +43,12 @@ public class GestionPlantillas extends JFrame {
 	private JMenuItem mntmMostrar;
 
 
-	public GestionPlantillas(MICONS micons) {
+	public GestionPlantillas(OficinaTramites actualOficinaTramites) {
 		setTitle("Plantillas");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 526, 300);
-		this.micons=micons;
+		micons=MICONS.getMICONS();	
+		this.actualOficinaTramites = actualOficinaTramites;
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 		addPopup(getTablePlantillas(), getPopupMenu());
@@ -76,7 +80,7 @@ public class GestionPlantillas extends JFrame {
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					GestionOficinaTramites g = new GestionOficinaTramites(micons);
+					GestionOficinaTramites g = new GestionOficinaTramites( );
 					g.setVisible(true);					
 				}
 			});
@@ -105,6 +109,14 @@ public class GestionPlantillas extends JFrame {
 							"Dirección","Fecha Levantamiento", "ID", "Precio Total"
 					}
 					));
+			tablePlantillas.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					if (e.getClickCount() == 2) 
+						mostrarPlantilla();
+
+				}
+			});
+
 		}
 		return tablePlantillas;
 	}
@@ -126,8 +138,7 @@ public class GestionPlantillas extends JFrame {
 			mntmMostrar.setBackground(Color.DARK_GRAY);
 			mntmMostrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					MostrarPlantilla c =new MostrarPlantilla (micons);
-					c.setVisible(true);
+
 				}
 			});
 		}
@@ -159,5 +170,13 @@ public class GestionPlantillas extends JFrame {
 				popup.show(e.getComponent(), e.getX(), e.getY());
 			}
 		});
+	}
+
+	//----------------------------------------------------------------------------
+	public void mostrarPlantilla(){
+		int pos = tablePlantillas.getSelectedRow();
+		Plantilla p = actualOficinaTramites.getPlantillas().get(pos);
+		MostrarPlantilla m = new MostrarPlantilla (p);
+		m.setVisible(true);
 	}
 }

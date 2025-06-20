@@ -37,8 +37,8 @@ public class Principal extends JFrame {
 	private JButton btnHacerLevantamiento;
 	private JMenuItem mntmCerrarPrograma;
 
-	public Principal(MICONS micons) {
-		this.micons=micons;
+	public Principal() {
+		micons=MICONS.getMICONS();	
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 550, 350);
@@ -104,7 +104,7 @@ public class Principal extends JFrame {
 			mnGestionarViviendas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					GestionViviendas gestionViviendas = new GestionViviendas(micons);
+					GestionViviendas gestionViviendas = new GestionViviendas();
 					gestionViviendas.setVisible(true);
 				}
 			});
@@ -119,7 +119,7 @@ public class Principal extends JFrame {
 			mntmGestionarOficinas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					GestionOficinaTramites gestionOficinaTramites = new GestionOficinaTramites(micons);
+					GestionOficinaTramites gestionOficinaTramites = new GestionOficinaTramites();
 					gestionOficinaTramites.setVisible(true);
 				}
 			});
@@ -183,7 +183,7 @@ public class Principal extends JFrame {
 			mntmCerrarSesion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					Login login = new Login(micons);
+					Login login = new Login();
 					login.setVisible(true);
 				}
 			});
