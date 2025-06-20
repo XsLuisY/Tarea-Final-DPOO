@@ -22,9 +22,13 @@ public class Cubicacion  {
 	public void setId() {
 		id=UUID.randomUUID();
 	}
+	
+	public void setMateriales(ArrayList<MaterialACubicar> materiales){
+		this.materiales=materiales;
+	}		
 	public ArrayList<MaterialACubicar> getMateriales(){
 		return materiales;
-	}
+	}		
 
 	//CRUD-MaterialACubicar ARREGLAR
 	//Create	
@@ -72,7 +76,6 @@ public class Cubicacion  {
 				encontrado=true;
 			}
 	}
-
 	//Métodos
 
 	public double calcularPrecioTotal(){

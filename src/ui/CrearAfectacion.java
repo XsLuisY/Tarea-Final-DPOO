@@ -42,6 +42,7 @@ import java.awt.Window.Type;
 
 import javax.swing.JMenuBar;
 
+import clases.Afectacion;
 import clases.MICONS;
 
 public class CrearAfectacion extends JFrame {
@@ -154,10 +155,7 @@ public class CrearAfectacion extends JFrame {
 			btnAgregar.setForeground(Color.ORANGE);
 			btnAgregar.setBackground(Color.DARK_GRAY);
 			btnAgregar.setBounds(165, 73, 89, 23);
-			btnAgregar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-				}
-			});
+			
 		}
 		return btnAgregar;
 	}

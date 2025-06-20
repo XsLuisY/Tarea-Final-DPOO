@@ -19,17 +19,22 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JMenuBar;
 import javax.swing.table.DefaultTableModel;
 
 import clases.MICONS;
+import clases.Material;
+import clases.OficinaTramites;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 public class GestionMateriales extends JFrame {
 	private MICONS micons;
+	private OficinaTramites actualOficinaTramites;
 	private JPanel contentPane;
 	private JScrollPane scrollPaneMateriales;
 	private JTable tableMateriales;
@@ -40,7 +45,7 @@ public class GestionMateriales extends JFrame {
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
 
-	public GestionMateriales() {
+	public GestionMateriales(OficinaTramites actualOficinaTramites) {
 		setTitle("Materiales");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
@@ -65,8 +70,6 @@ public class GestionMateriales extends JFrame {
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					GestionOficinaTramites g = new GestionOficinaTramites();
-					g.setVisible(true);
 				}
 			});
 		}
@@ -155,6 +158,33 @@ public class GestionMateriales extends JFrame {
 			menuItemEliminar.setHorizontalAlignment(SwingConstants.RIGHT);
 			menuItemEliminar.setForeground(Color.ORANGE);
 			menuItemEliminar.setBackground(Color.DARK_GRAY);
+			menuItemEliminar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Material material = obtenerMaterialSeleccionado();
+
+					if (material != null) {
+						String nombre = material.getNombre();
+						int confirmar = JOptionPane.showConfirmDialog(
+								GestionMateriales.this,
+								"¿Seguro que deseas eliminar \"" + nombre + "\"?",
+								"Confirmar eliminación",
+								JOptionPane.YES_NO_OPTION
+								);
+
+						if (confirmar == JOptionPane.YES_OPTION) {
+							actualOficinaTramites.deleteMaterial(material);
+							cargarMateriales();
+						}
+					} else {
+						JOptionPane.showMessageDialog(
+								GestionMateriales.this,
+								"Debes seleccionar un material para eliminar.",
+								"Aviso",
+								JOptionPane.WARNING_MESSAGE
+								);
+					}
+				}
+			});
 		}
 		return menuItemEliminar;
 	}
@@ -176,4 +206,34 @@ public class GestionMateriales extends JFrame {
 			}
 		});
 	}
+	public void cargarMateriales() {
+		DefaultTableModel modelo = (DefaultTableModel) tableMateriales.getModel();
+		modelo.setRowCount(0); // Limpiar tabla
+		for (Material m : actualOficinaTramites.getMateriales()) {
+			modelo.addRow(new Object[]{
+					m.getNombre(), m.getUnidadMedida(), m.getPrecioUnitario()
+			});
+		}
+	}
+	public Material obtenerMaterialSeleccionado() {
+		Material seleccionado = null;
+		int fila = tableMateriales.getSelectedRow();
+		int i = 0;
+
+		if (fila >= 0) {
+			String nombre = (String) tableMateriales.getValueAt(fila, 0);
+			ArrayList<Material> materiales = actualOficinaTramites.getMateriales();
+
+			while (i < materiales.size()) {
+				Material m = materiales.get(i);
+				if (m.getNombre().equals(nombre) && seleccionado == null) {
+					seleccionado = m;
+				}
+				i++;
+			}
+		}
+
+		return seleccionado;
+	}
+
 }
