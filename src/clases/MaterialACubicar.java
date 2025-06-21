@@ -1,18 +1,15 @@
 package clases;
 
-import java.util.UUID;
-
 public class MaterialACubicar {
 
 	//Atributos
 	private	Material material;
 	private double cantidad;
-	private UUID id;
 	
 	//Constructor
 	public MaterialACubicar(Material material, double cantidad){
 		setCantidad(cantidad);
-		setMaterial(material);		
+		setMaterial(material);
 	}
 
 	//Encapsulamiento	
@@ -31,12 +28,6 @@ public class MaterialACubicar {
 	}
 	public double getCantidad(){
 		return cantidad;	
-	}
-	public UUID getId() {
-		return id;
-	}
-	public void setId() {
-		id = UUID.randomUUID();
 	}
 
 	//Métodos

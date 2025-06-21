@@ -13,7 +13,7 @@ public class Material {
 		setNombre(nombre);
 		setUnidadMedida(unidadMedida);
 		setPrecioUnitario(precioUnitario);
-		this.id= UUID.randomUUID();
+		setId();
 	}
 
 	//Encapsulamiento
@@ -40,7 +40,7 @@ public class Material {
 			this.precioUnitario=precioUnitario;
 		else throw new IllegalArgumentException("El precio debe ser mayor que 0");
 	}
-	public double getPrecioUnitario(){
+	public Double getPrecioUnitario(){
 		return precioUnitario;
 	}
 
@@ -48,7 +48,9 @@ public class Material {
 		return id;
 	}
 	public void setId() {
-		id=UUID.randomUUID();
+		do
+			id=UUID.randomUUID();
+		while(MICONS.existUUID(id));
 	}
 
 	//Métodos

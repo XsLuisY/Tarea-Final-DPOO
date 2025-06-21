@@ -53,7 +53,7 @@ public class CrearAfectacion extends JFrame {
 	private JTextField textFieldMaterialPredominante;
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
-	private JComboBox comboBox;
+	private JComboBox comboBoxTipoAfectacion;
 	private JLabel lblTipoAfectacion;
 	private JLabel labelMaterialPredominante;
 	private JButton btnAgregar;
@@ -65,8 +65,7 @@ public class CrearAfectacion extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 280, 170);
 		micons=MICONS.getMICONS();	
-		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
+		JMenuBar menuBar = new JMenuBar();		
 		setContentPane(getContentPane());
 		setJMenuBar(getBarraSuperior());
 	}
@@ -118,12 +117,12 @@ public class CrearAfectacion extends JFrame {
 	}
 
 	public JComboBox getComboBox(){
-		if(comboBox==null){
-			comboBox= new JComboBox(tipoDerrumbe);
-			comboBox.setModel(new DefaultComboBoxModel(new String[] {"Pared", "Pared de carga", "Techo"}));
-			comboBox.setBounds(139, 11, 115, 20);
+		if(comboBoxTipoAfectacion==null){
+			comboBoxTipoAfectacion= new JComboBox(tipoDerrumbe);
+			comboBoxTipoAfectacion.setModel(new DefaultComboBoxModel(new String[] {"Pared", "Pared de carga", "Techo"}));
+			comboBoxTipoAfectacion.setBounds(139, 11, 115, 20);
 		}
-		return comboBox;
+		return comboBoxTipoAfectacion;
 	}
 	public JLabel getLblTipoAfectacion(){
 		if(lblTipoAfectacion==null){

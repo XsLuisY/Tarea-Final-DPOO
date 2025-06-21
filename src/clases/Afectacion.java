@@ -1,23 +1,26 @@
 package clases;
 import java.util.UUID;
 
+import interfaces.Identificable;
 
-public abstract class Afectacion {
+
+
+public abstract class Afectacion implements Identificable{
 	//Atributos
 	protected Boolean esDerrumbeTotal;
 	protected String materialPredominante;
 	protected UUID id;
 	//Constructor
-	public Afectacion(Boolean esDerrumbeTotal, String materialPredominante,UUID id){
+	
+	public Afectacion(Boolean esDerrumbeTotal, String materialPredominante){
 		setEsDerrumbeTotal(esDerrumbeTotal);
 		setMaterialPredominante(materialPredominante);
-		this.id= UUID.randomUUID();
+		setId();
 	}
+	
 	//M�todos
 	protected abstract void setEsDerrumbeTotal(Boolean esDerrumbeTotal);
 	protected abstract Boolean getEsDerrumbeTotal();
 	protected abstract void setMaterialPredominante(String materialPredominante);
 	protected abstract String getMaterialPredominante();
-	protected abstract UUID getId();
-	protected abstract void setId(UUID id);
 }
