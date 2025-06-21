@@ -106,8 +106,6 @@ public class CrearFichaTecnicaDO extends JFrame {
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					GestionFichaTecnicaDO g=new GestionFichaTecnicaDO( );
-					g.setVisible(true);
 				}
 			});
 		}

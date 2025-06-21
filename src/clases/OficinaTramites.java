@@ -44,6 +44,10 @@ public class OficinaTramites{
 	public String getConsejoPopular(){
 		return consejoPopular;		
 	}	
+	public ArrayList<Material> getMateriales(){
+		return materiales;
+	}
+
 	public ArrayList<Plantilla> getPlantillas(){
 		return plantillas;
 	}
@@ -103,6 +107,13 @@ public class OficinaTramites{
 			throw new IllegalArgumentException("Esta cubicacion ya existe");
 	}
 	//Read
+	public Boolean existCubicacion(UUID id){
+		Boolean exist=false;
+		for(int i=0; i<cubicaciones.size()&& !exist; i++)
+			if(cubicaciones.get(i).getId()==id)
+				exist=true;
+		return exist;
+	}
 	public Cubicacion searchCubicacion(UUID id){
 		boolean encontrado=false;
 		Cubicacion auxCubicacion= null;
@@ -114,6 +125,15 @@ public class OficinaTramites{
 		return auxCubicacion; 			
 	}
 	//Update
+	public void updateCubicacion(UUID id, ArrayList<MaterialACubicar> nuevosMateriales) {
+		Cubicacion c=searchCubicacion(id);
+		if(nuevosMateriales!=null) {
+			c.getMateriales().clear();
+			c.setMateriales(nuevosMateriales);
+		} else {
+			throw new IllegalArgumentException("La nueva lista no puede ser null.");
+		}
+	}
 	//Delete
 	public void deleteCubicacion(Cubicacion cubicacion){
 		if(cubicaciones.contains(cubicacion))
@@ -190,14 +210,14 @@ public class OficinaTramites{
 	}
 	//Update
 	public void updatePlantilla(UUID id, Cubicacion cubicacion, FichaTecnicaDO ficha){
-	Plantilla auxPlantilla = searchPlantilla(id);
-	
-			if(auxPlantilla!=null){
-				auxPlantilla.setCubicacion(cubicacion);
-				auxPlantilla.setFichaTecnicaDO(ficha);		
-			}
-			else
-				throw new IllegalArgumentException("La plantilla no existe");
+		Plantilla auxPlantilla = searchPlantilla(id);
+
+		if(auxPlantilla!=null){
+			auxPlantilla.setCubicacion(cubicacion);
+			auxPlantilla.setFichaTecnicaDO(ficha);		
+		}
+		else
+			throw new IllegalArgumentException("La plantilla no existe");
 	}	
 	//Delete
 	public void deletePlantilla(Plantilla plantilla){
@@ -256,35 +276,5 @@ public class OficinaTramites{
 		materiales.add(new Material("Polvo de piedra","Saco", 420));
 		materiales.add(new Material("Grava","Saco", 200));		
 	}
-	
+
 }
-/*
- * 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(txtMateriales), "UTF-8"));
-			String linea;
-
-			while ((linea = reader.readLine()) != null) {
-				String[] datos = linea.split(",");
-
-				if (datos.length == 3) {
-
-					String nombre = datos[0].trim();	
-					String unidadMedida = datos[1].trim();
-					int precio = Integer.parseInt(datos[2].trim());
-					String ci = datos[3].trim();
-					String cargo = datos[4].trim(); //.substring(1));
-					Material material = new Material(nombre, unidadMedida, precio);
-					materiales.add(material);
-				}
-			}
-
-			reader.close();
-		} catch (IOException e) {
-			System.out.println("Error al leer el archivo: " + e.getMessage());
-		}
- */
-
-
-
-
-

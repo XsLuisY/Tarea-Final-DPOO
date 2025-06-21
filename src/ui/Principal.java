@@ -118,7 +118,6 @@ public class Principal extends JFrame {
 			mntmGestionarOficinas.setForeground(Color.ORANGE);
 			mntmGestionarOficinas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
 					GestionOficinaTramites gestionOficinaTramites = new GestionOficinaTramites();
 					gestionOficinaTramites.setVisible(true);
 				}

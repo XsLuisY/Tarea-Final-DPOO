@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JDialog;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JButton;
@@ -20,7 +21,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 
-public class CrearOficinaTramites extends JFrame {
+public class CrearOficinaTramites extends JDialog {
+
+	private static final long serialVersionUID = 1L;
+
 	private MICONS micons;
 	private GestionOficinaTramites gestion;
 	private JPanel contentPane;
@@ -29,18 +33,20 @@ public class CrearOficinaTramites extends JFrame {
 	private JMenuItem mntmRegresar;
 	private JButton btnEnviar;
 	private JLabel lblConsejoPopular;
-	
+
 	public CrearOficinaTramites(GestionOficinaTramites gestion) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 200, 170);
+		super(gestion, "Crear Oficina de Trámites", true);
 		micons=MICONS.getMICONS();	
 		this.gestion=gestion;
-		setContentPane(getContentPane());		
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 190, 180);
+		setResizable(false);
+		setLocationRelativeTo(gestion);
 		setJMenuBar(getBarraSuperior());
-
+		setContentPane(getPane());
 	}
 
-	public JPanel getContentPane(){
+	public JPanel getPane(){
 		if(contentPane==null){
 			contentPane = new JPanel();
 			contentPane.setBackground(Color.ORANGE);
@@ -61,18 +67,12 @@ public class CrearOficinaTramites extends JFrame {
 	}
 	public JMenuItem getMntmRegresar(){
 		if(mntmRegresar==null){
-			mntmRegresar = new JMenuItem("Regresar");
-			mntmRegresar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-					
-				}
-			});
+			mntmRegresar = new JMenuItem("Regresar");		
 			mntmRegresar.setBackground(Color.DARK_GRAY);
 			mntmRegresar.setForeground(Color.ORANGE);
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
+				public void actionPerformed(ActionEvent arg0) {					
 					dispose();
 				}
 			});
@@ -86,17 +86,21 @@ public class CrearOficinaTramites extends JFrame {
 			btnEnviar.setForeground(Color.ORANGE);
 			btnEnviar.setBounds(85, 73, 89, 23);
 			btnEnviar.addActionListener(new ActionListener() {
-			    public void actionPerformed(ActionEvent e) {
-			        String consejoPopular=textField.getText().trim();
-			        if (!consejoPopular.isEmpty()) {		
-			            micons.addOficinaTramites(consejoPopular);
-			            JOptionPane.showMessageDialog(null, "Oficina agregada exitosamente.");			            
-			            gestion.actualizarListaOficinas();
-			            dispose();
-			        } else {
-			            JOptionPane.showMessageDialog(null, "Por favor ingresa un Consejo Popular.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-			        }
-			    }
+				public void actionPerformed(ActionEvent e) {
+					String consejoPopular=textField.getText().trim();
+
+					if (!consejoPopular.isEmpty()){
+					
+						boolean agregado = micons.addOficinaTramites(consejoPopular);
+						if(agregado){									
+							JOptionPane.showMessageDialog(null, "Oficina agregada exitosamente.");			            
+							gestion.actualizarListaOficinas();
+							dispose();
+						} else 
+							JOptionPane.showMessageDialog(null, "Ya existe una oficina con ese nombre.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+					}else 
+						JOptionPane.showMessageDialog(null, "Por favor ingresa un Consejo Popular.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+				}
 			});
 		}
 		return btnEnviar;

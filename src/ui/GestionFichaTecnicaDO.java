@@ -22,6 +22,7 @@ import javax.swing.JMenuBar;
 import javax.swing.table.DefaultTableModel;
 
 import clases.MICONS;
+import clases.OficinaTramites;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -39,7 +40,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 	private JMenuItem menuItemModificar;
 	private JMenuItem menuItemEliminar;
 
-	public GestionFichaTecnicaDO() {
+	public GestionFichaTecnicaDO(OficinaTramites oficinaActual) {
 		setTitle("Gesti\u00F3n de Fichas T\u00E9cnicas");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 400, 300);

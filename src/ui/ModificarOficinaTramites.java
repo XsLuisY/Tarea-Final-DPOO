@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JDialog;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JButton;
@@ -20,7 +21,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 
-public class ModificarOficinaTramites extends JFrame {
+public class ModificarOficinaTramites extends JDialog {
 	private MICONS micons;
 	private JPanel contentPane;
 	private JTextField textField;
@@ -32,17 +33,21 @@ public class ModificarOficinaTramites extends JFrame {
 	private GestionOficinaTramites gestion;
 
 	public ModificarOficinaTramites( OficinaTramites oficina, GestionOficinaTramites gestion) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 200, 170);
+		super(gestion, "Modificar Oficina", true);
 		micons=MICONS.getMICONS();	
 		this.oficina=oficina;
 		this.gestion=gestion;
-		setContentPane(getContentPane());
+
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 190, 180);
+		setResizable(false);
+		setLocationRelativeTo(gestion);
 		setJMenuBar(getBarraSuperior());
+		setContentPane(getPane());	       
 
 	}
 
-	public JPanel getContentPane(){
+	public JPanel getPane(){
 		if(contentPane==null){
 			contentPane = new JPanel();
 			contentPane.setBackground(Color.ORANGE);
@@ -86,11 +91,16 @@ public class ModificarOficinaTramites extends JFrame {
 					String oficinaModificar = oficina.getConsejoPopular();
 					String newConsejoPopular = textField.getText().trim();
 					if (!newConsejoPopular.isEmpty()) {
-						micons.updateOficinaTramites(oficinaModificar, newConsejoPopular);						
-						gestion.actualizarListaOficinas();
-						dispose();
-					} 
-					else 
+						boolean actualizado = micons.updateOficinaTramites(oficinaModificar, newConsejoPopular);
+						if (actualizado) {
+							gestion.actualizarListaOficinas();
+							JOptionPane.showMessageDialog(ModificarOficinaTramites.this,"Oficina actualizada correctamente.","Éxito", JOptionPane.INFORMATION_MESSAGE);
+							dispose();
+						} 
+						else {
+							JOptionPane.showMessageDialog(ModificarOficinaTramites.this,"Ya existe una oficina con ese nombre.","Advertencia", JOptionPane.WARNING_MESSAGE);
+						}
+					}else 
 						JOptionPane.showMessageDialog(null, "El nombre no puede estar vacío.");
 				}
 			});
@@ -110,6 +120,7 @@ public class ModificarOficinaTramites extends JFrame {
 			textField = new JTextField();
 			textField.setBounds(10, 36, 164, 20);			
 			textField.setColumns(10);
+			textField.setText(oficina.getConsejoPopular());
 		}
 		return textField ;
 	}

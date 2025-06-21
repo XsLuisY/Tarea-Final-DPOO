@@ -10,9 +10,9 @@ public class MICONS {
 
 	//Singleton
 	public static MICONS getMICONS() {
-	    if (micons == null)
-	        micons = new MICONS();
-	    return micons;
+		if (micons == null)
+			micons = new MICONS();
+		return micons;
 	}
 	//Constructor 
 	private MICONS(){
@@ -24,23 +24,31 @@ public class MICONS {
 		return oficinas;
 	}
 	//Metodos CRUD de OficinaTramites
-	//Create
+	//Create	
 	public Boolean addOficinaTramites(String consejoPopular){
-		Boolean agregado= false;
 		OficinaTramites oficinaT= new OficinaTramites(consejoPopular);
-		if(oficinaT!= null){
+		Boolean agregado=false;
+		if(oficinaT!=null && !existOficinaTramites(consejoPopular)){
 			oficinas.add(oficinaT);
-			agregado= true;
+			agregado=true;
 		}
 		return agregado;
 	}
 	//Read
+	public Boolean existOficinaTramites(String consejoPopular){
+		Boolean exist=false;
+		for (int i=0; i<oficinas.size() && !exist; i++) {
+			if (oficinas.get(i).getConsejoPopular().equalsIgnoreCase(consejoPopular))
+				exist=true;
+		}
+		return exist;
+	}
 	public OficinaTramites readOficinaTramites(String consejoPopular){
 		OficinaTramites oficina = null;
 		int i=0;
 		Boolean found= false;
 		while(i<oficinas.size() && !found){
-			if(oficinas.get(i).getId().equals(consejoPopular)){
+			if(oficinas.get(i).getConsejoPopular().equalsIgnoreCase(consejoPopular)){
 				found= true;
 				oficina= oficinas.get(i);
 			}
@@ -51,19 +59,14 @@ public class MICONS {
 	//Update
 	public Boolean updateOficinaTramites(String consejoPopular, String nuevoConsejo){
 		OficinaTramites oficina=readOficinaTramites(consejoPopular);
-		Boolean updt= false;
-		Boolean exist=false;
+		Boolean updt=!existOficinaTramites(nuevoConsejo);
 
 		if(oficina != null){
-			for(int i=0; !exist && i<oficinas.size(); i++)
-				if(oficinas.get(i).getConsejoPopular().equalsIgnoreCase(nuevoConsejo))
-					exist=true;
+			if(updt)		
+				oficina.setConsejoPopular(nuevoConsejo);
 		}
-		if(!exist){
-			updt=true;			
-			oficina.setConsejoPopular(nuevoConsejo);
-		}
-
+		//else
+		//lanzar excepcion
 		return updt;
 	}
 	//Delete

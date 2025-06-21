@@ -353,7 +353,7 @@ public class MostrarPlantilla extends JFrame {
 			lblDatosVivienda.setBounds(10, 21, 322, 14);
 		}
 		return lblDatosVivienda;
-	}
+	}	
 	public JLabel getLblHabitantes(){
 		if( lblHabitantes==null){
 			lblHabitantes= new JLabel("Habitantes:");

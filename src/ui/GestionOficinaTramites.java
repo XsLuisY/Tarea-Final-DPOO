@@ -22,6 +22,7 @@ import javax.swing.JList;
 import javax.swing.JTextPane;
 import javax.swing.JScrollBar;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 
 import java.awt.Scrollbar;
 
@@ -73,7 +74,7 @@ public class GestionOficinaTramites extends JFrame {
 		setBounds(100, 100, 400, 300);
 		micons=MICONS.getMICONS();		
 		setJMenuBar(getBarraSuperior());
-		setContentPane(getContentPane());
+		setContentPane(getPanel());
 		addPopup(getListOficinas(), getPopupMenu());
 	}
 	public JMenuBar getBarraSuperior(){ 
@@ -99,7 +100,7 @@ public class GestionOficinaTramites extends JFrame {
 		}
 		return mntmRegresar;
 	}
-	public JPanel getContentPane(){
+	public JPanel getPanel(){
 		if(contentPane==null){
 			contentPane = new JPanel();
 			contentPane.setBackground(Color.ORANGE);
@@ -124,10 +125,22 @@ public class GestionOficinaTramites extends JFrame {
 				model.addElement(o.getConsejoPopular());
 			listOficinas = new JList<String>(model);
 			listOficinas.setForeground(Color.ORANGE);
-			listOficinas.setBackground(Color.DARK_GRAY);							
+			listOficinas.setBackground(Color.DARK_GRAY);
+			listOficinas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			// Mostrar aviso si no hay oficinas
+			if (model.isEmpty()) {
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						JOptionPane.showMessageDialog(GestionOficinaTramites.this,
+								"No hay oficinas registradas todavía.",
+								"Información", JOptionPane.INFORMATION_MESSAGE);
+					}
+				});
+			}
 		}
 		return listOficinas;
 	}
+
 	public JPopupMenu getPopupMenu(){
 		if(popupMenu==null){
 			popupMenu = new JPopupMenu();
@@ -162,18 +175,22 @@ public class GestionOficinaTramites extends JFrame {
 			menuItemModificar.setForeground(Color.ORANGE);
 			menuItemModificar.setBackground(Color.DARK_GRAY);
 			menuItemModificar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					int pos = listOficinas.getSelectedIndex();
-					if (pos >= 0 && pos <  micons.getOficinaTramites().size()) {
-						OficinaTramites o =  micons.getOficinaTramites().get(pos);
-						ModificarOficinaTramites m = new ModificarOficinaTramites(o, GestionOficinaTramites.this);
-						m.setVisible(true);
-					}
-					else 
-						JOptionPane.showMessageDialog(null, "Debes seleccionar una oficina para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE);
-
-				}
+			    public void actionPerformed(ActionEvent e) {
+			        OficinaTramites oficina = obtenerOficinaSeleccionada();
+			        if (oficina != null) {
+			            ModificarOficinaTramites m = new ModificarOficinaTramites(oficina, GestionOficinaTramites.this);
+			            m.setVisible(true);
+			        } else {
+			            JOptionPane.showMessageDialog(
+			                GestionOficinaTramites.this,
+			                "Debes seleccionar una oficina para modificar.",
+			                "Aviso",
+			                JOptionPane.WARNING_MESSAGE
+			            );
+			        }
+			    }
 			});
+
 		}
 		return menuItemModificar;
 	}
@@ -185,26 +202,35 @@ public class GestionOficinaTramites extends JFrame {
 			menuItemEliminar.setBackground(Color.DARK_GRAY);
 			menuItemEliminar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					int pos = listOficinas.getSelectedIndex();
-					ArrayList<OficinaTramites> oficinas =  micons.getOficinaTramites();
+					OficinaTramites oficina = obtenerOficinaSeleccionada();
 
-					if (pos >= 0 && pos < oficinas.size()) {
-						String consejoPopular = oficinas.get(pos).getConsejoPopular();
-						int confirmar = JOptionPane.showConfirmDialog(null,
+					if (oficina != null) {
+						String consejoPopular = oficina.getConsejoPopular();
+						int confirmar = JOptionPane.showConfirmDialog(
+								GestionOficinaTramites.this,
 								"¿Seguro que deseas eliminar \"" + consejoPopular + "\"?",
-								"Confirmar eliminación",JOptionPane.YES_NO_OPTION);
+								"Confirmar eliminación",
+								JOptionPane.YES_NO_OPTION
+								);
 
 						if (confirmar == JOptionPane.YES_OPTION) {
-							oficinas.remove(pos);
+							micons.getOficinaTramites().remove(oficina);
 							actualizarListaOficinas();
 						}
-					} else 
-						JOptionPane.showMessageDialog(null, "Debes seleccionar una oficina para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE);			        
+					} else {
+						JOptionPane.showMessageDialog(
+								GestionOficinaTramites.this,
+								"Debes seleccionar una oficina para eliminar.",
+								"Aviso",
+								JOptionPane.WARNING_MESSAGE
+								);
+					}
 				}
 			});
 		}
 		return menuItemEliminar;
 	}
+
 	public JMenu getMntmGestionar(){ 
 		if(mntmGestionar==null){
 			mntmGestionar= new JMenu("Gestionar");
@@ -222,11 +248,22 @@ public class GestionOficinaTramites extends JFrame {
 			mntmMateriales.setBackground(Color.DARK_GRAY);
 			mntmMateriales.setForeground(Color.ORANGE);
 			mntmMateriales.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-					GestionMateriales g= new GestionMateriales();
-					g.setVisible(true);
-				}
+			    public void actionPerformed(ActionEvent arg0) {
+			        OficinaTramites oficina = obtenerOficinaSeleccionada();
+
+			        if (oficina != null) {
+			            dispose();
+			            GestionMateriales g= new GestionMateriales(oficina);
+			            g.setVisible(true);
+			        } else {
+			            JOptionPane.showMessageDialog(
+			                GestionOficinaTramites.this,
+			                "Debes seleccionar una oficina antes de continuar.",
+			                "Aviso",
+			                JOptionPane.WARNING_MESSAGE
+			            );
+			        }
+			    }
 			});
 		}
 		return mntmMateriales;
@@ -237,11 +274,22 @@ public class GestionOficinaTramites extends JFrame {
 			mntmFtdos.setBackground(Color.DARK_GRAY);
 			mntmFtdos.setForeground(Color.ORANGE);
 			mntmFtdos.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-					GestionFichaTecnicaDO g =new GestionFichaTecnicaDO();
-					g.setVisible(true);
-				}
+			    public void actionPerformed(ActionEvent arg0) {
+			        OficinaTramites oficina = obtenerOficinaSeleccionada();
+
+			        if (oficina != null) {
+			            dispose();			       
+			            GestionFichaTecnicaDO g =new GestionFichaTecnicaDO(oficina);
+			            g.setVisible(true);
+			        } else {
+			            JOptionPane.showMessageDialog(
+			                GestionOficinaTramites.this,
+			                "Debes seleccionar una oficina antes de continuar.",
+			                "Aviso",
+			                JOptionPane.WARNING_MESSAGE
+			            );
+			        }
+			    }
 			});
 		}
 		return mntmFtdos;
@@ -252,22 +300,22 @@ public class GestionOficinaTramites extends JFrame {
 			mntmPlantillas.setBackground(Color.DARK_GRAY);
 			mntmPlantillas.setForeground(Color.ORANGE);
 			mntmPlantillas.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					int pos=listOficinas.getSelectedIndex();
-					ArrayList<OficinaTramites> oficinas =  micons.getOficinaTramites();
+			    public void actionPerformed(ActionEvent arg0) {
+			        OficinaTramites oficina = obtenerOficinaSeleccionada();
 
-					if(pos>=0){
-						if(pos<oficinas.size()){
-							dispose();
-							OficinaTramites o = oficinas.get(pos);
-							GestionPlantillas g = new GestionPlantillas(o);
-							g.setVisible(true);
-						}else
-							JOptionPane.showMessageDialog(null, "No hay datos disponibles para esa selección.", "Error", JOptionPane.ERROR_MESSAGE);
-					}else 
-						JOptionPane.showMessageDialog(null, "Debes seleccionar una oficina antes de continuar.", "Aviso", JOptionPane.WARNING_MESSAGE);
-
-				}
+			        if (oficina != null) {
+			            dispose();
+			            GestionPlantillas g = new GestionPlantillas(oficina);
+			            g.setVisible(true);
+			        } else {
+			            JOptionPane.showMessageDialog(
+			                GestionOficinaTramites.this,
+			                "Debes seleccionar una oficina antes de continuar.",
+			                "Aviso",
+			                JOptionPane.WARNING_MESSAGE
+			            );
+			        }
+			    }
 			});
 		}
 		return mntmPlantillas;
@@ -297,6 +345,13 @@ public class GestionOficinaTramites extends JFrame {
 			model.addElement(o.getConsejoPopular());	  
 		listOficinas.setModel(model);
 	}
-
+	private OficinaTramites obtenerOficinaSeleccionada() {
+		int pos = listOficinas.getSelectedIndex();
+		ArrayList<OficinaTramites> oficinas = micons.getOficinaTramites();
+		if (pos >= 0 && pos < oficinas.size()) {
+			return oficinas.get(pos);
+		}
+		return null;
+	}
 }
 

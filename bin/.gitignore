@@ -1,9 +1,5 @@
-/ui
-/clases
-/auxiliaes
 /auxiliares
-/datos
-/runner
-/CrearOficinaTramites$1.class
-/CrearOficinaTramites.class
+/clases
 /interfaces
+/runner
+/ui

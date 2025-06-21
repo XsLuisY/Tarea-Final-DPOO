@@ -106,9 +106,7 @@ public class ModificarFichaTecnicaDO extends JFrame {
 			mntmRegresar.setBackground(Color.DARK_GRAY);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-					GestionFichaTecnicaDO g= new GestionFichaTecnicaDO();
-			
+					dispose();							
 				}
 			});
 		}
