@@ -172,7 +172,7 @@ public class GestionMateriales extends JFrame {
 								);
 
 						if (confirmar == JOptionPane.YES_OPTION) {
-							actualOficinaTramites.deleteMaterial(material);
+							actualOficinaTramites.deleteMaterial(material.getId());
 							cargarMateriales();
 						}
 					} else {

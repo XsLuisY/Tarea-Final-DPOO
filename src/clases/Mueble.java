@@ -18,7 +18,7 @@ public class Mueble {
 	}
 	public void setNombre(String nombre) {
 	 if (nombre != null && !nombre.trim().isEmpty()) {
-    if(nombre.matches("[a-zA-ZñÑ1234567890 ]+"))
+    if(nombre.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ1234567890 ]+"))
       this.nombre = nombre.trim().replaceAll("\\s+", " ");
     else
       throw new IllegalArgumentException("El nombre del mueble solo debe tener letras");

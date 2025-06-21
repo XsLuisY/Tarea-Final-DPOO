@@ -59,7 +59,7 @@ public class Vivienda{
 	}
 	public void setDocumentoLegal(String documentoLegal) {
 	  if (documentoLegal != null && !documentoLegal.trim().isEmpty()) {
-    if(documentoLegal.matches("[a-zA-ZÒ—1234567890 ]+"))
+    if(documentoLegal.matches("[a-zA-ZÒ—·ÈÌÛ˙¡…Õ”⁄1234567890 ]+"))
       this.documentoLegal = documentoLegal.trim().replaceAll("\\s+", " ");
     else
       throw new IllegalArgumentException("El documento legal solo debe tener letras");
@@ -72,7 +72,7 @@ public class Vivienda{
 	}
 	public void setTipologiaHabitacional(String tipologiaHabitacional) {
 	  if (tipologiaHabitacional != null && !tipologiaHabitacional.trim().isEmpty()) {
-    if(tipologiaHabitacional.matches("[a-zA-ZÒ—1234567890 ]+"))
+    if(tipologiaHabitacional.matches("[a-zA-ZÒ—·ÈÌÛ˙¡…Õ”⁄1234567890 ]+"))
       this.tipologiaHabitacional = tipologiaHabitacional.trim().replaceAll("\\s+", " ");
     else
       throw new IllegalArgumentException("La tipologia habitacional solo debe tener letras");
@@ -85,7 +85,7 @@ public class Vivienda{
 	}
 	public void setTipologiaConstructiva(String tipologiaConstructiva) {
 	  if (tipologiaConstructiva != null && !tipologiaConstructiva.trim().isEmpty()) {
-    if(tipologiaConstructiva.matches("[a-zA-ZÒ—1234567890 ]+"))
+    if(tipologiaConstructiva.matches("[a-zA-ZÒ—·ÈÌÛ˙¡…Õ”⁄1234567890 ]+"))
       this.tipologiaConstructiva = tipologiaConstructiva.trim().replaceAll("\\s+", " ");
     else
       throw new IllegalArgumentException("La tipologia constructiva solo debe tener letras");

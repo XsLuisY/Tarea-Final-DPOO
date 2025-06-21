@@ -1,49 +1,51 @@
 package clases;
+import interfaces.Identificable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
 public class MICONS {
 	private static MICONS micons = null;
+	private static HashMap<UUID, Identificable> listaId = null;
+
 	private ArrayList<OficinaTramites> oficinas;
 	private ArrayList<Vivienda> viviendas;
-
 	//Singleton
 	public static MICONS getMICONS() {
 		if (micons == null)
-			micons = new MICONS();
+			micons = new MICONS();		
 		return micons;
 	}
 	//Constructor 
 	private MICONS(){
 		oficinas = new ArrayList<OficinaTramites>();
 		viviendas = new ArrayList<Vivienda>();		
+		listaId = new HashMap<UUID, Identificable>();
 	}
 	//Encapsulamiento
 	public ArrayList<OficinaTramites> getOficinaTramites(){
 		return oficinas;
 	}
-	//Metodos CRUD de OficinaTramites
-	//Create	
-	public Boolean addOficinaTramites(String consejoPopular){
-		OficinaTramites oficinaT= new OficinaTramites(consejoPopular);
+	public static Boolean existUUID(UUID id){
+		Boolean exist=false;
+		for(int i=0; i<listaId.size()&& !exist; i++)
+			if(listaId.containsKey(id))
+				exist=true;
+		return exist;
+	}
+	//CRUD-OficinaTramites
+	/*Create*/ public Boolean addOficinaTramites(String consejoPopular){
+		OficinaTramites oficina= new OficinaTramites(consejoPopular);
 		Boolean agregado=false;
-		if(oficinaT!=null && !existOficinaTramites(consejoPopular)){
-			oficinas.add(oficinaT);
+
+		if(oficina!=null && !existOficinaTramites(consejoPopular)){
+			oficinas.add(oficina);
 			agregado=true;
 		}
 		return agregado;
 	}
-	//Read
-	public Boolean existOficinaTramites(String consejoPopular){
-		Boolean exist=false;
-		for (int i=0; i<oficinas.size() && !exist; i++) {
-			if (oficinas.get(i).getConsejoPopular().equalsIgnoreCase(consejoPopular))
-				exist=true;
-		}
-		return exist;
-	}
-	public OficinaTramites readOficinaTramites(String consejoPopular){
+	/*Read*/ public OficinaTramites readOficinaTramites(String consejoPopular){
 		OficinaTramites oficina = null;
 		int i=0;
 		Boolean found= false;
@@ -56,33 +58,39 @@ public class MICONS {
 		}
 		return oficina;
 	}
-	//Update
-	public Boolean updateOficinaTramites(String consejoPopular, String nuevoConsejo){
-		OficinaTramites oficina=readOficinaTramites(consejoPopular);
+	/*Update*/ public Boolean updateOficinaTramites(String consejoPopular, String nuevoConsejo){
 		Boolean updt=!existOficinaTramites(nuevoConsejo);
 
-		if(oficina != null){
-			if(updt)		
-				oficina.setConsejoPopular(nuevoConsejo);
+		if(updt){		
+			OficinaTramites o = readOficinaTramites(consejoPopular);
+			o.setConsejoPopular(nuevoConsejo);	
 		}
-		//else
-		//lanzar excepcion
+		else throw new IllegalArgumentException("Esta OficinaTramites no existe");
+
 		return updt;
 	}
-	//Delete
-	public Boolean deleteOficinaTramites(String consejoPopular){
-		OficinaTramites oficina = readOficinaTramites(consejoPopular);
-		Boolean exit = false;
-		if(oficina != null){
-			oficinas.remove(oficina);
-			exit= true;
-		}
-		return exit;
+	/*Delete*/ public Boolean deleteOficinaTramites(String consejoPopular){
+		Boolean del=existOficinaTramites(consejoPopular);
+
+		if(!del)			
+			oficinas.remove(readOficinaTramites(consejoPopular));
+		else throw new IllegalArgumentException("Esta OficinaTramites no existe");
+
+		return del;
+	}
+	public Boolean existOficinaTramites(String consejoPopular){
+		//Verificar si la OficinaTramites existe a traves de su consejoPopular
+		Boolean exist=false;
+
+		for (int i=0; i<oficinas.size() && !exist; i++)
+			if (oficinas.get(i).getConsejoPopular().equalsIgnoreCase(consejoPopular))
+				exist=true;
+
+		return exist;
 	}
 
 	// Metodos CRUD de Vivienda
-	//Create
-	public Boolean addVivienda(String nombreJefeN, String idJefeN, String direccion, String documentoLegal, String tipologiaHabitacional, String tipologiaConstructiva, Boolean facilidadTemporal, double largo, double ancho, double altura, int cantNinios, int cantAncianos, int cantEmbarazadas, int totalHabitantes){
+	/*Create*/ public Boolean addVivienda(String nombreJefeN, String idJefeN, String direccion, String documentoLegal, String tipologiaHabitacional, String tipologiaConstructiva, Boolean facilidadTemporal, double largo, double ancho, double altura, int cantNinios, int cantAncianos, int cantEmbarazadas, int totalHabitantes){
 		Boolean agg= false;
 		Vivienda vivienda= new Vivienda(nombreJefeN, idJefeN, direccion, documentoLegal, tipologiaHabitacional, tipologiaConstructiva, facilidadTemporal, largo, ancho, altura, cantNinios, cantAncianos, cantEmbarazadas, totalHabitantes);
 		if(vivienda!=null){
@@ -91,8 +99,7 @@ public class MICONS {
 		}
 		return agg;
 	}
-	//Read
-	public Vivienda readByIDVivienda(UUID id){
+	/*Read */ public Vivienda readByIDVivienda(UUID id){
 		Vivienda vivienda= null;
 		int i=0;
 		Boolean found= false;
@@ -105,8 +112,7 @@ public class MICONS {
 		}
 		return vivienda;
 	}
-	//Update
-	public Boolean updateVivienda(String newNombreJefeN, UUID idJefeN, String newDireccion, String newDocumentoLegal, String newTipologiaHabitacional, String newTipologiaConstructiva, Boolean newFacilidadTemporal, double newLargo, double newAncho, double newAltura, int newCantNinios, int newCantAncianos, int newCantEmbarazadas, int newTotalHabitantes){
+	/*Update*/ public Boolean updateVivienda(String newNombreJefeN, UUID idJefeN, String newDireccion, String newDocumentoLegal, String newTipologiaHabitacional, String newTipologiaConstructiva, Boolean newFacilidadTemporal, double newLargo, double newAncho, double newAltura, int newCantNinios, int newCantAncianos, int newCantEmbarazadas, int newTotalHabitantes){
 		Vivienda vivienda= readByIDVivienda(idJefeN);
 		Boolean exit= false;
 		if(vivienda != null){
@@ -127,8 +133,7 @@ public class MICONS {
 		}
 		return exit;
 	}
-	//Delete
-	public Boolean deleteVivienda(UUID id){
+	/*Delete*/ public Boolean deleteVivienda(UUID id){
 		Vivienda vivienda = readByIDVivienda(id);
 		Boolean exit = false;
 		if(vivienda != null){

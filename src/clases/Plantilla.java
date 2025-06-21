@@ -1,8 +1,6 @@
 package clases;
 import java.util.UUID;
 
-import java.util.UUID;
-
 public class Plantilla {
 
 	//Atributos
@@ -14,7 +12,7 @@ public class Plantilla {
 	public Plantilla(Cubicacion cubicacion, FichaTecnicaDO ficha){
 		setCubicacion(cubicacion);
 		setFichaTecnicaDO(ficha);
-		this.id= UUID.randomUUID();
+		setId();
 	}
 
 	//Encapsulamiento
@@ -31,7 +29,7 @@ public class Plantilla {
 			this.ficha= ficha;	
 		else throw new IllegalArgumentException("La Ficha Técnica de Daños Ocasionados no puede ser nula");
 	}
-	public FichaTecnicaDO setFichaTecnicaDO(){
+	public FichaTecnicaDO getFichaTecnicaDO(){
 		return ficha;
 	}
 	public UUID getId() {
@@ -39,10 +37,12 @@ public class Plantilla {
 	}
 
 	public void setId() {
-		id=UUID.randomUUID();
+		do
+			id=UUID.randomUUID();
+		while(MICONS.existUUID(id));
 	}
 
-	//Métodos
+	//Metodos
 	public double calcularPrecioTotal(){
 		return	cubicacion.calcularPrecioTotal();
 	}

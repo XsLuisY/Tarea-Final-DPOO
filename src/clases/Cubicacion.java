@@ -19,10 +19,11 @@ public class Cubicacion  {
 	public UUID getId() {
 		return id;
 	}
-	public void setId() {
-		id=UUID.randomUUID();
-	}
-	
+	public void setId() {		
+		do
+			id=UUID.randomUUID();
+		while(MICONS.existUUID(id));
+	}	
 	public void setMateriales(ArrayList<MaterialACubicar> materiales){
 		this.materiales=materiales;
 	}		
@@ -31,51 +32,56 @@ public class Cubicacion  {
 	}		
 
 	//CRUD-MaterialACubicar ARREGLAR
-	//Create	
+	/*Create*/ public Boolean addMaterialACubicar(Material material, double cantidad){
+		Boolean add=false;
 
-	public MaterialACubicar createMaterialACubicar(Material material, double cantidad){
-		return new MaterialACubicar(material, cantidad);
-
+		if(!existMaterialACubicar(material)){
+			MaterialACubicar m= new MaterialACubicar(material, cantidad);
+			materiales.add(m);	
+			add=true;
+		}
+		else throw new IllegalArgumentException("Este Material ya existe");
+		return add;
 	}
-
-	public void addMaterialACubicar(MaterialACubicar material){
-		if(!materiales.contains(material))
-			materiales.add(material);
-		else
-			throw new IllegalArgumentException("Este material ya fue cubicado");
-	}
-
-	//Read
-	public MaterialACubicar searchMaterialACubicar(UUID id){
-		boolean encontrado=false;
-		MaterialACubicar auxMaterial= null;
-		for(int i=0; i<materiales.size() && !encontrado; i++)
-			if(materiales.get(i).getId()==id){
-				auxMaterial=materiales.get(i);
-				encontrado=true;
+	/*Read*/ public MaterialACubicar readMaterialACubicar(Material material){	
+		//Busca y devuelve el objeto, si no lo encuentra devuelve null
+		MaterialACubicar m= null;
+		Boolean found=false;
+		for(int i=0; i<materiales.size() && !found; i++)
+			if(materiales.get(i).getMaterial().equals(material)){
+				m = materiales.get(i);
+				found=true;
 			}					
-		return auxMaterial; 			
+		return m; 			
 	}
-	//Update
-	public void updateMaterialACubicar(UUID id, Material material, double cantidad){
-		boolean encontrado=false;
+	/*Update*/public Boolean updateMaterialACubicar(Material material, double cantidad){
+		Boolean updt=!existMaterialACubicar(material);
 
-		for (int i=0;i<materiales.size() && !encontrado; i++)
-			if(materiales.get(i).getId()==id){
-				materiales.get(i).setMaterial(material);
-				materiales.get(i).setCantidad(cantidad);
-				encontrado=true;
-			}
-	}	
-	//Delete
-	public void deleteMaterialACubicar(UUID id){
-		boolean encontrado=false;
-		for (int i=0;i<materiales.size() && !encontrado; i++)
-			if(materiales.get(i).getId()==id){
-				materiales.remove(i);		
-				encontrado=true;
-			}
+		if(updt){
+			MaterialACubicar m = readMaterialACubicar(material);	
+			m.setMaterial(material);
+			m.setCantidad(cantidad);
+		}else throw new IllegalArgumentException("Este Material no existe");
+		return updt;
 	}
+	/*Delete*/public Boolean deleteMaterialACubicar(Material material){
+		Boolean del=existMaterialACubicar(material);
+		if(!del)			
+			materiales.remove(readMaterialACubicar(material));
+		else throw new IllegalArgumentException("Este Material no existe");
+
+		return del;
+	}
+	public boolean existMaterialACubicar(Material material){
+		//Verificar si MaterialACubicar existe a traves de material 
+		Boolean exist=false;
+		for (int i=0; i<materiales.size() && !exist; i++) {
+			if (materiales.get(i).getMaterial().equals(material))
+				exist=true;
+		}
+		return exist;
+	}
+
 	//Métodos
 
 	public double calcularPrecioTotal(){
@@ -85,26 +91,7 @@ public class Cubicacion  {
 		}
 		return precioTotal;
 	}
-
-	//Metodos para cargar los datos desde el .txt
-
-
-
-
-	//----------------------------------------------------------------------
-
-	public void inicializarDatos(){
-
-
-
-
-	}
-
-
-
-	//----------------------------------------------------------------------
-
-
 }
+//----------------------------------------------------------------------
 
 
