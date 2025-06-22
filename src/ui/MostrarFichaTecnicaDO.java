@@ -20,12 +20,14 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JMenuBar;
 
+import clases.FichaTecnicaDO;
 import clases.MICONS;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class MostrarFichaTecnicaDO extends JFrame {
+	private FichaTecnicaDO ficha;
 	private JPanel contentPane;
 	private JTable tableMuebles;
 	private JTable tableAfectaciones;
@@ -49,7 +51,8 @@ public class MostrarFichaTecnicaDO extends JFrame {
 	private JLabel lblJefeNucleo;
 	private JLabel lblDireccion;
 
-	public MostrarFichaTecnicaDO( ) {
+	public MostrarFichaTecnicaDO(FichaTecnicaDO ficha) {
+		this.ficha=ficha;
 		setType(Type.UTILITY);
 		setTitle("Ficha T\u00E9cnica de Da\u00F1os Ocacionados");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

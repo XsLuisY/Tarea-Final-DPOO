@@ -26,7 +26,7 @@ public class OficinaTramites{
 	//Encapsulamiento
 	public void setConsejoPopular(String consejoPopular){
 		if(consejoPopular!=null && !consejoPopular.trim().isEmpty())
-			if(consejoPopular.matches("[a-zA-Z������������1234567890 ]+"))
+			if(consejoPopular.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"))
 				this.consejoPopular=consejoPopular.trim().replaceAll("\\s+", " ");		
 			else throw new IllegalArgumentException("El nombre del Consejo Popular no puede contener numeros o caracteres no validos.");
 		else throw new NullPointerException("El nombre del Consejo Popular no puede estar vacio.");
@@ -75,14 +75,14 @@ public class OficinaTramites{
 		if(updt){
 			FichaTecnicaDO f = readFichaTecnicaDO(id);
 			f.setVivienda(vivienda);
-		}else throw new IllegalArgumentException("Esta FichaTecnicaDO no existe");
-
+		}
+		else throw new IllegalArgumentException("Esta FichaTecnicaDO no existe");
 		return updt;
 	}	
 	/*Delete*/ public Boolean deleteFichaTecnicaDO(UUID id){
 		Boolean del=existFichaTecnicaDO(id);
 
-		if(!del)			
+		if(del)			
 			fichas.remove(readFichaTecnicaDO(id));
 		else throw new IllegalArgumentException("Esta FichaTecnicaDO no existe");
 
@@ -131,12 +131,13 @@ public class OficinaTramites{
 		return cubicacion; 			
 	}
 	/*Update*/ public Boolean updateCubicacion(UUID id, ArrayList<MaterialACubicar> materiales) {		
-		Boolean updt=!existCubicacion(id);
+		Boolean updt=false;
 
-		if(updt)
+		if(existCubicacion(id))
 			if(materiales!=null) {
 				Cubicacion c = readCubicacion(id);
 				c.setMateriales(materiales);
+				updt=true;
 			}else throw new NullPointerException("La nueva lista no puede ser null.");
 		else throw new IllegalArgumentException("Esta Cubicacion no existe");
 		return updt;
@@ -144,7 +145,7 @@ public class OficinaTramites{
 	/*Delete*/ public Boolean deleteCubicacion(UUID id){
 		Boolean del=existCubicacion(id);
 
-		if(!del)			
+		if(del)			
 			cubicaciones.remove(readCubicacion(id));
 		else throw new IllegalArgumentException("Esta Cubicacion no existe");
 
@@ -188,21 +189,22 @@ public class OficinaTramites{
 		return material; 				
 	}
 	/*Update*/ public Boolean updateMaterial(UUID id, String nombre, String unidadMedida, Double precioUnitario){
-		Boolean updt=!existMaterial(id);
+		Boolean updt=false;
 
-		if(updt){
+		if(existMaterial(id)){
 			Material m = readMaterial(id);
 			m.setNombre(nombre);
 			m.setPrecioUnitario(precioUnitario);
-			m.setUnidadMedida(unidadMedida);				
+			m.setUnidadMedida(unidadMedida);	
+			updt=true;A
 		}else throw new IllegalArgumentException("Este Material no existe");
 		return updt;
 	}	
 	/*Delete*/ public Boolean deleteMaterial(UUID id){
 		Boolean del=existMaterial(id);
 
-		if(!del)			
-			plantillas.remove(readMaterial(id));
+		if(del)			
+			materiales.remove(readMaterial(id));
 		else throw new IllegalArgumentException("Este Material no existe");
 
 		return del;
@@ -251,19 +253,20 @@ public class OficinaTramites{
 		return plantilla; 			
 	}
 	/*Update*/ public Boolean updatePlantilla(UUID id, Cubicacion cubicacion, FichaTecnicaDO ficha){
-		Boolean updt=!existMaterial(id);
+		Boolean updt=false;
 
-		if(updt){
+		if(existPlantilla(id)){
 			Plantilla p = readPlantilla(id);
 			p.setCubicacion(cubicacion);
-			p.setFichaTecnicaDO(ficha);			
+			p.setFichaTecnicaDO(ficha);		
+			updt=true;
 		}else throw new IllegalArgumentException("Este Material no existe");
 		return updt;
 	}		
 	/*Delete*/ public Boolean deletePlantilla(UUID id){
 		Boolean del=existMaterial(id);
 
-		if(!del)			
+		if(del)			
 			plantillas.remove(readPlantilla(id));
 		else throw new IllegalArgumentException("Esta Plantilla no existe");
 
@@ -306,7 +309,7 @@ public class OficinaTramites{
 		return mayores;
 	}
 
-	
+
 	//------------------------------Inicializar Datos-------------------------------------
 	//Inicializar materiales
 	public void inicializarMateriales(String txtMateriales){

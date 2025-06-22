@@ -1,6 +1,5 @@
 package ui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -9,30 +8,32 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JPopupMenu;
-
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Color;
-
 import javax.swing.ListSelectionModel;
 import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
 import javax.swing.JMenuBar;
 import javax.swing.table.DefaultTableModel;
-
+import clases.FichaTecnicaDO;
 import clases.MICONS;
 import clases.OficinaTramites;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 public class GestionFichaTecnicaDO extends JFrame {
-	private MICONS micons;
+	
+	private static final long serialVersionUID = 1L;
+	
+	private ArrayList<FichaTecnicaDO> fichas;
+	private OficinaTramites oficina;
 	private JMenuBar barraSuperior;
 	private JPanel contentPane;
 	private JScrollPane scrollPane;
-	private JTable table;
+	private JTable tableFichas;
 	private JMenuItem mntmRegresar;
 	private JPopupMenu popupMenu;
 	private JMenuItem menuItemAgregar;
@@ -40,14 +41,15 @@ public class GestionFichaTecnicaDO extends JFrame {
 	private JMenuItem menuItemModificar;
 	private JMenuItem menuItemEliminar;
 
-	public GestionFichaTecnicaDO(OficinaTramites oficinaActual) {
+	public GestionFichaTecnicaDO(OficinaTramites oficina) {
 		setTitle("Gesti\u00F3n de Fichas T\u00E9cnicas");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
-		micons=MICONS.getMICONS();	
+		this.oficina=oficina;
+		fichas=oficina.getFichas();
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
-		addPopup(getTable(), getPopupMenu());
+		addPopup(getTableFichas(), getPopupMenu());
 
 	}
 
@@ -89,18 +91,18 @@ public class GestionFichaTecnicaDO extends JFrame {
 		if(scrollPane==null){
 			scrollPane = new JScrollPane();
 			scrollPane.setBounds(10, 11, 364, 215);
-			scrollPane.setViewportView(getTable());
+			scrollPane.setViewportView(getTableFichas());
 		}
 		return scrollPane;
 	}
-	public JTable getTable(){
-		if(table==null){
-			table = new JTable();
-			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			table.setForeground(Color.ORANGE);
-			table.setFillsViewportHeight(true);
-			table.setBackground(Color.DARK_GRAY);
-			table.setModel(new DefaultTableModel(
+	public JTable getTableFichas(){
+		if(tableFichas==null){
+			tableFichas = new JTable();
+			tableFichas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			tableFichas.setForeground(Color.ORANGE);
+			tableFichas.setFillsViewportHeight(true);
+			tableFichas.setBackground(Color.DARK_GRAY);
+			tableFichas.setModel(new DefaultTableModel(
 					new Object[][] {
 					},
 					new String[] {
@@ -108,7 +110,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 					}
 					));
 		}
-		return table;
+		return tableFichas;
 	}
 	public JPopupMenu getPopupMenu(){	
 		if(popupMenu==null){
@@ -130,9 +132,9 @@ public class GestionFichaTecnicaDO extends JFrame {
 			menuItemAgregar.setBackground(Color.DARK_GRAY);
 			menuItemAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-					CrearFichaTecnicaDO c =new CrearFichaTecnicaDO();
-					c.setVisible(true);
+					dispose();					
+					CrearFichaTecnicaDO c =new CrearFichaTecnicaDO(GestionFichaTecnicaDO.this);
+					c.setVisible(true);					
 				}
 			});
 		}
@@ -147,7 +149,8 @@ public class GestionFichaTecnicaDO extends JFrame {
 			menuItemMostrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					MostrarFichaTecnicaDO m = new MostrarFichaTecnicaDO( );
+					FichaTecnicaDO f = obtenerFichaTecnicaSeleccionada();
+					MostrarFichaTecnicaDO m = new MostrarFichaTecnicaDO(f);
 					m.setVisible(true);
 				}
 			});
@@ -163,7 +166,8 @@ public class GestionFichaTecnicaDO extends JFrame {
 			menuItemModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					CrearFichaTecnicaDO c = new CrearFichaTecnicaDO();
+					FichaTecnicaDO f = obtenerFichaTecnicaSeleccionada();
+					ModificarFichaTecnicaDO c = new ModificarFichaTecnicaDO(GestionFichaTecnicaDO.this, f);
 					c.setVisible(true);
 				}
 			});
@@ -197,4 +201,39 @@ public class GestionFichaTecnicaDO extends JFrame {
 			}
 		});
 	}
+	//Metodos
+	public OficinaTramites getOficinaTramites(){
+		return oficina;
+	}
+	public FichaTecnicaDO obtenerFichaTecnicaSeleccionada(){
+		FichaTecnicaDO f = null;
+		int pos = getTableFichas().getSelectedRow();
+		if (pos >= 0 && pos < fichas.size()) {
+			f=fichas.get(pos);
+		}
+		return f;
+	}
+	public void actualizarTableFichas() {
+		DefaultTableModel model = (DefaultTableModel) getTableFichas().getModel();
+		model.setRowCount(0); // Limpiar la tabla
+
+		for(FichaTecnicaDO f:  fichas){
+			String direccion=f.getVivienda().getDireccion();
+			String fechaLevantamiento=f.getFechaLevantamiento();
+			Object[] newRow = new Object[]{direccion, fechaLevantamiento, f.getId()};
+			model.addRow(newRow);			
+		}
+		getTableFichas().setModel(model);
+	}
 }
+
+
+
+
+
+
+
+
+
+
+

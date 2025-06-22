@@ -1,17 +1,18 @@
 package ui;
 
-import java.awt.BorderLayout;
+import interfaces.GestionAfectaciones;
+import interfaces.GestionMuebles;
+
 import java.awt.Color;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
-import javax.swing.JSpinner;
 import javax.swing.SwingConstants;
 import javax.swing.JPopupMenu;
 
@@ -20,20 +21,30 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JMenuItem;
-
-import java.awt.Window.Type;
-
-import javax.swing.JComboBox;
 import javax.swing.JMenuBar;
 import javax.swing.JButton;
 
-import clases.MICONS;
+import clases.Afectacion;
+import clases.AfectacionPared;
+import clases.AfectacionTecho;
+import clases.FichaTecnicaDO;
+import clases.Mueble;
+import clases.OficinaTramites;
+import clases.Vivienda;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
-public class ModificarFichaTecnicaDO extends JFrame {
-	private MICONS micons;
+public class ModificarFichaTecnicaDO extends JFrame implements GestionAfectaciones, GestionMuebles {	
+
+	private static final long serialVersionUID = 1L;
+
+	private FichaTecnicaDO ficha;
+	private GestionFichaTecnicaDO gestion;
+	private ArrayList<Afectacion> afectaciones;
+	private ArrayList<Mueble> muebles;
+
 	private JPanel contentPane;
 	private JTable tableMuebles;
 	private JTable tableAfectaciones;
@@ -41,9 +52,9 @@ public class ModificarFichaTecnicaDO extends JFrame {
 	private JMenuItem mntmRegresar;
 	private JScrollPane scrollPaneAfectaciones;
 	private JPopupMenu popupMenuAfectaciones;
-	private JMenuItem mntmAgregar;
-	private JMenuItem mntmModificar;
-	private JMenuItem mntmEliminar;
+	private JMenuItem mntmAgregarAfectacion;
+	private JMenuItem mntmModificarAfectacion;
+	private JMenuItem mntmEliminarAfectacion;
 	private JScrollPane scrollPaneMuebles;
 	private JPopupMenu popupMenuMuebles;
 	private JMenuItem mntmAgregarMueble ;
@@ -51,24 +62,27 @@ public class ModificarFichaTecnicaDO extends JFrame {
 	private JMenuItem mntmEliminarMueble;
 	private JLabel lblAfectacionInmueble; 
 	private JLabel lblAfectacinVivienda; 
-	private JLabel lblFechaLevantamiento;
-	private JSpinner spinnerDia;
-	private JSpinner spinnerMes;
-	private JSpinner spinnerAnno; 
 	private JButton btnModificar;
-	private JLabel lblId;
+
+	//TODO: IMPLEMENTAR FECHA LEVANTAMIENTO
 
 
-	public ModificarFichaTecnicaDO() {
+	public ModificarFichaTecnicaDO(GestionFichaTecnicaDO gestion, FichaTecnicaDO ficha) {
 		setType(Type.UTILITY);
-		setTitle("Ficha T\u00E9cnica de Da\u00F1os Ocacionados");
+		setTitle("Modificar Ficha T\u00E9cnica de Da\u00F1os Ocacionados");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 320, 500);
-		micons=MICONS.getMICONS();	
+		setBounds(100, 100, 320, 455); 	
+		this.gestion=gestion;		
+		this.ficha=ficha;
+		afectaciones=this.ficha.getAfectaciones();
+		muebles=this.ficha.getMuebles();
+
 		setContentPane(getContentPane());
 		setJMenuBar(getBarraSuperior());
 		addPopup(getTableAfectaciones(), getPopupMenuAfectaciones());
 		addPopup(getTableMuebles(), getPopupMenuMuebles());
+
+		rellenarFormulario();
 	}
 
 	public JPanel getContentPane(){
@@ -81,12 +95,7 @@ public class ModificarFichaTecnicaDO extends JFrame {
 			contentPane.add(getScrollPaneMuebles());
 			contentPane.add(getLblAfectacionInmueble());
 			contentPane.add(getLblAfectacinVivienda());
-			contentPane.add(getSpinnerDia());
-			contentPane.add(getLblFechaLevantamiento());
-			contentPane.add(getSpinnerMes());
-			contentPane.add(getSpinnerAnno());
-			contentPane.add(getbtnModificar());				
-			contentPane.add(getLblId());
+			contentPane.add(getBtnModificar());
 
 		}
 		return contentPane;
@@ -106,7 +115,7 @@ public class ModificarFichaTecnicaDO extends JFrame {
 			mntmRegresar.setBackground(Color.DARK_GRAY);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();							
+					dispose();
 				}
 			});
 		}
@@ -129,9 +138,7 @@ public class ModificarFichaTecnicaDO extends JFrame {
 			tableAfectaciones.setModel(new DefaultTableModel(
 					new Object[][] {
 					},
-					new String[] {
-							"Tipo", "Material Predominante"
-					}
+					new String[] { "Tipo", "Material", "Derrumbe", "Carga" }
 					));			
 		}
 		return tableAfectaciones;
@@ -139,51 +146,70 @@ public class ModificarFichaTecnicaDO extends JFrame {
 	public JPopupMenu getPopupMenuAfectaciones(){
 		if(popupMenuAfectaciones==null){
 			popupMenuAfectaciones = new JPopupMenu();
-			popupMenuAfectaciones.add(getMntmAgregar());
-			popupMenuAfectaciones.add(getMntmModificar());
-			popupMenuAfectaciones.add(getMntmEliminar());
+			popupMenuAfectaciones.add(getMntmAgregarAfectacion());
+			popupMenuAfectaciones.add(getMntmModificarAfectacion());
+			popupMenuAfectaciones.add(getMntmEliminarAfectacion());
 		}
 		return popupMenuAfectaciones;
 	}
-	public JMenuItem getMntmAgregar(){			
-		if(mntmAgregar==null){
-			mntmAgregar = new JMenuItem("Agregar");
-			mntmAgregar.setHorizontalAlignment(SwingConstants.RIGHT);
-			mntmAgregar.setBackground(Color.DARK_GRAY);
-			mntmAgregar.setForeground(Color.ORANGE);
-			mntmAgregar.addActionListener(new ActionListener() {
+	public JMenuItem getMntmAgregarAfectacion(){			
+		if(mntmAgregarAfectacion==null){
+			mntmAgregarAfectacion = new JMenuItem("Agregar");
+			mntmAgregarAfectacion.setHorizontalAlignment(SwingConstants.RIGHT);
+			mntmAgregarAfectacion.setBackground(Color.DARK_GRAY);
+			mntmAgregarAfectacion.setForeground(Color.ORANGE);
+			mntmAgregarAfectacion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					CrearAfectacion c = new CrearAfectacion();
+					CrearAfectacion c = new CrearAfectacion(ModificarFichaTecnicaDO.this, ficha);
 					c.setVisible(true);
 				}
 			});
 		}
-		return mntmAgregar;
+		return mntmAgregarAfectacion;
 	}
-	public JMenuItem getMntmModificar(){
-		if(mntmModificar==null){
-			mntmModificar = new JMenuItem("Modificar");
-			mntmModificar.setHorizontalAlignment(SwingConstants.RIGHT);
-			mntmModificar.setBackground(Color.DARK_GRAY);
-			mntmModificar.setForeground(Color.ORANGE);
-			mntmModificar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					ModificarAfectacion m = new ModificarAfectacion();
-					m.setVisible(true);
+	public JMenuItem getMntmModificarAfectacion(){
+		if(mntmModificarAfectacion==null){
+			mntmModificarAfectacion = new JMenuItem("Modificar");
+			mntmModificarAfectacion.setHorizontalAlignment(SwingConstants.RIGHT);
+			mntmModificarAfectacion.setBackground(Color.DARK_GRAY);
+			mntmModificarAfectacion.setForeground(Color.ORANGE);
+			mntmModificarAfectacion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Afectacion a= getAfectacionSeleccionada();
+					if (a != null) {
+						ModificarAfectacion m = new ModificarAfectacion(ModificarFichaTecnicaDO.this, ficha, a);
+						m.setVisible(true);
+					} else 
+						JOptionPane.showMessageDialog(ModificarFichaTecnicaDO.this, "Debes seleccionar una afectacion para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE );					
 				}
 			});
 		}
-		return mntmModificar;
+		return mntmModificarAfectacion;
 	}
-	public JMenuItem getMntmEliminar(){	
-		if(mntmEliminar==null){
-			mntmEliminar = new JMenuItem("Eliminar");
-			mntmEliminar.setHorizontalAlignment(SwingConstants.RIGHT);
-			mntmEliminar.setBackground(Color.DARK_GRAY);
-			mntmEliminar.setForeground(Color.ORANGE);
+	public JMenuItem getMntmEliminarAfectacion(){ 
+		if(mntmEliminarAfectacion == null){
+			mntmEliminarAfectacion = new JMenuItem("Eliminar");
+			mntmEliminarAfectacion.setHorizontalAlignment(SwingConstants.RIGHT);
+			mntmEliminarAfectacion.setBackground(Color.DARK_GRAY);
+			mntmEliminarAfectacion.setForeground(Color.ORANGE);
+			mntmEliminarAfectacion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Afectacion afectacion = getAfectacionSeleccionada();
+					if (afectacion != null) {
+						int confirmar = JOptionPane.showConfirmDialog(ModificarFichaTecnicaDO.this, "¿Seguro que deseas eliminar la afectación seleccionada?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION );
+
+						if (confirmar == JOptionPane.YES_OPTION) { 
+							ficha.delAfectacion(afectacion.getId()); 
+							actualizarTableAfectaciones(ficha.getAfectaciones());}
+					} else {
+						JOptionPane.showMessageDialog( ModificarFichaTecnicaDO.this, "Debes seleccionar una afectación para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE );
+					}
+				}
+			});
 		}
-		return mntmEliminar;
+		return mntmEliminarAfectacion;
 	}
+
 	public JScrollPane getScrollPaneMuebles(){
 		if(scrollPaneMuebles==null){
 			scrollPaneMuebles = new JScrollPane();
@@ -192,16 +218,11 @@ public class ModificarFichaTecnicaDO extends JFrame {
 		}
 		return scrollPaneMuebles;
 	}
+
 	public JTable getTableMuebles(){
 		if(tableMuebles==null){
 			tableMuebles = new JTable();
-			tableMuebles.setModel(new DefaultTableModel(
-					new Object[][] {
-					},
-					new String[] {
-							"Mueble", "Cantidad"
-					}
-					));
+			tableMuebles.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Mueble", "Cantidad"}));
 			tableMuebles.setFillsViewportHeight(true);
 			tableMuebles.setForeground(Color.ORANGE);
 			tableMuebles.setBackground(Color.DARK_GRAY);
@@ -225,7 +246,7 @@ public class ModificarFichaTecnicaDO extends JFrame {
 			mntmAgregarMueble.setForeground(Color.ORANGE);
 			mntmAgregarMueble.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					CrearMueble c = new CrearMueble();
+					CrearMueble c = new CrearMueble(ModificarFichaTecnicaDO.this, ficha);
 					c.setVisible(true);
 				}
 			});
@@ -239,9 +260,14 @@ public class ModificarFichaTecnicaDO extends JFrame {
 			mntmModificarMueble.setHorizontalAlignment(SwingConstants.RIGHT);
 			mntmModificarMueble.setForeground(Color.ORANGE);
 			mntmModificarMueble.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					ModificarMueble m = new ModificarMueble();
-					m.setVisible(true);
+				public void actionPerformed(ActionEvent e) {
+					Mueble mueble= getMuebleSeleccionado();
+					if (mueble != null) {
+						ModificarMueble m = new ModificarMueble(ModificarFichaTecnicaDO.this, ficha, mueble);
+						m.setVisible(true);
+					} else 
+						JOptionPane.showMessageDialog(ModificarFichaTecnicaDO.this, "Debes seleccionar un mueble para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+
 				}
 			});
 		}
@@ -253,6 +279,24 @@ public class ModificarFichaTecnicaDO extends JFrame {
 			mntmEliminarMueble.setBackground(Color.DARK_GRAY);
 			mntmEliminarMueble.setHorizontalAlignment(SwingConstants.RIGHT);
 			mntmEliminarMueble.setForeground(Color.ORANGE);
+			mntmEliminarMueble.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int fila = getTableMuebles().getSelectedRow();
+					if (fila >= 0) {
+						String nombre = (String) getTableMuebles().getValueAt(fila, 0);
+						int confirmar = JOptionPane.showConfirmDialog(ModificarFichaTecnicaDO.this,"¿Seguro que deseas eliminar el mueble \"" + nombre + "\"?","Confirmar eliminación",JOptionPane.YES_NO_OPTION);
+						if (confirmar == JOptionPane.YES_OPTION) 
+							try {
+								ficha.delMueble(nombre);
+								actualizarTableMuebles(ficha.getMuebles());
+							} catch (IllegalArgumentException ex) {
+								JOptionPane.showMessageDialog(ModificarFichaTecnicaDO.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+							}			            
+					} else 
+						JOptionPane.showMessageDialog( ModificarFichaTecnicaDO.this,"Debes seleccionar un mueble para eliminar.","Aviso", JOptionPane.WARNING_MESSAGE);
+
+				}
+			});
 		}
 		return mntmEliminarMueble;
 	}
@@ -272,49 +316,38 @@ public class ModificarFichaTecnicaDO extends JFrame {
 		}
 		return lblAfectacinVivienda;
 	}
-	public JLabel getLblFechaLevantamiento(){
-		if(lblFechaLevantamiento==null){
-			lblFechaLevantamiento= new JLabel("Fecha Levantamiento:");
-			lblFechaLevantamiento.setBounds(10, 365, 133, 14);
-		}
-		return lblFechaLevantamiento;
-	}
-	public JSpinner getSpinnerDia(){
-		if(spinnerDia ==null){
-			spinnerDia = new JSpinner();
-			spinnerDia.setBounds(142, 362, 40, 20);
-		}
-		return spinnerDia;
-	}
-	public JSpinner getSpinnerMes(){
-		if(spinnerMes==null){
-			spinnerMes = new JSpinner();
-			spinnerMes.setBounds(192, 362, 40, 20);
-		}
-		return spinnerMes;
-	}
-	public JSpinner getSpinnerAnno(){
-		if(spinnerAnno ==null){
-			spinnerAnno = new JSpinner();
-			spinnerAnno.setBounds(242, 362, 50, 20);
-		}
-		return spinnerAnno;
-	}
-	public JButton getbtnModificar(){
+
+	public JButton getBtnModificar(){
 		if(btnModificar==null){
-			btnModificar = new JButton("Enviar");
+			btnModificar = new JButton("Enviar");			
 			btnModificar.setForeground(Color.ORANGE);
 			btnModificar.setBackground(Color.DARK_GRAY);
-			btnModificar.setBounds(203, 403, 89, 23);
-		}
+			btnModificar.setBounds(203, 362, 89, 23);
+			btnModificar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					boolean validado = true;
+
+					if (ficha.getAfectaciones().isEmpty() && ficha.getMuebles().isEmpty()) {
+						JOptionPane.showMessageDialog(ModificarFichaTecnicaDO.this,"La ficha técnica debe contener al menos una afectación o un mueble.","Validación", JOptionPane.WARNING_MESSAGE);
+						validado = false;
+					}
+
+					if(validado){				
+						Vivienda vivienda=ficha.getVivienda();
+						String fechaLevantamiento = ficha.getFechaLevantamiento();
+						OficinaTramites o = gestion.getOficinaTramites();
+						boolean add = o.addFichaTecnicaDO(vivienda, fechaLevantamiento);
+						if(add){									
+							JOptionPane.showMessageDialog(null, "Ficha Tecnica de Daños Ocacionados agregada exitosamente.");			            
+							gestion.actualizarTableFichas();
+							dispose();
+						} else 
+							JOptionPane.showMessageDialog(null, "Ya existe una Ficha Tecnica de Daños Ocacionados asociada a esta vivienda.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+					}
+				}
+			});
+		}		
 		return btnModificar; 
-	}
-	public JLabel getLblId(){
-		if(lblId==null){
-			lblId = new JLabel("ID:");
-			lblId.setBounds(10, 412, 172, 14);
-		}
-		return lblId;
 	}
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
@@ -334,5 +367,72 @@ public class ModificarFichaTecnicaDO extends JFrame {
 			}
 		});
 	}
+
+	//Metodos
+	public void actualizarTableAfectaciones(ArrayList<Afectacion> afectaciones) {
+		DefaultTableModel model = (DefaultTableModel) tableAfectaciones.getModel();
+		model.setRowCount(0); // Limpiar la tabla
+
+		String tipo;
+		String materialPredominante;
+		String esDerrumbeTotal;
+		String esDeCarga;
+		for (int i = 0; i < afectaciones.size(); i++) {
+			if (afectaciones.get(i) instanceof AfectacionPared){				
+				AfectacionPared a =  ((AfectacionPared)afectaciones.get(i));
+				tipo = "Pared";
+				materialPredominante = a.getMaterialPredominante();
+				esDerrumbeTotal = a.getEsDerrumbeTotal()? "Total" : "Parcial";
+				esDeCarga= a.getEsDeCarga() ? "Sí" : "No";
+			}
+			else{			
+				AfectacionTecho a =  ((AfectacionTecho)afectaciones.get(i));
+				tipo = "Techo";	
+				materialPredominante = a.getMaterialPredominante();		
+				esDerrumbeTotal = a.getEsDerrumbeTotal()? "Total" : "Parcial";
+				esDeCarga="-";
+			}
+			Object[] newRow = new Object[] { tipo, materialPredominante, esDerrumbeTotal, esDeCarga};
+			model.addRow(newRow);			
+		}
+		getTableAfectaciones().setModel(model);
+	}
+	public void actualizarTableMuebles(ArrayList<Mueble> muebles) {
+		DefaultTableModel model = (DefaultTableModel) tableMuebles.getModel();
+		model.setRowCount(0); // Limpiar la tabla
+
+		for (int i = 0; i < muebles.size(); i++) {
+			Mueble m = muebles.get(i);
+			String nombre=m.getNombre();
+			String cantidad=((Integer)m.getCantidad()).toString();
+			Object[] newRow = new Object[]{nombre, cantidad};
+			model.addRow(newRow);			
+		}
+		getTableMuebles().setModel(model);
+	}
+	public Afectacion getAfectacionSeleccionada(){
+		Afectacion a=null;
+		int pos = getTableAfectaciones().getSelectedRow();
+		if (pos >= 0 && pos < afectaciones.size())
+			a=afectaciones.get(pos);
+		return a;
+	}
+	public Mueble getMuebleSeleccionado(){
+		Mueble m=null;
+		int pos = getTableMuebles().getSelectedRow();
+		if (pos >= 0 && pos < muebles.size())
+			m=muebles.get(pos);
+		return m;
+	}
+	public void rellenarFormulario(){
+	if(ficha!=null){
+		actualizarTableAfectaciones(ficha.getAfectaciones());
+		actualizarTableMuebles(ficha.getMuebles());	}
+	}
 }
+
+
+
+
+
 

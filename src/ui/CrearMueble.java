@@ -1,33 +1,29 @@
 package ui;
 
-import java.awt.EventQueue;
-
+import interfaces.GestionMuebles;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JSpinner;
-
 import java.awt.Color;
-
-import javax.swing.JPopupMenu;
-
-import java.awt.Component;
-
 import javax.swing.JMenuItem;
 import javax.swing.JMenuBar;
+import clases.FichaTecnicaDO;
 
-import clases.MICONS;
+public class CrearMueble extends JFrame {	
 
-public class CrearMueble extends JFrame {
-	private MICONS micons;
+	private static final long serialVersionUID = 1L;
+	
+	private FichaTecnicaDO ficha;
+	private GestionMuebles gestion;
+	
 	private JPanel contentPane;
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
@@ -38,16 +34,18 @@ public class CrearMueble extends JFrame {
 	private JButton buttonAgregar;
 
 
-	public CrearMueble() {
+	public CrearMueble(GestionMuebles gestion, FichaTecnicaDO ficha) {
+		this.gestion=gestion;
+		this.ficha=ficha;
+		
 		setType(Type.UTILITY);
 		setTitle("Agregar mueble");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 280, 170);
-		micons=MICONS.getMICONS();	
+		setBounds(100, 100, 280, 170);		
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 	}
-	
+
 	public JMenuBar getBarraSuperior(){ 
 		if(barraSuperior==null){
 			barraSuperior = new JMenuBar();
@@ -121,6 +119,30 @@ public class CrearMueble extends JFrame {
 			buttonAgregar.setBackground(Color.DARK_GRAY);
 			buttonAgregar.setForeground(Color.ORANGE);
 			buttonAgregar.setBounds(165, 73, 89, 23);
+			buttonAgregar.addActionListener(new ActionListener() {
+			    public void actionPerformed(ActionEvent arg0) {
+			        String nombre = getTextFieldNombre().getText().trim();
+			        int cantidad = (int) getSpinnerCantidad().getValue();
+
+			        if (nombre.isEmpty()) {
+			            JOptionPane.showMessageDialog(CrearMueble.this, "Debes ingresar el nombre del mueble.", "Validación", JOptionPane.WARNING_MESSAGE);
+			        } else if (cantidad <= 0) {
+			            JOptionPane.showMessageDialog(CrearMueble.this, "La cantidad debe ser mayor que cero.", "Validación", JOptionPane.WARNING_MESSAGE);
+			        } else {
+			            try {
+			                boolean add = ficha.addMueble(nombre, cantidad);
+			                if (add) {
+			                    JOptionPane.showMessageDialog(CrearMueble.this, "Mueble agregado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+			                    gestion.actualizarTableMuebles(ficha.getMuebles());
+			                    dispose();
+			                }
+			            } catch (IllegalArgumentException ex) {
+			                JOptionPane.showMessageDialog(CrearMueble.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			            }
+			        }
+			    }
+			});
+
 		}
 		return buttonAgregar;
 	}

@@ -1,6 +1,6 @@
 package ui;
 
-import java.awt.EventQueue;
+import interfaces.GestionMuebles;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -17,37 +18,45 @@ import javax.swing.JSpinner;
 
 import java.awt.Color;
 
-import javax.swing.JPopupMenu;
-
-import java.awt.Component;
-
 import javax.swing.JMenuItem;
 import javax.swing.JMenuBar;
 
-import clases.MICONS;
+import clases.FichaTecnicaDO;
+import clases.Material;
+import clases.Mueble;
 
-public class ModificarMueble extends JFrame {
-	private MICONS micons;
+public class ModificarMueble extends JFrame {	
+
+	private static final long serialVersionUID = 1L;
+	
+	private FichaTecnicaDO ficha;
+	private GestionMuebles gestion;
+	private Mueble mueble;
+	
 	private JPanel contentPane;
+	private JMenuBar barraSuperior;
+	private JMenuItem mntmRegresar;
 	private JTextField textFieldNombre;
+	private JLabel lblCantidadAfectada;
 	private JLabel lblMueble;
 	private JSpinner spinnerCantidad; 
 	private JButton buttonModificar;
-	private JLabel lblCantidadAfectada;
-	private JMenuItem mntmRegresar;
-	private JMenuBar barraSuperior;
 
 
-	public ModificarMueble( ) {
+	public ModificarMueble(GestionMuebles gestion, FichaTecnicaDO ficha, Mueble mueble) {
+		
 		setType(Type.UTILITY);
 		setTitle("Modificar mueble");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 280, 170);
-		micons=MICONS.getMICONS();	
+		setBounds(100, 100, 280, 170);		
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
+		this.gestion=gestion;
+		this.ficha=ficha;
+		this.mueble=mueble;
+		rellenarFormulario();
 	}
-	
+
 	public JMenuBar getBarraSuperior(){ 
 		if(barraSuperior==null){
 			barraSuperior = new JMenuBar();
@@ -58,14 +67,14 @@ public class ModificarMueble extends JFrame {
 	public JMenuItem getMntmRegresar(){
 		if(mntmRegresar==null){
 			mntmRegresar = new JMenuItem("Regresar");
+			mntmRegresar.setBackground(Color.DARK_GRAY);
+			mntmRegresar.setForeground(Color.ORANGE);
+			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
 				}
 			});
-			mntmRegresar.setBackground(Color.DARK_GRAY);
-			mntmRegresar.setForeground(Color.ORANGE);
-			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 		}
 		return mntmRegresar;
 	}
@@ -121,7 +130,38 @@ public class ModificarMueble extends JFrame {
 			buttonModificar.setBackground(Color.DARK_GRAY);
 			buttonModificar.setForeground(Color.ORANGE);
 			buttonModificar.setBounds(165, 73, 89, 23);
+			buttonModificar.addActionListener(new ActionListener() {
+			    public void actionPerformed(ActionEvent arg0) {
+			        String nombre = getTextFieldNombre().getText().trim();
+			        int cantidad = (int) getSpinnerCantidad().getValue();
+
+			        if (nombre.isEmpty()) {
+			            JOptionPane.showMessageDialog(ModificarMueble.this, "Debes ingresar el nombre del mueble.", "Validación", JOptionPane.WARNING_MESSAGE);
+			        } else if (cantidad <= 0) {
+			            JOptionPane.showMessageDialog(ModificarMueble.this, "La cantidad debe ser mayor que cero.", "Validación", JOptionPane.WARNING_MESSAGE);
+			        } else {
+			            try {
+			                boolean add = ficha.updtMueble(mueble.getNombre(), nombre, cantidad);
+			                if (add) {
+			                    JOptionPane.showMessageDialog(ModificarMueble.this, "Mueble modificardo exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+			                    gestion.actualizarTableMuebles(ficha.getMuebles());
+			                    dispose();
+			                }
+			            } catch (IllegalArgumentException ex) {
+			                JOptionPane.showMessageDialog(ModificarMueble.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			            }
+			        }
+			    }
+			});
+
 		}
 		return buttonModificar;
 	}
+
+
+//Metodos
+private void rellenarFormulario() {
+    getTextFieldNombre().setText(mueble.getNombre());
+    getSpinnerCantidad().setValue(mueble.getCantidad());
+}
 }

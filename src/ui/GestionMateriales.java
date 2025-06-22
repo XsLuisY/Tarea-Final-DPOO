@@ -1,8 +1,5 @@
 package ui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -24,17 +21,22 @@ import javax.swing.SwingConstants;
 import javax.swing.JMenuBar;
 import javax.swing.table.DefaultTableModel;
 
-import clases.MICONS;
 import clases.Material;
 import clases.OficinaTramites;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class GestionMateriales extends JFrame {
-	private MICONS micons;
-	private OficinaTramites actualOficinaTramites;
+
+
+	private static final long serialVersionUID = 1L;
+
+	private OficinaTramites oficina;
+	private ArrayList<Material> materiales;
+
 	private JPanel contentPane;
 	private JScrollPane scrollPaneMateriales;
 	private JTable tableMateriales;
@@ -45,14 +47,15 @@ public class GestionMateriales extends JFrame {
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
 
-	public GestionMateriales(OficinaTramites actualOficinaTramites) {
+	public GestionMateriales(OficinaTramites oficina) {
 		setTitle("Materiales");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
-		micons=MICONS.getMICONS();	
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 		addPopup(getTableMateriales(), getPopupMenu());
+		this.oficina=oficina;
+		materiales=oficina.getMateriales();
 	}
 	public JMenuBar getBarraSuperior(){ 
 		if(barraSuperior==null){
@@ -129,14 +132,14 @@ public class GestionMateriales extends JFrame {
 			menuItemAgregar.setBackground(Color.DARK_GRAY);
 			menuItemAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					CrearMaterial c = new CrearMaterial();
+					CrearMaterial c = new CrearMaterial(GestionMateriales.this, oficina);
+
 					c.setVisible(true);
 				}
 			});
 		}
 		return menuItemAgregar;
 	}
-
 	public JMenuItem getMenuItemModificar(){
 		if(menuItemModificar==null){
 			menuItemModificar = new JMenuItem("Modificar");
@@ -145,8 +148,13 @@ public class GestionMateriales extends JFrame {
 			menuItemModificar.setBackground(Color.DARK_GRAY);
 			menuItemModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					ModificarMaterial c = new ModificarMaterial();
-					c.setVisible(true);
+					Material m = getMaterialSeleccionado();
+					if (m != null) {
+						ModificarMaterial c = new ModificarMaterial(GestionMateriales.this, oficina, m);
+						c.setVisible(true);
+					} else {
+						JOptionPane.showMessageDialog(GestionMateriales.this, "Debes seleccionar un material para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+					}
 				}
 			});
 		}
@@ -160,35 +168,27 @@ public class GestionMateriales extends JFrame {
 			menuItemEliminar.setBackground(Color.DARK_GRAY);
 			menuItemEliminar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Material material = obtenerMaterialSeleccionado();
+					Material m = getMaterialSeleccionado();
 
-					if (material != null) {
-						String nombre = material.getNombre();
-						int confirmar = JOptionPane.showConfirmDialog(
-								GestionMateriales.this,
-								"¿Seguro que deseas eliminar \"" + nombre + "\"?",
-								"Confirmar eliminación",
-								JOptionPane.YES_NO_OPTION
-								);
-
+					if (m != null) {
+						int confirmar = JOptionPane.showConfirmDialog(GestionMateriales.this,"¿Seguro que deseas eliminar el material \"" + m.getNombre() + "\"?","Confirmar eliminación", JOptionPane.YES_NO_OPTION);
 						if (confirmar == JOptionPane.YES_OPTION) {
-							actualOficinaTramites.deleteMaterial(material.getId());
-							cargarMateriales();
+							try {
+								oficina.deleteMaterial(m.getId());
+								actualizarTableMateriales(oficina.getMateriales());
+							} catch (IllegalArgumentException ex) {
+								JOptionPane.showMessageDialog(GestionMateriales.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+							}
 						}
+					
 					} else {
-						JOptionPane.showMessageDialog(
-								GestionMateriales.this,
-								"Debes seleccionar un material para eliminar.",
-								"Aviso",
-								JOptionPane.WARNING_MESSAGE
-								);
+						JOptionPane.showMessageDialog(GestionMateriales.this, "Debes seleccionar un material para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE);
 					}
 				}
 			});
 		}
 		return menuItemEliminar;
 	}
-
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -209,31 +209,32 @@ public class GestionMateriales extends JFrame {
 	public void cargarMateriales() {
 		DefaultTableModel modelo = (DefaultTableModel) tableMateriales.getModel();
 		modelo.setRowCount(0); // Limpiar tabla
-		for (Material m : actualOficinaTramites.getMateriales()) {
+		for (Material m : oficina.getMateriales()) {
 			modelo.addRow(new Object[]{
 					m.getNombre(), m.getUnidadMedida(), m.getPrecioUnitario()
 			});
 		}
 	}
-	public Material obtenerMaterialSeleccionado() {
-		Material seleccionado = null;
-		int fila = tableMateriales.getSelectedRow();
-		int i = 0;
+	public void actualizarTableMateriales(ArrayList<Material> material) {
+		DefaultTableModel model = (DefaultTableModel) tableMateriales.getModel();
+		model.setRowCount(0); // Limpiar la tabla
 
-		if (fila >= 0) {
-			String nombre = (String) tableMateriales.getValueAt(fila, 0);
-			ArrayList<Material> materiales = actualOficinaTramites.getMateriales();
+		for (int i = 0; i < materiales.size(); i++) {
+			Material m = materiales.get(i);
+			String nombre=m.getNombre();
+			String unidadMedida=m.getUnidadMedida();
+			String precioUnitario=((Double)m.getPrecioUnitario()).toString();
 
-			while (i < materiales.size()) {
-				Material m = materiales.get(i);
-				if (m.getNombre().equals(nombre) && seleccionado == null) {
-					seleccionado = m;
-				}
-				i++;
-			}
+			Object[] newRow = new Object[]{nombre, unidadMedida, precioUnitario};
+			model.addRow(newRow);			
 		}
-
-		return seleccionado;
+		getTableMateriales().setModel(model);
 	}
-
+	public Material getMaterialSeleccionado (){
+		Material m=null;
+		int pos = getTableMateriales().getSelectedRow();
+		if (pos >= 0 && pos < materiales.size())
+			m=materiales.get(pos);
+		return m;
+	}
 }

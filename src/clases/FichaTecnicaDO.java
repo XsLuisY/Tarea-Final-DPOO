@@ -3,9 +3,15 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Date;
 
+import javax.swing.JOptionPane;
+
 
 public class FichaTecnicaDO {
 	//Atributos
+	private static final String TECHO = "Techo";
+	private static final String PARED = "Pared";
+	private static final String PARED_CARGA = "Pared de carga";
+
 	private Vivienda vivienda;
 	private Date fechaLevantamiento;
 	private ArrayList<Afectacion> afectaciones;
@@ -17,6 +23,12 @@ public class FichaTecnicaDO {
 		setId();
 		setVivienda(vivienda);
 		fechaLevantamiento= new Date();
+		afectaciones = new ArrayList<Afectacion>();
+		muebles = new ArrayList<Mueble>();
+	}
+
+	public FichaTecnicaDO() {
+		setId();
 		afectaciones = new ArrayList<Afectacion>();
 		muebles = new ArrayList<Mueble>();
 	}
@@ -34,7 +46,18 @@ public class FichaTecnicaDO {
 	public Date getFechaLevantamiento(){
 		return fechaLevantamiento;		
 	}	
-
+	public void setAfectaciones(ArrayList<Afectacion> afectaciones){
+		this.afectaciones=afectaciones;
+	}
+	public ArrayList<Afectacion> getAfectaciones(){
+		return afectaciones;
+	}
+	public void setMuebles(ArrayList<Mueble> muebles){
+		this.muebles=muebles;
+	}
+	public ArrayList<Mueble> getMuebles(){
+		return muebles;
+	}
 	public UUID getId() {
 		return id;
 	}
@@ -69,14 +92,19 @@ public class FichaTecnicaDO {
 			}					
 		return mueble; 	
 	}
-	/*Update*/ public Boolean updtMueble(String nombre, int newcantidad){	
+	/*Update*/ public Boolean updtMueble(String nombre, String newNombre, int newcantidad){	
 		Boolean updt= false;
+		Mueble mueble= readMueble(newNombre);
 		Mueble m= readMueble(nombre);
 		if(m!=null){
+		  if(mueble==null){
 		  m.setCantidad(newcantidad);
+		  m.setNombre(newNombre);
 		  updt= true;
+		  }
+		  else throw new IllegalArgumentException("Este nombre de mueble ya existe");
 		}
-		}else throw new IllegalArgumentException("Este Mueble no existe");
+		else throw new IllegalArgumentException("Este Mueble no existe");
 		return updt;
 	}
 	/*Delete*/ public Boolean delMueble(String nombre){
@@ -92,6 +120,20 @@ public class FichaTecnicaDO {
 
 	//CRUD-Afectacion
 	/*Create*/ 
+	public boolean addAfectacion(String tipo, String material, boolean esDerrumbeTotal) {
+		boolean add = false;
+		if (material==null || material.isEmpty())
+			throw new IllegalArgumentException("Debes ingresar el material predominante.");
+		else
+			if (tipo.equals(TECHO)) 
+				add =addAfectacionTecho(esDerrumbeTotal, material);
+			else if (tipo.equals(PARED_CARGA)) 
+				add =addAfectacionPared(esDerrumbeTotal, material, true);
+			else if (tipo.equals(PARED)) 
+				add =addAfectacionPared(esDerrumbeTotal, material, false);	       
+
+		return add;
+	}
 	public Boolean addAfectacionTecho(Boolean esDerrumbeTotal, String materialPredominante){
 		Boolean add=false;
 		
@@ -100,7 +142,7 @@ public class FichaTecnicaDO {
 			afectaciones.add(a);	
 			add=true;
 		}
-		else throw new IllegalArgumentException("Esta Plantilla ya existe");
+		else throw new IllegalArgumentException("Esta Afectacion ya existe");
 		return add;
 	}
 	public Boolean addAfectacionPared(Boolean esDerrumbeTotal, String materialPredominante, Boolean esDeCarga){
@@ -111,7 +153,7 @@ public class FichaTecnicaDO {
 			afectaciones.add(a);	
 			add=true;
 		}
-		else throw new IllegalArgumentException("Esta Plantilla ya existe");
+		else throw new IllegalArgumentException("Esta Afectacion ya existe");
 		return add;
 	}
 	/*Read*/ public Afectacion readAfectacion(UUID id){
@@ -126,30 +168,32 @@ public class FichaTecnicaDO {
 	}
 	/*Update*/ 
 	public Boolean updtAfectacionPared(UUID id, Boolean esDerrumbeTotal, String materialPredominante, Boolean esDeCarga){
-		Boolean updt=!existAfectacion(id);
+		Boolean updt=false;
 
-		if(updt){
+		if(existAfectacion(id)){
 			AfectacionPared a = (AfectacionPared) readAfectacion(id);
 			a.setEsDerrumbeTotal(esDerrumbeTotal);
 			a.setMaterialPredominante(materialPredominante);
 			a.setEsDeCarga(esDeCarga);
+			updt=true;
 		}else throw new IllegalArgumentException("Esta Afectacion no existe");
 		return updt;
 	}
 	public Boolean updtAfectacionTecho(UUID id, Boolean esDerrumbeTotal, String materialPredominante){
-		Boolean updt=!existAfectacion(id);
+		Boolean updt=false;
 
-		if(updt){
+		if(existAfectacion(id)){
 			AfectacionTecho a = (AfectacionTecho) readAfectacion(id);
 			a.setEsDerrumbeTotal(esDerrumbeTotal);
 			a.setMaterialPredominante(materialPredominante);
+			updt=true;
 		}else throw new IllegalArgumentException("Esta Afectacion no existe");
 		return updt;
 	}
 	/*Delete*/ public Boolean delAfectacion(UUID id){
 		Boolean del=existAfectacion(id);
 
-		if(!del)			
+		if(del)			
 			afectaciones.remove(readAfectacion(id));
 		else throw new IllegalArgumentException("Esta Afectacion no existe");
 
@@ -186,4 +230,5 @@ public class FichaTecnicaDO {
 		}
 		return exist;
 	}
+
 }
