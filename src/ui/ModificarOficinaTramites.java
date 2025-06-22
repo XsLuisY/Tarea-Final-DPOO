@@ -32,7 +32,7 @@ public class ModificarOficinaTramites extends JDialog {
 	private OficinaTramites oficina;
 	private GestionOficinaTramites gestion;
 
-	public ModificarOficinaTramites( OficinaTramites oficina, GestionOficinaTramites gestion) {
+	public ModificarOficinaTramites(OficinaTramites oficina, GestionOficinaTramites gestion) {
 		super(gestion, "Modificar Oficina", true);
 		micons=MICONS.getMICONS();	
 		this.oficina=oficina;
@@ -89,21 +89,22 @@ public class ModificarOficinaTramites extends JDialog {
 			btnModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String oficinaModificar = oficina.getConsejoPopular();
-					String newConsejoPopular = textField.getText().trim();
-					if (!newConsejoPopular.isEmpty()) {
-						boolean actualizado = micons.updateOficinaTramites(oficinaModificar, newConsejoPopular);
-						if (actualizado) {
-							gestion.actualizarListaOficinas();
-							JOptionPane.showMessageDialog(ModificarOficinaTramites.this,"Oficina actualizada correctamente.","Éxito", JOptionPane.INFORMATION_MESSAGE);
+					String newConsejoPopular = getTextField().getText().trim();					
+
+					if (!oficinaModificar.equalsIgnoreCase(newConsejoPopular)) 				
+						try {
+							micons.updateOficinaTramites(oficinaModificar, newConsejoPopular);
+							JOptionPane.showMessageDialog(null, "Oficina actualizada exitosamente.");
 							dispose();
-						} 
-						else {
-							JOptionPane.showMessageDialog(ModificarOficinaTramites.this,"Ya existe una oficina con ese nombre.","Advertencia", JOptionPane.WARNING_MESSAGE);
+						} catch (IllegalArgumentException ex) {
+							JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al actualizar", JOptionPane.ERROR_MESSAGE);
 						}
-					}else 
-						JOptionPane.showMessageDialog(null, "El nombre no puede estar vacío.");
+					else   
+						JOptionPane.showMessageDialog(null, "El nuevo nombre es igual al actual.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+
 				}
 			});
+
 		}
 		return btnModificar;
 	}

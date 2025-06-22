@@ -175,23 +175,25 @@ public class FichaTecnicaDO {
 	}
 	/*Update*/ 
 	public Boolean updtAfectacionPared(UUID id, Boolean esDerrumbeTotal, String materialPredominante, Boolean esDeCarga){
-		Boolean updt=!existAfectacion(id);
+		Boolean updt=false;
 
-		if(updt){
+		if(existAfectacion(id)){
 			AfectacionPared a = (AfectacionPared) readAfectacion(id);
 			a.setEsDerrumbeTotal(esDerrumbeTotal);
 			a.setMaterialPredominante(materialPredominante);
 			a.setEsDeCarga(esDeCarga);
+			updt=true;
 		}else throw new IllegalArgumentException("Esta Afectacion no existe");
 		return updt;
 	}
 	public Boolean updtAfectacionTecho(UUID id, Boolean esDerrumbeTotal, String materialPredominante){
-		Boolean updt=!existAfectacion(id);
+		Boolean updt=false;
 
-		if(updt){
+		if(existAfectacion(id)){
 			AfectacionTecho a = (AfectacionTecho) readAfectacion(id);
 			a.setEsDerrumbeTotal(esDerrumbeTotal);
 			a.setMaterialPredominante(materialPredominante);
+			updt=true;
 		}else throw new IllegalArgumentException("Esta Afectacion no existe");
 		return updt;
 	}

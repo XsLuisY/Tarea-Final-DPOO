@@ -1,11 +1,10 @@
 package ui;
 
-
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -13,46 +12,45 @@ import javax.swing.JButton;
 
 import java.awt.Color;
 
-import javax.swing.JPopupMenu;
-
-import java.awt.Component;
-
 import javax.swing.JMenuItem;
 import javax.swing.JComboBox;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-import javax.swing.JMenuBar;
 
-import clases.MICONS;
+import javax.swing.JMenuBar;
+import clases.OficinaTramites;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
 public class CrearMaterial extends JFrame {
-	private MICONS micons;
-	private JPanel contentPane;
+
+	private static final long serialVersionUID = 1L;
+	private OficinaTramites oficina;
+	private GestionMateriales gestion;
 
 	private JTextField textFieldNombre;
-	private JTextField textField;
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
 	private JPanel panelAfectaciones;
 	private JButton btnAgregar;
 	private JLabel lblMaterial;
 	private JLabel lblUnidadDeMedida;
-	private JComboBox comboBox;
+	private JComboBox<String> comboBox;
 	private JLabel lblPrecioUnitario;
+	private JTextField textFieldPrecioUnitario;
 
-	public CrearMaterial() {
+	public CrearMaterial(GestionMateriales gestion, OficinaTramites oficina) {
 		setTitle("Agregar material");
 		setType(Type.UTILITY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 280, 190);
-		micons=MICONS.getMICONS();	
 		setJMenuBar(getBarraSuperior());
-		setContentPane(getContentPane());
-
+		setContentPane(getPanelAfectaciones());
+		this.oficina=oficina;
+		this.gestion=gestion;
+		oficina.getMateriales();
 
 	}
 
@@ -77,15 +75,6 @@ public class CrearMaterial extends JFrame {
 		}
 		return mntmRegresar;
 	}
-	public JPanel getContentPane(){
-		if(contentPane==null){
-			contentPane = new JPanel();
-			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-			contentPane.setLayout(null);
-			contentPane.add(getPanelAfectaciones());
-		}
-		return contentPane;
-	}
 	public JPanel getPanelAfectaciones(){
 		if(panelAfectaciones==null){
 			panelAfectaciones=new JPanel();
@@ -98,6 +87,7 @@ public class CrearMaterial extends JFrame {
 			panelAfectaciones.add(getLblUnidadDeMedida());
 			panelAfectaciones.add(getComboBox());
 			panelAfectaciones.add(getLblPrecioUnitario());
+			panelAfectaciones.add(getTextFieldPrecioUnitario());
 		}
 		return panelAfectaciones;
 	}
@@ -108,20 +98,7 @@ public class CrearMaterial extends JFrame {
 			textFieldNombre.setColumns(10);
 		}
 		return textFieldNombre;
-	}
-	public JButton getBtnAgregar(){
-		if(btnAgregar ==null){
-			btnAgregar = new JButton("Agregar");
-			btnAgregar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-				}
-			});
-			btnAgregar.setForeground(Color.ORANGE);
-			btnAgregar.setBackground(Color.DARK_GRAY);
-			btnAgregar.setBounds(165, 93, 89, 23);
-		}
-		return btnAgregar;
-	}
+	}	
 	public JLabel getLblMaterial(){
 		if(lblMaterial==null){
 			lblMaterial = new JLabel("Material:");
@@ -136,27 +113,71 @@ public class CrearMaterial extends JFrame {
 		}
 		return lblUnidadDeMedida ;
 	}
-	public JComboBox getComboBox(){
+	public JComboBox<String> getComboBox(){
 		if(comboBox==null){
-			comboBox  = new JComboBox();
+			comboBox  = new JComboBox<String>();						
+			comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Metro", "Unidad", "Saco", "Kilogramo", "Litro"}));		
 			comboBox.setBounds(140, 36, 114, 20);
+
 		}
 		return comboBox;
 	}
 	public JLabel getLblPrecioUnitario(){ 
 		if(lblPrecioUnitario==null){
 			lblPrecioUnitario = DefaultComponentFactory.getInstance().createLabel("Precio unitario:");
-			lblPrecioUnitario.setBounds(10, 64, 92, 14);
+			lblPrecioUnitario.setBounds(10, 64, 120, 14);
 		}
 		return lblPrecioUnitario;
 	}
-	public JTextField getTextField(){
-		if(textField==null){			
-			textField = new JTextField();
-			textField.setBounds(140, 61, 114, 20);
-			panelAfectaciones.add(textField);
-			textField.setColumns(10);
+
+	public JTextField getTextFieldPrecioUnitario() {
+		if (textFieldPrecioUnitario == null) {
+			textFieldPrecioUnitario = new JTextField();
+			textFieldPrecioUnitario.setColumns(10);
+			textFieldPrecioUnitario.setBounds(140, 61, 76, 20);
 		}
-		return textField;
+		return textFieldPrecioUnitario;
+	}
+	public JButton getBtnAgregar(){
+		if(btnAgregar ==null){
+			btnAgregar = new JButton("Agregar");		
+			btnAgregar.setForeground(Color.ORANGE);
+			btnAgregar.setBackground(Color.DARK_GRAY);
+			btnAgregar.setBounds(165, 93, 89, 23);
+			btnAgregar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String nombre = getTextFieldNombre().getText().trim();
+					Object selectedItem = getComboBox().getSelectedItem();
+					String unidad = selectedItem != null ? selectedItem.toString().trim() : null;
+					String precioStr = getTextFieldPrecioUnitario().getText().trim();
+					double precio = 0;
+					boolean valido = true;
+
+					if (nombre.isEmpty() || unidad == null || unidad.isEmpty() || precioStr.isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Por favor complete todos los campos.","Campos incompletos", JOptionPane.WARNING_MESSAGE);
+						valido = false;
+					}
+
+					try {
+						precio = Double.parseDouble(precioStr);
+					} catch (NumberFormatException e) {
+						JOptionPane.showMessageDialog(null, "El precio debe ser un número válido.","Error de formato", JOptionPane.ERROR_MESSAGE);
+						valido = false;
+					}
+
+					if (valido) {
+					    try {
+					        oficina.addMaterial(nombre, unidad, precio);
+					        gestion.actualizarTableMateriales(oficina.getMateriales());
+					        JOptionPane.showMessageDialog(null, "Material agregado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+					        dispose();
+					    } catch (IllegalArgumentException ex) {
+					        JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					    }
+					}
+				}
+			});
+		}
+		return btnAgregar;
 	}
 }

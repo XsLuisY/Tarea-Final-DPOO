@@ -64,8 +64,7 @@ public class CrearFichaTecnicaDO extends JFrame implements GestionAfectaciones, 
 	private JLabel lblAfectacinVivienda; 
 	private JButton btnEnviar;
 
-//TODO: IMPLEMENTAR FECHA LEVANTAMIENTO
-
+	//TODO: IMPLEMENTAR FECHA LEVANTAMIENTO
 
 	public CrearFichaTecnicaDO(GestionFichaTecnicaDO gestion) {
 		setType(Type.UTILITY);
@@ -329,7 +328,7 @@ public class CrearFichaTecnicaDO extends JFrame implements GestionAfectaciones, 
 						JOptionPane.showMessageDialog(CrearFichaTecnicaDO.this,"La ficha técnica debe contener al menos una afectación o un mueble.","Validación", JOptionPane.WARNING_MESSAGE);
 						validado = false;
 					}
-					
+
 					if(validado){				
 						Vivienda vivienda=ficha.getVivienda();
 						String fechaLevantamiento = ficha.getFechaLevantamiento();

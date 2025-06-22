@@ -8,29 +8,26 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JPopupMenu;
-
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Color;
-
-
 import javax.swing.ListSelectionModel;
 import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
 import javax.swing.JMenuBar;
 import javax.swing.table.DefaultTableModel;
-
 import clases.FichaTecnicaDO;
 import clases.MICONS;
 import clases.OficinaTramites;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 public class GestionFichaTecnicaDO extends JFrame {
-	private MICONS micons;
+	
+	private static final long serialVersionUID = 1L;
+	
 	private ArrayList<FichaTecnicaDO> fichas;
 	private OficinaTramites oficina;
 	private JMenuBar barraSuperior;
@@ -48,7 +45,6 @@ public class GestionFichaTecnicaDO extends JFrame {
 		setTitle("Gesti\u00F3n de Fichas T\u00E9cnicas");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
-		micons=MICONS.getMICONS();	
 		this.oficina=oficina;
 		fichas=oficina.getFichas();
 		setJMenuBar(getBarraSuperior());
@@ -171,7 +167,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
 					FichaTecnicaDO f = obtenerFichaTecnicaSeleccionada();
-					ModificarFichaTecnicaDO c = new ModificarFichaTecnicaDO(GestionFichaTecnicaDO.this);
+					ModificarFichaTecnicaDO c = new ModificarFichaTecnicaDO(GestionFichaTecnicaDO.this, f);
 					c.setVisible(true);
 				}
 			});

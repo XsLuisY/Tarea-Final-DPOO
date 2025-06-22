@@ -55,18 +55,19 @@ public class Cubicacion  {
 		return m; 			
 	}
 	/*Update*/public Boolean updateMaterialACubicar(Material material, double cantidad){
-		Boolean updt=!existMaterialACubicar(material);
+		Boolean updt=false;
 
-		if(updt){
+		if(existMaterialACubicar(material)){
 			MaterialACubicar m = readMaterialACubicar(material);	
 			m.setMaterial(material);
 			m.setCantidad(cantidad);
+			updt=false;
 		}else throw new IllegalArgumentException("Este Material no existe");
 		return updt;
 	}
 	/*Delete*/public Boolean deleteMaterialACubicar(Material material){
 		Boolean del=existMaterialACubicar(material);
-		if(!del)			
+		if(del)			
 			materiales.remove(readMaterialACubicar(material));
 		else throw new IllegalArgumentException("Este Material no existe");
 

@@ -59,20 +59,24 @@ public class MICONS {
 		return oficina;
 	}
 	/*Update*/ public Boolean updateOficinaTramites(String consejoPopular, String nuevoConsejo){
-		Boolean updt=!existOficinaTramites(nuevoConsejo);
+		Boolean updt=false;
 
-		if(updt){		
+		if(existOficinaTramites(nuevoConsejo)){		
 			OficinaTramites o = readOficinaTramites(consejoPopular);
-			o.setConsejoPopular(nuevoConsejo);	
+			if(o!=null){
+				o.setConsejoPopular(nuevoConsejo);
+				updt=true;
+			}
+			else throw new IllegalArgumentException("La OficinaTramites original no existe");
 		}
-		else throw new IllegalArgumentException("Esta OficinaTramites no existe");
+		else throw new IllegalArgumentException("Ya existe una OficinaTramites con ese nombre");
 
 		return updt;
 	}
 	/*Delete*/ public Boolean deleteOficinaTramites(String consejoPopular){
 		Boolean del=existOficinaTramites(consejoPopular);
 
-		if(!del)			
+		if(del)			
 			oficinas.remove(readOficinaTramites(consejoPopular));
 		else throw new IllegalArgumentException("Esta OficinaTramites no existe");
 

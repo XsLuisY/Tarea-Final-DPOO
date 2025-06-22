@@ -28,7 +28,7 @@ public class Material {
 		return nombre;		
 	}
 	public void setUnidadMedida(String unidadMedida){
-		if(unidadMedida!=null && unidadMedida.trim().isEmpty())
+		if(unidadMedida!=null && !unidadMedida.trim().isEmpty())
 			this.unidadMedida=unidadMedida;
 		else throw new IllegalArgumentException("La unidad de medida no puede ser nula");
 	}
