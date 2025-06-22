@@ -3,6 +3,7 @@ package clases;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.Date;
 
 public class OficinaTramites{
 
@@ -25,7 +26,7 @@ public class OficinaTramites{
 	//Encapsulamiento
 	public void setConsejoPopular(String consejoPopular){
 		if(consejoPopular!=null && !consejoPopular.trim().isEmpty())
-			if(consejoPopular.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ1234567890 ]+"))
+			if(consejoPopular.matches("[a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1234567890 ]+"))
 				this.consejoPopular=consejoPopular.trim().replaceAll("\\s+", " ");		
 			else throw new IllegalArgumentException("El nombre del Consejo Popular no puede contener numeros o caracteres no validos.");
 		else throw new NullPointerException("El nombre del Consejo Popular no puede estar vacio.");
@@ -47,11 +48,11 @@ public class OficinaTramites{
 	}
 
 	//CRUD-FichaTecnicaDO
-	/*Create*/ public Boolean addFichaTecnicaDO(Vivienda vivienda, String fechaLevantamiento){
+	/*Create*/ public Boolean addFichaTecnicaDO(Vivienda vivienda){
 		Boolean add=false;
 
-		if(!existFichaTecnicaDO(vivienda,fechaLevantamiento)){
-			FichaTecnicaDO ficha = new FichaTecnicaDO(vivienda,fechaLevantamiento);
+		if(!existFichaTecnicaDO(vivienda)){
+			FichaTecnicaDO ficha = new FichaTecnicaDO(vivienda);
 			fichas.add(ficha);
 			add=true;
 		}	
@@ -69,12 +70,11 @@ public class OficinaTramites{
 			}					
 		return ficha; 			
 	}
-	/*Update*/ public Boolean updateFichaTecnicaDO(UUID id, Vivienda vivienda, String fechaLevantamiento){
+	/*Update*/ public Boolean updateFichaTecnicaDO(UUID id, Vivienda vivienda){
 		Boolean updt=!existFichaTecnicaDO(id);
 		if(updt){
 			FichaTecnicaDO f = readFichaTecnicaDO(id);
 			f.setVivienda(vivienda);
-			f.setFechaLevantamiento(fechaLevantamiento);			
 		}else throw new IllegalArgumentException("Esta FichaTecnicaDO no existe");
 
 		return updt;
@@ -97,11 +97,11 @@ public class OficinaTramites{
 		}
 		return exist;
 	}
-	public Boolean existFichaTecnicaDO(Vivienda vivienda, String fechaLevantamiento){
+	public Boolean existFichaTecnicaDO(Vivienda vivienda){
 		Boolean exist=false;
 		for(int i=0; i<fichas.size()&& !exist; i++){
 			FichaTecnicaDO f = fichas.get(i);
-			if(f.getFechaLevantamiento().equals(fechaLevantamiento) && f.getVivienda().equals(vivienda))
+			if(f.getVivienda().equals(vivienda))
 				exist=true;
 		}
 		return exist;

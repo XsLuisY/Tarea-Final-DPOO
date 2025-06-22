@@ -1,21 +1,22 @@
 package clases;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.Date;
 
 
 public class FichaTecnicaDO {
 	//Atributos
 	private Vivienda vivienda;
-	private String fechaLevantamiento;
+	private Date fechaLevantamiento;
 	private ArrayList<Afectacion> afectaciones;
 	private ArrayList<Mueble> muebles;
 	private UUID id;
 
 	//Constructor
-	public FichaTecnicaDO(Vivienda vivienda, String fechaLevantamiento){
+	public FichaTecnicaDO(Vivienda vivienda){
 		setId();
 		setVivienda(vivienda);
-		setFechaLevantamiento(fechaLevantamiento);
+		fechaLevantamiento= new Date();
 		afectaciones = new ArrayList<Afectacion>();
 		muebles = new ArrayList<Mueble>();
 	}
@@ -27,14 +28,10 @@ public class FichaTecnicaDO {
 	public Vivienda getVivienda(){
 		return vivienda;		
 	}
-	public void setFechaLevantamiento(String fechaLevantamiento){
-		if (fechaLevantamiento != null && !fechaLevantamiento.trim().isEmpty()) {
-			this.fechaLevantamiento = fechaLevantamiento.trim().replaceAll("\\s+", " ");
-		}
-		else
-			throw new IllegalArgumentException("La fecha no puede estar vacía o ser null");
+	public void setFechaLevantamiento(){
+		
 	}
-	public String getFechaLevantamiento(){
+	public Date getFechaLevantamiento(){
 		return fechaLevantamiento;		
 	}	
 
@@ -51,11 +48,13 @@ public class FichaTecnicaDO {
 	//CRUD-Mueble
 	/*Create*/ public Boolean addMueble(String nombre, int cantidad){
 		Boolean add=false;
-
-		if(!existMueble(nombre)){
-			Mueble m= new Mueble(nombre, cantidad);
-			muebles.add(m);	
-			add=true;
+		Mueble m= readMueble(nombre);
+		if(m==null){
+		  Mueble mueble= new Mueble(nombre,cantidad);
+		  if(mueble!=null){
+		    muebles.add(mueble);
+		    add= true;
+		  }
 		}
 		else throw new IllegalArgumentException("Este Mueble ya existe");
 		return add;
@@ -70,38 +69,32 @@ public class FichaTecnicaDO {
 			}					
 		return mueble; 	
 	}
-	/*Update*/ public Boolean updtMueble(String nombre, String newNombre, int cantidad){		
-		Boolean updt=!existMueble(nombre);
-
-		if(updt){
-			Mueble m = readMueble(nombre);	
-			m.setNombre(newNombre);
-			m.setCantidad(cantidad);
+	/*Update*/ public Boolean updtMueble(String nombre, int newcantidad){	
+		Boolean updt= false;
+		Mueble m= readMueble(nombre);
+		if(m!=null){
+		  m.setCantidad(newcantidad);
+		  updt= true;
+		}
 		}else throw new IllegalArgumentException("Este Mueble no existe");
 		return updt;
 	}
 	/*Delete*/ public Boolean delMueble(String nombre){
-		Boolean del=existMueble(nombre);
-		if(!del)			
-			muebles.remove(readMueble(nombre));
-		else throw new IllegalArgumentException("Este Mueble no existe");
-
-		return del;
-	}
-	public Boolean existMueble(String nombre){
-		Boolean exist=false;
-		for(int i=0; i<muebles.size()&& !exist; i++){		
-			if(muebles.get(i).getNombre().equals(nombre))				
-				exist=true;
+		Boolean del= false;
+		Mueble m= readMueble(nombre);
+		if(m!=null){
+		  muebles.remove(m);
+		  del= true;
 		}
-		return exist;
+		else throw new IllegalArgumentException("Este Mueble no existe");
+		return del;
 	}
 
 	//CRUD-Afectacion
 	/*Create*/ 
 	public Boolean addAfectacionTecho(Boolean esDerrumbeTotal, String materialPredominante){
 		Boolean add=false;
-
+		
 		if(!existAfectacionTecho(esDerrumbeTotal, materialPredominante)){
 			AfectacionTecho a = new AfectacionTecho(esDerrumbeTotal, materialPredominante);
 			afectaciones.add(a);	
