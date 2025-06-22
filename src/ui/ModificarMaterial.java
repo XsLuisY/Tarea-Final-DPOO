@@ -30,7 +30,6 @@ import clases.MICONS;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
 public class ModificarMaterial extends JFrame {
-	private MICONS micons;
 	private JPanel contentPane;
 
 	private JTextField textFieldNombre;
@@ -41,7 +40,6 @@ public class ModificarMaterial extends JFrame {
 	private JButton btnModificar;
 	private JLabel lblMaterial;
 	private JLabel lblUnidadDeMedida;
-	private JComboBox comboBox;
 	private JLabel lblPrecioUnitario;
 	private JLabel lblId; 
 
@@ -50,7 +48,6 @@ public class ModificarMaterial extends JFrame {
 		setType(Type.UTILITY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 280, 190);
-		micons=MICONS.getMICONS();	
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 

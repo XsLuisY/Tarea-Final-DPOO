@@ -2,9 +2,15 @@ package clases;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import javax.swing.JOptionPane;
+
 
 public class FichaTecnicaDO {
 	//Atributos
+	private static final String TECHO = "Techo";
+	private static final String PARED = "Pared";
+	private static final String PARED_CARGA = "Pared de carga";
+
 	private Vivienda vivienda;
 	private String fechaLevantamiento;
 	private ArrayList<Afectacion> afectaciones;
@@ -16,6 +22,12 @@ public class FichaTecnicaDO {
 		setId();
 		setVivienda(vivienda);
 		setFechaLevantamiento(fechaLevantamiento);
+		afectaciones = new ArrayList<Afectacion>();
+		muebles = new ArrayList<Mueble>();
+	}
+
+	public FichaTecnicaDO() {
+		setId();
 		afectaciones = new ArrayList<Afectacion>();
 		muebles = new ArrayList<Mueble>();
 	}
@@ -37,7 +49,18 @@ public class FichaTecnicaDO {
 	public String getFechaLevantamiento(){
 		return fechaLevantamiento;		
 	}	
-
+	public void setAfectaciones(ArrayList<Afectacion> afectaciones){
+		this.afectaciones=afectaciones;
+	}
+	public ArrayList<Afectacion> getAfectaciones(){
+		return afectaciones;
+	}
+	public void setMuebles(ArrayList<Mueble> muebles){
+		this.muebles=muebles;
+	}
+	public ArrayList<Mueble> getMuebles(){
+		return muebles;
+	}
 	public UUID getId() {
 		return id;
 	}
@@ -71,18 +94,23 @@ public class FichaTecnicaDO {
 		return mueble; 	
 	}
 	/*Update*/ public Boolean updtMueble(String nombre, String newNombre, int cantidad){		
-		Boolean updt=!existMueble(nombre);
+		Boolean updt=false;
 
-		if(updt){
-			Mueble m = readMueble(nombre);	
-			m.setNombre(newNombre);
-			m.setCantidad(cantidad);
-		}else throw new IllegalArgumentException("Este Mueble no existe");
+		if (existMueble(nombre)) 
+			if (nombre.equals(newNombre) || !existMueble(newNombre)) {
+				Mueble m = readMueble(nombre);
+				m.setNombre(newNombre);
+				m.setCantidad(cantidad);
+				updt=true;
+			}
+			else throw new IllegalArgumentException("Ya existe un mueble con ese nuevo nombre.");
+		else throw new IllegalArgumentException("Este mueble no existe y no se puede modificar.");
+
 		return updt;
 	}
 	/*Delete*/ public Boolean delMueble(String nombre){
 		Boolean del=existMueble(nombre);
-		if(!del)			
+		if(del)			
 			muebles.remove(readMueble(nombre));
 		else throw new IllegalArgumentException("Este Mueble no existe");
 
@@ -99,6 +127,20 @@ public class FichaTecnicaDO {
 
 	//CRUD-Afectacion
 	/*Create*/ 
+	public boolean addAfectacion(String tipo, String material, boolean esDerrumbeTotal) {
+		boolean add = false;
+		if (material==null || material.isEmpty())
+			throw new IllegalArgumentException("Debes ingresar el material predominante.");
+		else
+			if (tipo.equals(TECHO)) 
+				add =addAfectacionTecho(esDerrumbeTotal, material);
+			else if (tipo.equals(PARED_CARGA)) 
+				add =addAfectacionPared(esDerrumbeTotal, material, true);
+			else if (tipo.equals(PARED)) 
+				add =addAfectacionPared(esDerrumbeTotal, material, false);	       
+
+		return add;
+	}
 	public Boolean addAfectacionTecho(Boolean esDerrumbeTotal, String materialPredominante){
 		Boolean add=false;
 
@@ -107,7 +149,7 @@ public class FichaTecnicaDO {
 			afectaciones.add(a);	
 			add=true;
 		}
-		else throw new IllegalArgumentException("Esta Plantilla ya existe");
+		else throw new IllegalArgumentException("Esta Afectacion ya existe");
 		return add;
 	}
 	public Boolean addAfectacionPared(Boolean esDerrumbeTotal, String materialPredominante, Boolean esDeCarga){
@@ -118,7 +160,7 @@ public class FichaTecnicaDO {
 			afectaciones.add(a);	
 			add=true;
 		}
-		else throw new IllegalArgumentException("Esta Plantilla ya existe");
+		else throw new IllegalArgumentException("Esta Afectacion ya existe");
 		return add;
 	}
 	/*Read*/ public Afectacion readAfectacion(UUID id){
@@ -156,7 +198,7 @@ public class FichaTecnicaDO {
 	/*Delete*/ public Boolean delAfectacion(UUID id){
 		Boolean del=existAfectacion(id);
 
-		if(!del)			
+		if(del)			
 			afectaciones.remove(readAfectacion(id));
 		else throw new IllegalArgumentException("Esta Afectacion no existe");
 
@@ -193,4 +235,5 @@ public class FichaTecnicaDO {
 		}
 		return exist;
 	}
+
 }

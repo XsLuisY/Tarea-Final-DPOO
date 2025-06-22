@@ -87,10 +87,9 @@ public class CrearOficinaTramites extends JDialog {
 			btnEnviar.setBounds(85, 73, 89, 23);
 			btnEnviar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String consejoPopular=textField.getText().trim();
+					String consejoPopular=getTextField().getText().trim();
 
-					if (!consejoPopular.isEmpty()){
-					
+					if (!consejoPopular.isEmpty()){					
 						boolean agregado = micons.addOficinaTramites(consejoPopular);
 						if(agregado){									
 							JOptionPane.showMessageDialog(null, "Oficina agregada exitosamente.");			            

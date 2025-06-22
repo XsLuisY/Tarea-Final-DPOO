@@ -175,12 +175,7 @@ public class GestionViviendas extends JFrame {
 			menuItemEliminar.setHorizontalAlignment(SwingConstants.RIGHT);
 			menuItemEliminar.setForeground(Color.ORANGE);
 			menuItemEliminar.setBackground(Color.DARK_GRAY);
-			menuItemEliminar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					CrearFichaTecnicaDO c = new CrearFichaTecnicaDO();
-					c.setVisible(true);
-				}
-			});
+			
 		}
 		return menuItemEliminar;
 	}

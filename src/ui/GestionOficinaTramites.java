@@ -52,6 +52,8 @@ import java.util.ArrayList;
 public class GestionOficinaTramites extends JFrame {
 
 	private MICONS micons ;
+	private ArrayList<OficinaTramites> oficinas;
+	
 	private JPanel contentPane;
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
@@ -72,7 +74,8 @@ public class GestionOficinaTramites extends JFrame {
 		setTitle("Oficinas de Tramites");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
-		micons=MICONS.getMICONS();		
+		micons=MICONS.getMICONS();	
+		oficinas = micons.getOficinaTramites();
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getPanel());
 		addPopup(getListOficinas(), getPopupMenu());
@@ -346,12 +349,12 @@ public class GestionOficinaTramites extends JFrame {
 		listOficinas.setModel(model);
 	}
 	private OficinaTramites obtenerOficinaSeleccionada() {
-		int pos = listOficinas.getSelectedIndex();
-		ArrayList<OficinaTramites> oficinas = micons.getOficinaTramites();
+		OficinaTramites o=null;
+		int pos = listOficinas.getSelectedIndex();	
 		if (pos >= 0 && pos < oficinas.size()) {
-			return oficinas.get(pos);
+			o= oficinas.get(pos);
 		}
-		return null;
+		return o;
 	}
 }
 
