@@ -36,9 +36,9 @@ public class Cubicacion  {
 		Boolean add=false;
 		MaterialACubicar m= readMaterialACubicar(material);
 		if(m==null){
-		  MaterialACubicar material= new MaterialACubicar(material,cantidad);
-		  if(material!=null){
-		    materiales.add(material)
+		  MaterialACubicar materialA= new MaterialACubicar(material,cantidad);
+		  if(materialA!=null){
+			  materiales.add(materialA);
 		    add= true;
 		  }
 		}
@@ -56,11 +56,11 @@ public class Cubicacion  {
 			}					
 		return m; 			
 	}
-	/*Update*/public Boolean updateMaterialACubicar(Material material, double newcantidad){
+	/*Update*/public Boolean updateMaterialACubicar(Material material, double newCantidad){
 		Boolean updt= false;
 		MaterialACubicar m= readMaterialACubicar(material);
 		if(m!=null){
-		  m.setCantidad(newCantidad);
+			m.setCantidad(newCantidad);
 		  updt= true;
 		}
 		else throw new IllegalArgumentException("Este Material no existe");
@@ -76,7 +76,7 @@ public class Cubicacion  {
 		else throw new IllegalArgumentException("Este Material no existe");
 		return del;
 	}
-	//Mï¿½todos
+	//Métodos
 	public double calcularPrecioTotal(){
 		double precioTotal=0;
 		for(MaterialACubicar m: materiales){

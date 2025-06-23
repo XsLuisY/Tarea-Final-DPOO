@@ -26,7 +26,7 @@ public class OficinaTramites{
 	//Encapsulamiento
 	public void setConsejoPopular(String consejoPopular){
 		if(consejoPopular!=null && !consejoPopular.trim().isEmpty())
-			if(consejoPopular.matches("[a-zA-Z√°√©√≠√≥√∫√Å√â√ç√ì√ö√±√ë ]+"))
+			if(consejoPopular.matches("[a-zA-Z·ÈÌÛ˙¡…Õ”⁄Ò— ]+"))
 				this.consejoPopular=consejoPopular.trim().replaceAll("\\s+", " ");		
 			else throw new IllegalArgumentException("El nombre del Consejo Popular no puede contener numeros o caracteres no validos.");
 		else throw new NullPointerException("El nombre del Consejo Popular no puede estar vacio.");
@@ -196,7 +196,7 @@ public class OficinaTramites{
 			m.setNombre(nombre);
 			m.setPrecioUnitario(precioUnitario);
 			m.setUnidadMedida(unidadMedida);	
-			updt=true;A
+			updt=true;
 		}else throw new IllegalArgumentException("Este Material no existe");
 		return updt;
 	}	
