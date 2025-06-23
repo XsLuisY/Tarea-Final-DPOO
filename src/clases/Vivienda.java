@@ -36,6 +36,9 @@ public class Vivienda{
 		setCantEmbarazadas(cantEmbarazadas);
 		setTotalHabitantes(totalHabitantes);
 	}
+	public Vivienda(){
+	  
+	}
 	//Encapsulamiento
 	public JefeNucleo getJefeNucleo(){
 		return jefeNucleo;
@@ -109,8 +112,8 @@ public class Vivienda{
 		return largo;
 	}
 	public void setLargo(double largo) {
-   if (largo <=0) {
-    throw new IllegalArgumentException("El largo no puede ser menor o igual a 0. Por favor introduzca un valor de Largo mayor que 0");
+   if (largo <=3) {
+    throw new IllegalArgumentException("El largo no puede ser menor o igual a 3. Por favor introduzca un valor de Largo mayor que 3");
 }
   else
     if(largo*ancho> 50)
@@ -122,8 +125,8 @@ public class Vivienda{
 		return ancho;
 	}
 	public void setAncho(double ancho) {
-   if (ancho <=0) {
-    throw new IllegalArgumentException("El ancho no puede ser menor o igual a 0. Por favor introduzca un valor de Ancho mayor que 0");
+   if (ancho <=3) {
+    throw new IllegalArgumentException("El ancho no puede ser menor o igual a 3. Por favor introduzca un valor de Ancho mayor que 3");
 }
 else
     if(ancho*largo> 50)

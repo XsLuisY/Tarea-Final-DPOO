@@ -40,7 +40,7 @@ public class GestionViviendas extends JFrame {
 	private JMenuItem menuItemEliminar;
 
 	public GestionViviendas() {
-		setTitle("Gesti\u00F3n de Viviendas");
+		setTitle("GestiÃ³n de Viviendas");
 		setType(Type.UTILITY);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -103,7 +103,7 @@ public class GestionViviendas extends JFrame {
 					new Object[][] {
 					},
 					new String[] {
-							"Jefe de Núcleo", "Dirección", "ID"
+							"Jefe de Nï¿½cleo", "Direcciï¿½n", "ID"
 					}
 					));
 		}

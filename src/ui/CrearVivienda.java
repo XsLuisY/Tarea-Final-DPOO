@@ -1,11 +1,22 @@
 package ui;
 import java.awt.EventQueue;
+import javax.swing.SpinnerNumberModel;
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.text.ParseException;
+import javax.swing.*;
+
 
 
 import javax.swing.JRadioButton;
@@ -21,14 +32,14 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import clases.MICONS;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import clases.Vivienda;
+import clases.JefeNucleo;
 
 
 public class CrearVivienda extends JFrame {
 	
 	private MICONS micons;
+	private Vivienda vivienda;
 	
 	private JPanel contentPane;
 
@@ -46,34 +57,38 @@ public class CrearVivienda extends JFrame {
 	private JTextField textFieldCI;
 
 	private String[] tipologiaConstructiva={"Tipo I","Tipo II","Tipo III","Tipo IV","Tipo V"};
-	private String[] tipologiaHabitacional={"Casa","Apartamento","Boh�o","Otro"};
+	private String[] tipologiaHabitacional={"Casa","Apartamento","Bohío","Otro"};
 	private String[] documentoLegal={"Propiedad","Usufructo","Vivienda vinculada","Arrendamiento","Providencia","No posee"};
 
 	private JComboBox comboBoxTipologiaHabitacional;
 	private JComboBox comboBoxTipologiaConstructiva;
+	private JComboBox comboBoxDocumentoLegal;
 
 	private JLabel lblFacilidadTemporal;
 	private JLabel lblDimensiones;
 	private JLabel lblLargo;
 	private JLabel lblAncho;
+	private Jlabel lblErrorArea;
 	private JLabel lblAltura;
 	private JLabel lblDatosJefeNucleo;
 	private JLabel lblDatosVivienda;
 	private JLabel lblDireccion;
+	private Jlabel lblErrorDireccion;
 	private JLabel lblDocumentoLegal;
 	private JLabel lblTipologiaHabitacional;
 	private JLabel lblTipologiaConstructiva;
 	private JLabel lblNombre;
+	private Jlabel lblErrorNombre;
 	private JLabel lblCI;
+	private JLabel lblErrorCI;
 	private JLabel lblTotal;
 	private JLabel lblAncianos;
 	private JLabel lblEmbarazadas;
-	private JLabel lblNinos;
+	private JLabel lblNinios;
 	private JLabel lblHabitantes;
 	
 	private JButton btnEnviar;
 	
-	private JComboBox comboBoxDocumentoLegal;
 	
 	private JSpinner spinnerLargo;
 	private JSpinner spinnerAncho;
@@ -81,9 +96,10 @@ public class CrearVivienda extends JFrame {
 	private JSpinner spinnerTotal;
 	private JSpinner spinnerAncianos;
 	private JSpinner spinnerEmbarazadas;
-	private JSpinner spinnerNinos;
-
+	private JSpinner spinnerNinios;
+  //Constructor
 	public CrearVivienda() {
+	  vivienda= new Vivienda();
 		setType(Type.UTILITY);
 		setAlwaysOnTop(true);
 		setResizable(false);
@@ -104,6 +120,7 @@ public class CrearVivienda extends JFrame {
 			contentPane.setLayout(null);
 			contentPane.add(getTextFieldDireccion());
 			contentPane.add(getLblDireccion());
+			contentPane.add(getLblErrorDireccion());
 			contentPane.add(getLblDocumentoLegal());
 			contentPane.add(getLblTipologiaHabitacional());
 			contentPane.add(getLblTipologiaConstructiva());
@@ -114,10 +131,13 @@ public class CrearVivienda extends JFrame {
 			contentPane.add(getLblDimensiones());
 			contentPane.add(getLblLargo());
 			contentPane.add(getLblAncho());
+			contentPane.add(getLblErrorArea());
 			contentPane.add(getLblAltura());
 			contentPane.add(getLblNombre());
+			contentPane.add(getLblErrorNombre());
 			contentPane.add(getTextFieldNombre());
 			contentPane.add(getLblCI());
+			contentPane.add(getLblErrorCI());
 			contentPane.add(getTextFieldCI());
 			contentPane.add(getBtnEnviar());
 			contentPane.add(getComboBoxDocumentoLegal());
@@ -131,10 +151,10 @@ public class CrearVivienda extends JFrame {
 			contentPane.add(getSpinnerTotal());
 			contentPane.add(getSpinnerAncianos());
 			contentPane.add(getSpinnerEmbarazadas());
-			contentPane.add(getSpinnerNinos());
+			contentPane.add(getSpinnerNinios());
 			contentPane.add(getLblAncianos());
 			contentPane.add(getLblEmbarazadas());
-			contentPane.add(getLblNinos());
+			contentPane.add(getLblNinios());
 			contentPane.add(getLblHabitantes());
 
 		}
@@ -170,13 +190,37 @@ public class CrearVivienda extends JFrame {
 		}
 		return textFieldDireccion;
 	}
+	textFieldDireccion.getDocument().addDocumentListener(new DocumentListener() {
+    void validarDirec() {
+        try {
+            vivienda.setDireccion(textFieldDireccion.getText());
+            lblErrorDireccion.setVisible(false);
+        } catch (IllegalArgumentException ex) {
+            lblErrorDireccion.setText(ex.getMessage());
+            lblErrorDireccion.setVisible(true);
+        }
+    }
+    @Override public void insertUpdate(DocumentEvent e) { validarDirec(); }
+    @Override public void removeUpdate(DocumentEvent e) { validarDirec(); }
+    @Override public void changedUpdate(DocumentEvent e) { validarDirec(); }
+});
+	
 	public JLabel getLblDireccion(){
 		if(lblDireccion==null){
-			lblDireccion = new JLabel("Direcci\u00F3n:");
+			lblDireccion = new JLabel("Dirección:");
 			lblDireccion.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblDireccion.setBounds(11, 114, 67, 16);
 		}
 		return lblDireccion;
+	}
+	public JLabel getLblErrorDireccion(){
+		if(lblErrorDireccion=null){
+			lblErrorDireccion = new JLabel(" ");
+			lblErrorDireccion.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblErrorDireccion.setBounds(11, 110, 67, 16);
+			lblErrorDireccion.setVisible(false);
+		}
+		return lblErrorDireccion;
 	}
 	public JLabel getLblDocumentoLegal(){ 
 		if(lblDocumentoLegal==null){
@@ -196,7 +240,7 @@ public class CrearVivienda extends JFrame {
 	}
 	public JLabel getLblTipologiaConstructiva(){
 		if(lblTipologiaConstructiva==null){
-			lblTipologiaConstructiva = new JLabel("Tipolog\u00EDa Constructiva:");
+			lblTipologiaConstructiva = new JLabel("Tipología Constructiva:");
 			lblTipologiaConstructiva.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblTipologiaConstructiva.setBounds(0, 176, 144, 20);
 		}
@@ -213,7 +257,7 @@ public class CrearVivienda extends JFrame {
 	public JLabel getLblDatosJefeNucleo(){
 		if(lblDatosJefeNucleo==null){
 
-			lblDatosJefeNucleo = new JLabel("Datos del Jefe de N\u00FAcleo:");
+			lblDatosJefeNucleo = new JLabel("Datos del Jefe de Núcleo:");
 			lblDatosJefeNucleo.setHorizontalAlignment(SwingConstants.CENTER);
 			lblDatosJefeNucleo.setBounds(11, 11, 273, 14);
 		}
@@ -221,7 +265,7 @@ public class CrearVivienda extends JFrame {
 	}
 	public JRadioButton getRdbtnSi(){		
 		if(rdbtnSi==null){
-			rdbtnSi = new JRadioButton("S\u00ED");
+			rdbtnSi = new JRadioButton("Sí");
 			rdbtnSi.setBackground(Color.ORANGE);
 			rdbtnSi.setBounds(175, 142, 39, 23);
 		}
@@ -260,6 +304,14 @@ public class CrearVivienda extends JFrame {
 		}
 		return lblAncho;
 	}	
+	public JLabel getLblErrorArea(){
+		if(lblErrorArea==null){
+			lblErrorArea = new JLabel("Largo:");
+			lblErrorArea.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblErrorArea.setBounds(175, 270, 39, 20);
+		}
+		return lblErrorArea;
+	}
 	public JLabel getLblAltura(){
 		if(lblAltura==null){
 			lblAltura = new JLabel("Altura:");
@@ -272,9 +324,18 @@ public class CrearVivienda extends JFrame {
 		if(lblNombre==null){
 			lblNombre = new JLabel("Nombre:");
 			lblNombre.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblNombre.setBounds(11, 34, 67, 14);
+			lblNombre.setBounds(11, 54, 67, 14);
 		}
 		return lblNombre;
+	}
+	public JLabel getLblErrorNombre(){
+		if(lblErrorNombre==null){
+			lblErrorNombre = new JLabel(" ");
+			lblErrorNombre.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblErrorNombre.setBounds(88, 28, 196, 20);
+			lblErrorNombre.setVisible(false);
+		}
+		return lblErrorNombre;
 	}
 	public JTextField getTextFieldNombre(){
 		if(textFieldNombre==null){
@@ -284,6 +345,21 @@ public class CrearVivienda extends JFrame {
 		}
 		return textFieldNombre;
 	}
+	textFieldNombre.getDocument().addDocumentListener(new DocumentListener() {
+    void validarNombre() {
+        try {
+            vivienda.getJefeNucleo().setNombre(textFieldNombre.getText());
+            lblErrorNombre.setVisible(false);
+        } catch (IllegalArgumentException ex) {
+            lblErrorNombre.setText(ex.getMessage());
+            lblErrorNombre.setVisible(true);
+        }
+    }
+    @Override public void insertUpdate(DocumentEvent e) { validarNombre(); }
+    @Override public void removeUpdate(DocumentEvent e) { validarNombre(); }
+    @Override public void changedUpdate(DocumentEvent e) { validarNombre(); }
+});
+
 	public JLabel getLblCI(){
 		if(lblCI==null){
 			lblCI = new JLabel("CI:");
@@ -291,6 +367,15 @@ public class CrearVivienda extends JFrame {
 			lblCI.setBounds(11, 59, 67, 14);
 		}
 		return lblCI;
+	}
+	public JLabel getLblErrorCI(){
+		if(lblErrorCI==null){
+			lblErrorCI = new JLabel(" ");
+			lblErrorCI.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblErrorCI.setBounds(11, 56, 67, 14);
+			lblErrorCI.setVisible(false);
+		}
+		return lblErrorCI;
 	}
 	public JTextField getTextFieldCI(){
 		if(textFieldCI==null){
@@ -301,12 +386,118 @@ public class CrearVivienda extends JFrame {
 		}
 		return textFieldCI;
 	}
+	textFieldCI.getDocument().addDocumentListener(new DocumentListener() {
+    void validarCI() {
+        try {
+            vivienda.getJefeNucleo().setCI(textFieldCI.getText());
+            lblErrorCI.setVisible(false);
+        } catch (IllegalArgumentException ex) {
+            lblErrorCI.setText(ex.getMessage());
+            lblErrorCI.setVisible(true);
+        }
+    }
+    @Override public void insertUpdate(DocumentEvent e) { validarCI(); }
+    @Override public void removeUpdate(DocumentEvent e) { validarCI(); }
+    @Override public void changedUpdate(DocumentEvent e) { validarCI(); }
+});
+	
 	public JButton getBtnEnviar(){
 		if(btnEnviar==null){
 			btnEnviar = new JButton("Enviar");
 			btnEnviar.setBackground(Color.DARK_GRAY);
 			btnEnviar.setForeground(Color.ORANGE);
 			btnEnviar.setBounds(195, 403, 89, 23);
+			btnEnviar.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        try {
+            // Validar campos de texto no vacíos
+            if (textFieldNombre.getText().trim().isEmpty()) {
+                throw new IllegalArgumentException("Debe ingresar el nombre del jefe de núcleo.");
+            }
+            if (textFieldCI.getText().trim().isEmpty()) {
+                throw new IllegalArgumentException("Debe ingresar el carnet de identidad.");
+            }
+            if (textFieldDireccion.getText().trim().isEmpty()) {
+                throw new IllegalArgumentException("Debe ingresar la dirección.");
+            }
+
+            // Validar que se haya seleccionado un RadioButton (Facilidad Temporal)
+            if (!rdbtnSi.isSelected() && !rdbtnNo.isSelected()) {
+                throw new IllegalArgumentException("Debe seleccionar una opción para Facilidad Temporal.");
+            }
+            Boolean facilidadTemporal = rdbtnSi.isSelected();
+
+            // Validar ComboBoxes (que tengan selección)
+            if (comboBoxTipologiaConstructiva.getSelectedIndex() == -1) {
+                throw new IllegalArgumentException("Debe seleccionar un tipo de construcción.");
+            }
+            if (comboBoxTipologiaHabitacionalHabitacional.getSelectedIndex() == -1) {
+                throw new IllegalArgumentException("Debe seleccionar un tipo habitacional.");
+            }
+            if (comboBoxDocumentoLegal.getSelectedIndex() == -1) {
+                throw new IllegalArgumentException("Debe seleccionar un documento legal.");
+            }
+
+            // Validar spinners con commitEdit para aplicar valor y lanzar excepción si inválido
+            spinnerNinios.commitEdit();
+            spinnerAncianos.commitEdit();
+            spinnerEmbarazadas.commitEdit();
+            spinnerTotal.commitEdit();
+            spinnerAltura.commitEdit();
+            spinnerAncho.commitEdit();
+            spinnerLargo.commitEdit();
+
+            // Obtener valores de spinners
+            int cantidadNiños = (Integer) spinnerNiños.getValue();
+            int cantidadAncianos = (Integer) spinnerAncianos.getValue();
+            int cantidadEmbarazadas = (Integer) spinnerEmbarazadas.getValue();
+            int totalPersonas = (Integer) spinnerTotal.getValue();
+            double altura = (Double) spinnerAltura.getValue();
+            double ancho = (Double) spinnerAncho.getValue();
+            double largo = (Double) spinnerLargo.getValue();
+
+            // Validar área máxima
+            double area = ancho * largo;
+            if (area > 50) {
+                throw new IllegalArgumentException("El área (ancho x largo) no puede superar 50. Área actual: " + area);
+            }
+
+            // Si todo está bien, asignar valores a la instancia vivienda
+            vivienda.setNombre(textFieldNombre.getText().trim());
+            vivienda.setCarnetIdentidad(textFieldCarnet.getText().trim());
+            vivienda.setDireccion(textFieldDireccion.getText().trim());
+            vivienda.setFacilidadTemporal(facilidadTemporal);
+            vivienda.setTipologiaConstructiva((String) comboBoxTipologiaConstructiva.getSelectedItem());
+            vivienda.setTipologiaHabitacional((String) comboBoxTipologiaHabitacional.getSelectedItem());
+            vivienda.setDocumentoLegal((String) comboBoxDocumentoLegal.getSelectedItem());
+            vivienda.setCantNinios(cantidadNinios);
+            vivienda.setCantAncianos(cantidadAncianos);
+            vivienda.setCantEmbarazadas(cantidadEmbarazadas);
+            vivienda.setTotalHabitantes(totalPersonas);
+            vivienda.setAltura(altura);
+            vivienda.setAncho(ancho);
+            vivienda.setLargo(largo);
+
+            // Agregar vivienda a la lista
+            listaViviendas.add(vivienda);
+
+            // Mostrar mensaje de éxito
+            JOptionPane.showMessageDialog(null, "Vivienda guardada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            // Opcional: limpiar formulario o crear nueva instancia vivienda
+            vivienda = new Vivienda();
+
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(null, "Error en los valores numéricos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error inesperado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+});
+
 		}
 		return btnEnviar;
 	}
@@ -333,21 +524,44 @@ public class CrearVivienda extends JFrame {
 	}
 	public JSpinner getSpinnerLargo(){
 		if(spinnerLargo==null){
-			spinnerLargo = new JSpinner();
+		  SpinnerNumberModel largo= new SpinnerNumberModel(3.0,3.0,Double.MAX_VALUE,1.0);
+			spinnerLargo = new JSpinner(largo);
 			spinnerLargo.setBounds(242, 286, 41, 20);
+			spinnerLargo.addChangeListener(validarArea);
 		}
 		return spinnerLargo;
 	}
 	public JSpinner getSpinnerAncho(){
 		if(spinnerAncho==null){
-			spinnerAncho  = new JSpinner();
+		  SpinnerNumberModel ancho= new SpinnerNumberModel(3.0,3.0,Double.MAX_VALUE,1.0);
+			spinnerAncho  = new JSpinner(ancho);
 			spinnerAncho.setBounds(242, 318, 41, 20);
+			spinnerAncho.addChangeListener(validarArea);
 		}
 		return spinnerAncho;
 	}
+	// Validar ancho y largo 
+	ChangeListener validarArea = new ChangeListener() {
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        double ancho = (Double) spinnerAncho.getValue();
+        double largo = (Double) spinnerLargo.getValue();
+        double area = ancho * largo;
+
+        if (area > 50) {
+            lblErrorArea.setText("El área (ancho x largo) no puede superar 50 (actual: " + area + ")");
+            lblErrorArea.setVisible(true);
+        } else {
+            labelError.setVisible(false);
+        }
+    }
+};
+
+	
 	public JSpinner getSpinnerAltura(){
 		if(spinnerAltura==null){
-			spinnerAltura= new JSpinner();
+		  SpinnerNumberModel altura= new SpinnerNumberModel(2.0,2.0,3.0,0.2);
+			spinnerAltura= new JSpinner(altura);
 			spinnerAltura.setBounds(243, 352, 41, 20);
 		}
 		return spinnerAltura;
@@ -370,31 +584,35 @@ public class CrearVivienda extends JFrame {
 	}
 	public JSpinner getSpinnerTotal(){
 		if(spinnerTotal==null){	
-			spinnerTotal= new JSpinner();
+		  SpinnerNumberModel total= new SpinnerNumberModel(0,0,40,1);
+			spinnerTotal= new JSpinner(total);
 			spinnerTotal.setBounds(103, 380, 41, 20);
 		}
 		return spinnerTotal;
 	}
 	public JSpinner getSpinnerAncianos(){
 		if(spinnerAncianos==null){	
-			spinnerAncianos= new JSpinner();
+		  SpinnerNumberModel ancianos= new SpinnerNumberModel(0,0,10,1);
+			spinnerAncianos= new JSpinner(ancianos);
 			spinnerAncianos.setBounds(103, 349, 41, 20);
 		}
 		return spinnerAncianos;
 	}
 	public JSpinner getSpinnerEmbarazadas(){
 		if(spinnerEmbarazadas==null){	
-			spinnerEmbarazadas= new JSpinner();
+		  SpinnerNumberModel embarazadas= new SpinnerNumberModel(0,0,10,1);
+			spinnerEmbarazadas= new JSpinner(embarazadas);
 			spinnerEmbarazadas.setBounds(103, 318, 41, 20);
 		}
 		return spinnerEmbarazadas;
 	}
-	public JSpinner getSpinnerNinos(){
-		if(spinnerNinos==null){	
-			spinnerNinos= new JSpinner();
-			spinnerNinos.setBounds(103, 287, 41, 20);
+	public JSpinner getSpinnerNinios(){
+		if(spinnerNinios==null){	
+		  SpinnerNumberModel ninios= new SpinnerNumberModel(0,0,10,1);
+			spinnerNinios= new JSpinner(ninios);
+			spinnerNinios.setBounds(103, 287, 41, 20);
 		}
-		return spinnerNinos;
+		return spinnerNinios;
 	}
 	public JLabel getLblAncianos(){
 		if(lblAncianos==null){
@@ -411,13 +629,13 @@ public class CrearVivienda extends JFrame {
 		}
 		return lblEmbarazadas;
 	}
-	public JLabel getLblNinos(){
-		if(lblNinos==null){
-			lblNinos= new JLabel("Ni\u00F1os:");
-			lblNinos.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblNinos.setBounds(6, 287, 75, 20);
+	public JLabel getLblNinios(){
+		if(lblNinios==null){
+			lblNinios= new JLabel("Ni\u00F1os:");
+			lblNinios.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblNinios.setBounds(6, 287, 75, 20);
 		}
-		return lblNinos;
+		return lblNinios;
 	}
 	public JLabel getLblHabitantes(){
 		if(lblHabitantes==null){
@@ -425,7 +643,7 @@ public class CrearVivienda extends JFrame {
 			lblHabitantes.setHorizontalAlignment(SwingConstants.CENTER);
 			lblHabitantes.setBounds(19, 261, 125, 14);
 		}
-		return lblNinos;
+		return lblNinios;
 	}
 }
 
