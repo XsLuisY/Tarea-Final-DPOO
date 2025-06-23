@@ -19,13 +19,13 @@ public class AfectacionPared extends Afectacion{
 	public void setEsDeCarga(Boolean esDeCarga) {
 		if(esDeCarga!=null)		
 			this.esDeCarga = esDeCarga;
-		else throw new NullPointerException("La variable no puede ser null");
+		else throw new NullPointerException("El tipo de pared no puede ser null");
 	}
 
 	public void setEsDerrumbeTotal(Boolean esDerrumbeTotal){
 		if(esDerrumbeTotal!=null)
 			this.esDerrumbeTotal = esDerrumbeTotal;	
-		else throw new NullPointerException("La variable no puede ser null");
+		else throw new NullPointerException("El tipo de derrumbe no puede ser null");
 	}
 
 	public Boolean getEsDerrumbeTotal(){
@@ -33,14 +33,15 @@ public class AfectacionPared extends Afectacion{
 	}
 
 	public void setMaterialPredominante(String materialPredominante){
-		if (materialPredominante != null && !materialPredominante.trim().isEmpty()) {
-			if(materialPredominante.matches("[a-zA-ZáéíóÁÉÍÓÚñÑ1234567890 ]+"))
+		if (materialPredominante == null)
+		throw new NullPointerException("El material predominante no debe ser null");
+		else
+		  if(!materialPredominante.trim().isEmpty()) {
+      if(materialPredominante.matches("[a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1234567890 ]+"))
 				this.materialPredominante = materialPredominante.trim().replaceAll("\\s+", " ");
 			else
-				throw new IllegalArgumentException("El material predominante solo debe tener letras");
+				throw new IllegalArgumentException("El material predominante no debe estar vacÃ­o y solo debe tener letras");
 		}
-		else
-			throw new IllegalArgumentException("El material predominante no puede estar vacÃ­o o ser null");
 	}
 	public String getMaterialPredominante(){
 		return materialPredominante;

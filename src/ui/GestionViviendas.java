@@ -19,14 +19,20 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JMenuBar;
 
+import clases.FichaTecnicaDO;
 import clases.MICONS;
+import clases.OficinaTramites;
+import clases.Vivienda;
 
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Date;
+import java.util.ArrayList;
 
 public class GestionViviendas extends JFrame {
 	private MICONS micons;
+	private ArrayList<Vivienda> viviendas;
 
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
@@ -40,7 +46,7 @@ public class GestionViviendas extends JFrame {
 	private JMenuItem menuItemEliminar;
 
 	public GestionViviendas() {
-		setTitle("Gesti\u00F3n de Viviendas");
+		setTitle("GestiÃ³n de Viviendas");
 		setType(Type.UTILITY);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -103,7 +109,7 @@ public class GestionViviendas extends JFrame {
 					new Object[][] {
 					},
 					new String[] {
-							"Jefe de Núcleo", "Dirección", "ID"
+							"Jefe de Nï¿½cleo", "Direcciï¿½n", "ID"
 					}
 					));
 		}
@@ -130,7 +136,7 @@ public class GestionViviendas extends JFrame {
 			menuItemAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					CrearVivienda v = new CrearVivienda();
+					CrearVivienda v = new CrearVivienda(GestionViviendas.this);
 					v.setVisible(true);
 				}
 			});
@@ -196,5 +202,26 @@ public class GestionViviendas extends JFrame {
 				popup.show(e.getComponent(), e.getX(), e.getY());
 			}
 		});
+	}
+	
+	public Vivienda obtenerViviendaSeleccionada(){
+		Vivienda v = null;
+		int pos = getTableViviendas().getSelectedRow();
+		if (pos >= 0 && pos < viviendas.size()) {
+			v=viviendas.get(pos);
+		}
+		return v;
+	}
+	public void actualizarTableViviendas() {
+		DefaultTableModel model = (DefaultTableModel) getTableViviendas().getModel();
+		model.setRowCount(0); // Limpiar la tabla
+
+		for(Vivienda v:  viviendas){
+			String direccion=f.getVivienda().getDireccion();
+			Date fechaLevantamiento=f.getFechaLevantamiento();
+			Object[] newRow = new Object[]{direccion, fechaLevantamiento, f.getId()};
+			model.addRow(newRow);			
+		}
+		getTableViviendas().setModel(model);
 	}
 }

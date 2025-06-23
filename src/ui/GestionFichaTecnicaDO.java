@@ -23,6 +23,7 @@ import clases.OficinaTramites;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class GestionFichaTecnicaDO extends JFrame {
 	
@@ -219,7 +220,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 
 		for(FichaTecnicaDO f:  fichas){
 			String direccion=f.getVivienda().getDireccion();
-			String fechaLevantamiento=f.getFechaLevantamiento();
+			Date fechaLevantamiento=f.getFechaLevantamiento();
 			Object[] newRow = new Object[]{direccion, fechaLevantamiento, f.getId()};
 			model.addRow(newRow);			
 		}
