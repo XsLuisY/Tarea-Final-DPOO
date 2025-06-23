@@ -11,7 +11,7 @@ private String ci;
 //Constructor
 public JefeNucleo(String nombre, String ci) {
 	setNombre(nombre);
-	setId(id);
+	setCI(ci);
 }
 //Encapsulamiento
 public String getNombre() {
@@ -19,7 +19,7 @@ public String getNombre() {
 }
 public void setNombre(String nombre) {
   if (nombre != null && !nombre.trim().isEmpty()) {
-    if(nombre.matches("[a-zA-Z√°√©√≠√≥√∫√Å√â√ç√ì√ö√±√ë ]+"))
+    if(nombre.matches("[a-zA-Z·ÈÌÛ˙¡…Õ”⁄Ò— ]+"))
       this.nombre = nombre.trim().replaceAll("\\s+", " ");
     else
       throw new IllegalArgumentException("El nombre solo debe tener letras");

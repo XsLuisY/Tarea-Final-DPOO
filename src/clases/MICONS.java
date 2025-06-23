@@ -36,17 +36,17 @@ public class MICONS {
 	}
 	//CRUD-OficinaTramites
 	/*Create*/ public Boolean addOficinaTramites(String consejoPopular){
-	  Boolean add=false;
+		Boolean add=false;
 		OficinaTramites o= readOficinaTramites(consejoPopular);
 		if(o==null){
-		  OficinaTramites oficina= new OficinaTramites(consejoPopular);
-		  else { throw new IllegalArgumentException("Esta Oficina de Tramites ya existe");
-		  if(oficina!=null){
-		    add= true;
-		    oficinas.add(oficina);
-		  }
-		  }
-		}
+			OficinaTramites oficina= new OficinaTramites(consejoPopular);
+			if(oficina!=null){
+				add= true;
+				oficinas.add(oficina);
+			}
+			}
+		else 
+			throw new IllegalArgumentException("Esta Oficina de Tramites ya existe");
 		return add;
 	}
 	/*Read*/ public OficinaTramites readOficinaTramites(String consejoPopular){
@@ -63,15 +63,15 @@ public class MICONS {
 		return oficina;
 	}
 	/*Update*/ public Boolean updateOficinaTramites(String consejoPopular, String nuevoConsejo){
-     Boolean updt= false;
-     OficinaTramites o= readOficinaTramites(nuevoConsejo);
-     OficinaTramites oficina= readOficinaTramites(consejoPopular);
+		Boolean updt= false;
+		OficinaTramites o= readOficinaTramites(nuevoConsejo);
+		OficinaTramites oficina= readOficinaTramites(consejoPopular);
 		if(oficina!=null){
-		  if(o==null){
-		    oficina.setConsejoPopular(nuevoConsejo);
-		    add= true;
-		  }
-		  else throw new IllegalArgumentException("El nombre que intentas poner ya existe en otra Oficina de Tramites");
+			if(o==null){
+				oficina.setConsejoPopular(nuevoConsejo);
+				updt= true;
+			}
+			else throw new IllegalArgumentException("El nombre que intentas poner ya existe en otra Oficina de Tramites");
 		}
 		else throw new IllegalArgumentException("Esta Oficina de Tramites no existe");
 		return updt;
@@ -79,25 +79,25 @@ public class MICONS {
 	/*Delete*/ public Boolean deleteOficinaTramites(String consejoPopular){
 		Boolean del= false;
 		OficinaTramites oficina= readOficinaTramites(consejoPopular);
-    if(oficina!=null){
-      oficinas.remove(oficina);
-      del= true;
-    }
+		if(oficina!=null){
+			oficinas.remove(oficina);
+			del= true;
+		}
 		else throw new IllegalArgumentException("Esta OficinaTramites no existe");
 		return del;
 	}
-	
+
 
 	// Metodos CRUD de Vivienda
-	/*Create*/ public Boolean addVivienda(String nombreJefeN, String ciJefeN, String direccion, String documentoLegal, String tipologiaHabitacional, String tipologiaConstructiva, Boolean facilidadTemporal, double largo, double ancho, double altura, int cantNinios, int cantAncianos, int cantEmbarazadas, int totalHabitantes){
+	/*Create*/ public Boolean addVivienda(Vivienda viv){
 		Boolean add= false;
-		Vivienda v= readByIDVivienda(ciJefeN);
+		Vivienda v= readByIDVivienda(viv.getJefeNucleo().getCI());
 		if(v==null){
-		 Vivienda vivienda= new Vivienda(nombreJefeN, ciJefeN, direccion, documentoLegal, tipologiaHabitacional, tipologiaConstructiva, facilidadTemporal, largo, ancho, altura, cantNinios, cantAncianos, cantEmbarazadas, totalHabitantes);
-		  if(vivienda!=null){
-			viviendas.add(vivienda);
-			add= true;
-		}
+			Vivienda vivienda= viv;
+			if(vivienda!=null){
+				viviendas.add(vivienda);
+				add= true;
+			}
 		}
 		else throw new IllegalArgumentException("Esta vivienda ya existe");
 		return add;
@@ -132,7 +132,7 @@ public class MICONS {
 			vivienda.setCantAncianos(newCantAncianos);
 			vivienda.setCantEmbarazadas(newCantEmbarazadas);
 			vivienda.setTotalHabitantes(newTotalHabitantes);
-			udpt=true;
+			updt=true;
 		}
 		else throw new IllegalArgumentException("Esta vivienda no existe");
 		return updt;
@@ -144,7 +144,7 @@ public class MICONS {
 			viviendas.remove(vivienda);
 			exit= true;
 		}
-    else throw new IllegalArgumentException("Esta vivienda no existe");
+		else throw new IllegalArgumentException("Esta vivienda no existe");
 		return exit;
 	}
 
@@ -192,13 +192,13 @@ public class MICONS {
 		oficinas.add(new OficinaTramites("La Lisa"));		
 	}
 
-public void inicializarViviendas(){
-  viviendas.add(new Vivienda(Paco,05012045762,Calle J entre L y K,Propiedad,Casa,Tipo II,true,4,5,4,2,3,1,6));
-  viviendas.add(new Vivienda(Luis,05011045061,Calle 20 entre 23 y 21,Propiedad,Casa,Tipo I,false,3,3,4,2,1,1,5));
-  viviendas.add(new Vivienda(Ernesto,03061545181,Calle Fernanda entre C y B,Usufructo,Apartamento,Tipo III,true,3,4,4,1,0,1,3));
-  viviendas.add(new Vivienda(Diana,02092317632,Calle A entre D y C,Arrendamiento,Otro,Tipo IV,false,5,5,4,3,0,0,8));
-  viviendas.add(new Vivienda(Ana,01120564637,Calle Balear entre Piedra y Soto,Providencia,BohÃ­o,Tipo V,false,6,7,5,2,0,1,7));
-}
+	public void inicializarViviendas(){
+		viviendas.add(new Vivienda("Paco","05012045762","Calle J entre L y K","Propiedad","Casa","Tipo II",true,4,5,4,2,3,1,6));
+		viviendas.add(new Vivienda("Luis","05011045061","Calle 20 entre 23 y 21","Propiedad","Casa","Tipo I",false,3,3,4,2,1,1,5));
+		viviendas.add(new Vivienda("Ernesto","03061545181","Calle Fernanda entre C y B","Usufructo","Apartamento","Tipo III",true,3,4,4,1,0,1,3));
+		viviendas.add(new Vivienda("Diana","02092317632","Calle A entre D y C","Arrendamiento","Otro","Tipo IV",false,5,5,4,3,0,0,8));
+		viviendas.add(new Vivienda("Ana","01120564637","Calle Balear entre Piedra y Soto","Providencia","Bohío","Tipo V",false,6,7,5,2,0,1,7));
+	}
 
 }
 

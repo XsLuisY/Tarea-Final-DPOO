@@ -34,7 +34,7 @@ public class AfectacionPared extends Afectacion{
 
 	public void setMaterialPredominante(String materialPredominante){
 		if (materialPredominante == null)
-		throw new NullPointerException("El material predominante no debe ser null")
+		throw new NullPointerException("El material predominante no debe ser null");
 		else
 		  if(!materialPredominante.trim().isEmpty()) {
       if(materialPredominante.matches("[a-zA-Z�����������1234567890 ]+"))

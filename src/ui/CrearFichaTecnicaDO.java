@@ -2,6 +2,7 @@ package ui;
 
 import interfaces.GestionAfectaciones;
 import interfaces.GestionMuebles;
+import java.util.Date;
 
 import java.awt.Color;
 
@@ -331,9 +332,8 @@ public class CrearFichaTecnicaDO extends JFrame implements GestionAfectaciones, 
 
 					if(validado){				
 						Vivienda vivienda=ficha.getVivienda();
-						String fechaLevantamiento = ficha.getFechaLevantamiento();
 						OficinaTramites o = gestion.getOficinaTramites();
-						boolean add = o.addFichaTecnicaDO(vivienda, fechaLevantamiento);
+						boolean add = o.addFichaTecnicaDO(vivienda);
 						if(add){									
 							JOptionPane.showMessageDialog(null, "Ficha Tecnica de Daños Ocacionados agregada exitosamente.");			            
 							gestion.actualizarTableFichas();
