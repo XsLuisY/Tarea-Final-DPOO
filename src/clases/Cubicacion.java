@@ -34,11 +34,13 @@ public class Cubicacion  {
 	//CRUD-MaterialACubicar ARREGLAR
 	/*Create*/ public Boolean addMaterialACubicar(Material material, double cantidad){
 		Boolean add=false;
-
-		if(!existMaterialACubicar(material)){
-			MaterialACubicar m= new MaterialACubicar(material, cantidad);
-			materiales.add(m);	
-			add=true;
+		MaterialACubicar m= readMaterialACubicar(material);
+		if(m==null){
+		  MaterialACubicar material= new MaterialACubicar(material,cantidad);
+		  if(material!=null){
+		    materiales.add(material)
+		    add= true;
+		  }
 		}
 		else throw new IllegalArgumentException("Este Material ya existe");
 		return add;
@@ -54,37 +56,27 @@ public class Cubicacion  {
 			}					
 		return m; 			
 	}
-	/*Update*/public Boolean updateMaterialACubicar(Material material, double cantidad){
-		Boolean updt=false;
-
-		if(existMaterialACubicar(material)){
-			MaterialACubicar m = readMaterialACubicar(material);	
-			m.setMaterial(material);
-			m.setCantidad(cantidad);
-			updt=false;
-		}else throw new IllegalArgumentException("Este Material no existe");
+	/*Update*/public Boolean updateMaterialACubicar(Material material, double newcantidad){
+		Boolean updt= false;
+		MaterialACubicar m= readMaterialACubicar(material);
+		if(m!=null){
+		  m.setCantidad(newCantidad);
+		  updt= true;
+		}
+		else throw new IllegalArgumentException("Este Material no existe");
 		return updt;
 	}
 	/*Delete*/public Boolean deleteMaterialACubicar(Material material){
-		Boolean del=existMaterialACubicar(material);
-		if(del)			
-			materiales.remove(readMaterialACubicar(material));
+		Boolean del= false;
+		MaterialACubicar m= readMaterialACubicar(material);
+		if(m!=null){
+		  materiales.remove(m);
+		  del= true;
+		}
 		else throw new IllegalArgumentException("Este Material no existe");
-
 		return del;
 	}
-	public boolean existMaterialACubicar(Material material){
-		//Verificar si MaterialACubicar existe a traves de material 
-		Boolean exist=false;
-		for (int i=0; i<materiales.size() && !exist; i++) {
-			if (materiales.get(i).getMaterial().equals(material))
-				exist=true;
-		}
-		return exist;
-	}
-
-	//Métodos
-
+	//Mï¿½todos
 	public double calcularPrecioTotal(){
 		double precioTotal=0;
 		for(MaterialACubicar m: materiales){
