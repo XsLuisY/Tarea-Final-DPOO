@@ -178,11 +178,12 @@ public class Vivienda{
 		return totalHabitantes;
 	}
 	public void setTotalHabitantes(int totalHabitantes) {
-		if (totalHabitantes <0 || totalHabitantes >40) {
-			throw new IllegalArgumentException("El total de habitantes no puede ser menor a 0. Por favor introduzca un total de habitantes mayor o igual que 0 y menor o igual a 40");
-		}
-		else
-			this.totalHabitantes = totalHabitantes;
+   if (totalHabitantes <(cantNinios+cantAncianos+cantEmbarazadas) || totalHabitantes >40) {
+    throw new IllegalArgumentException("El total de habitantes no puede ser menor al total de ninios, ancianos y embarazadas juntos ni mayor a 40");
+}
+else
+		this.totalHabitantes = totalHabitantes;
+	}
 	}
 		
 
