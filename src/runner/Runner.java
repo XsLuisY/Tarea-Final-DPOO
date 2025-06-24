@@ -2,15 +2,25 @@ package runner;
 
 import java.awt.EventQueue;
 
+import clases.MICONS;
+import clases.OficinaTramites;
 import ui.Login;
+
 
 public class Runner {
 	public static void main(String[] args) {
 
 		EventQueue.invokeLater(new Runnable() {
+			private MICONS micons;
+
 			public void run() {
-				try {														
-					Login frame = new Login();
+				try {		
+					micons=MICONS.getMICONS();		
+					micons.inicializarOficinaTramites();
+					micons.inicializarViviendas();
+					for(OficinaTramites o: micons.getOficinaTramites())
+						o.inicializarMateriales();					
+					Login frame = Login.getLogin();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

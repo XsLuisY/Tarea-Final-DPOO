@@ -1,6 +1,6 @@
 package clases;
 import java.util.UUID;
-
+import clases.Afectacion;
 
 public class AfectacionTecho extends Afectacion{
 

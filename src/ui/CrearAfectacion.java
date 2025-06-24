@@ -1,7 +1,7 @@
 package ui;
 
 
-import interfaces.GestionAfectaciones;
+import interfaces.AsignableAfectaciones;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -29,7 +29,7 @@ import clases.FichaTecnicaDO;
 public class CrearAfectacion extends JFrame{
 
 	private static final long serialVersionUID = 1L;
-	private GestionAfectaciones gestion;
+	private AsignableAfectaciones gestion;
 	private JPanel contentPane;
 	private JPanel panelAfectaciones;
 	private JTextField textFieldMaterialPredominante;
@@ -43,7 +43,7 @@ public class CrearAfectacion extends JFrame{
 	private JLabel lblGravedad;
 	private FichaTecnicaDO ficha;
 
-	public CrearAfectacion(GestionAfectaciones gestion, FichaTecnicaDO ficha) {
+	public CrearAfectacion(AsignableAfectaciones gestion, FichaTecnicaDO ficha) {
 		setTitle("Agregar afectaci\u00F3n");
 		setType(Type.UTILITY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -138,7 +138,6 @@ public class CrearAfectacion extends JFrame{
 			btnAgregar.setForeground(Color.ORANGE);
 			btnAgregar.setBackground(Color.DARK_GRAY);
 			btnAgregar.setBounds(165, 73, 89, 23);
-
 			btnAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Object seleccionTipo = getComboBoxTipoAfectacion().getSelectedItem();

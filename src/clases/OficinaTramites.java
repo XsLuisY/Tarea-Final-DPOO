@@ -3,7 +3,6 @@ package clases;
 
 import java.util.ArrayList;
 import java.util.UUID;
-import java.util.Date;
 
 public class OficinaTramites{
 
@@ -48,15 +47,15 @@ public class OficinaTramites{
 	}
 
 	//CRUD-FichaTecnicaDO
-	/*Create*/ public Boolean addFichaTecnicaDO(Vivienda vivienda){
+	/*Create*/ public Boolean addFichaTecnicaDO(Vivienda vivienda, ArrayList<Afectacion> afectaciones, ArrayList<Mueble> muebles){
 		Boolean add=false;
 
 		if(!existFichaTecnicaDO(vivienda)){
-			FichaTecnicaDO ficha = new FichaTecnicaDO(vivienda);
+			FichaTecnicaDO ficha = new FichaTecnicaDO(vivienda, afectaciones, muebles);
 			fichas.add(ficha);
 			add=true;
 		}	
-		else throw new IllegalArgumentException("Esta FichaTecnicaDO ya existe");
+		else throw new IllegalArgumentException("Esta vivienda ya tiene una Ficha Tecnica de Daños Ocacionados asociada");
 		return add;
 	}
 	/*Read*/ public FichaTecnicaDO readFichaTecnicaDO(UUID id){	
@@ -71,13 +70,17 @@ public class OficinaTramites{
 		return ficha; 			
 	}
 	/*Update*/ public Boolean updateFichaTecnicaDO(UUID id, Vivienda vivienda){
-		Boolean updt=!existFichaTecnicaDO(id);
-		if(updt){
-			FichaTecnicaDO f = readFichaTecnicaDO(id);
-			f.setVivienda(vivienda);
-		}
+		Boolean updt=false;
+
+		if(existFichaTecnicaDO(id))
+			if(vivienda!=null) {
+				FichaTecnicaDO f = readFichaTecnicaDO(id);
+				f.setVivienda(vivienda);
+				updt=true;
+			}else throw new NullPointerException("La nueva vivienda no puede ser null.");
 		else throw new IllegalArgumentException("Esta FichaTecnicaDO no existe");
 		return updt;
+
 	}	
 	/*Delete*/ public Boolean deleteFichaTecnicaDO(UUID id){
 		Boolean del=existFichaTecnicaDO(id);
@@ -99,11 +102,16 @@ public class OficinaTramites{
 	}
 	public Boolean existFichaTecnicaDO(Vivienda vivienda){
 		Boolean exist=false;
-		for(int i=0; i<fichas.size()&& !exist; i++){
-			FichaTecnicaDO f = fichas.get(i);
+		if(vivienda!=null)
+		for(int i=0; i<getFichas().size()&& !exist; i++){
+			FichaTecnicaDO f = getFichas().get(i);
 			if(f.getVivienda().equals(vivienda))
 				exist=true;
 		}
+		else 
+			throw new NullPointerException("La vivienda es null");
+		if(exist)
+			throw new IllegalArgumentException("La vivienda ya tiene una Ficha Técnica de Daños Ocasionados asignada");
 		return exist;
 	}
 
@@ -312,7 +320,7 @@ public class OficinaTramites{
 
 	//------------------------------Inicializar Datos-------------------------------------
 	//Inicializar materiales
-	public void inicializarMateriales(String txtMateriales){
+	public void inicializarMateriales(){
 		materiales.add(new Material("Cemento","Saco", 360));
 		materiales.add(new Material("Cabilla","Metro", 460));
 		materiales.add(new Material("Bloque","Unidad", 120));

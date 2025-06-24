@@ -30,7 +30,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class Login extends JFrame {
-
+	private static Login login;
 	private JPanel contentPane;
 	private JPasswordField password;
 	private JTextField usuario;
@@ -40,14 +40,21 @@ public class Login extends JFrame {
 	private JLabel lblUsuario;
 	private JButton btnIniciar;
 	private MICONS micons;
-
-	public Login() {
+	
+	//Singleton
+	public static Login getLogin() {
+		if (login == null)
+			login = new Login();		
+		return login;
+	}
+	
+	//Constructor
+	private Login() {		
 		setTitle("Inicio de Sesión");
 		setType(Type.UTILITY);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		micons=MICONS.getMICONS();	
-
+		micons=MICONS.getMICONS();			
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.ORANGE);

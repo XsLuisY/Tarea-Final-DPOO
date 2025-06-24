@@ -19,16 +19,15 @@ public class FichaTecnicaDO {
 	private UUID id;
 
 	//Constructor
-	public FichaTecnicaDO(Vivienda vivienda){
+	public FichaTecnicaDO(Vivienda vivienda, ArrayList<Afectacion> afectaciones, ArrayList<Mueble> muebles){
 		setId();
 		setVivienda(vivienda);
-		fechaLevantamiento= new Date();
-		afectaciones = new ArrayList<Afectacion>();
-		muebles = new ArrayList<Mueble>();
+		setFechaLevantamiento();
+		setAfectaciones(afectaciones);
+		setMuebles(muebles);
 	}
 
-	public FichaTecnicaDO() {
-		setId();
+	public FichaTecnicaDO() {				
 		afectaciones = new ArrayList<Afectacion>();
 		muebles = new ArrayList<Mueble>();
 	}
@@ -41,7 +40,7 @@ public class FichaTecnicaDO {
 		return vivienda;		
 	}
 	public void setFechaLevantamiento(){
-		
+		fechaLevantamiento=new Date();
 	}
 	public Date getFechaLevantamiento(){
 		return fechaLevantamiento;		
@@ -97,7 +96,7 @@ public class FichaTecnicaDO {
 		Mueble mueble= readMueble(newNombre);
 		Mueble m= readMueble(nombre);
 		if(m!=null){
-		  if(mueble==null){
+		  if(mueble==null || mueble.getNombre().equals(m.getNombre())){
 		  m.setCantidad(newcantidad);
 		  m.setNombre(newNombre);
 		  updt= true;

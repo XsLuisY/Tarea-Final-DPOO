@@ -56,6 +56,7 @@ public class GestionMateriales extends JFrame {
 		addPopup(getTableMateriales(), getPopupMenu());
 		this.oficina=oficina;
 		materiales=oficina.getMateriales();
+		actualizarTableMateriales(materiales);
 	}
 	public JMenuBar getBarraSuperior(){ 
 		if(barraSuperior==null){

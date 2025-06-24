@@ -13,6 +13,10 @@ public JefeNucleo(String nombre, String ci) {
 	setNombre(nombre);
 	setCI(ci);
 }
+public JefeNucleo() {
+nombre=null;
+ci=null;
+}
 //Encapsulamiento
 public String getNombre() {
 	return nombre;

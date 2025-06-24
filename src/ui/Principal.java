@@ -182,7 +182,7 @@ public class Principal extends JFrame {
 			mntmCerrarSesion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					Login login = new Login();
+					Login login =Login.getLogin();
 					login.setVisible(true);
 				}
 			});
