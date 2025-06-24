@@ -2,7 +2,10 @@ package clases;
 import interfaces.Identificable;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.UUID;
 
 public class MICONS {
@@ -152,7 +155,67 @@ public class MICONS {
 	//Reportes
 
 	//Anthony
+	// 1
+	public Map<String, Double> buscarAfectacionTipologiaConstructiva() {
+    // 1. Preparar contadores
+    Map<String, Integer> totalPorTipo = new HashMap<>();
+    Map<String, Integer> danadasPorTipo = new HashMap<>();
+    
+    // Inicializar contadores para todos los tipos I-V
+    String[] tipos = {"Tipo I", "Tipo II", "Tipo III", "Tipo IV", "Tipo V"};
+    for (String tipo : tipos) {
+        totalPorTipo.put(tipo, 0);
+        danadasPorTipo.put(tipo, 0);
+    }
 
+    // 2. Recorrer todas las oficinas de trámites
+    for (OficinaTramites oficina : this.oficinas) {
+        for (FichaTecnicaDO ficha : oficina.getFichas()) {
+            Vivienda v = ficha.getVivienda();
+            String tipo = v.getTipologiaConstructiva();
+            
+            // Actualizar contador total
+            totalPorTipo.put(tipo, totalPorTipo.get(tipo) + 1);
+            
+            // Verificar daños (muebles o afectaciones)
+            if (!ficha.getMuebles().isEmpty() || !ficha.getAfectaciones().isEmpty()) {
+                danadasPorTipo.put(tipo, danadasPorTipo.get(tipo) + 1);
+            }
+        }
+    }
+
+    // 3. Calcular porcentajes
+    Map<String, Double> porcentajes = new LinkedHashMap<>();
+    for (String tipo : tipos) {
+        int total = totalPorTipo.get(tipo);
+        int danadas = danadasPorTipo.get(tipo);
+        
+        porcentajes.put(tipo, total > 0 ? (danadas * 100.0) / total : 0.0);
+    }
+    
+    return porcentajes;
+}
+
+	// 2
+  public ArrayList<Vivienda> buscarViviendasMasVulnerables(){
+    ArrayList<Vivienda> vulnerables= new ArrayList<Vivienda>();
+    int mayor= 0;
+    int mayoraux;
+    if(viviendas!=null){
+      for(Vivienda v: viviendas){
+        mayoraux= v.getCantNinios()+v.getCantAncianos()+v.getCantEmbarazadas();
+      if(mayoraux>mayor){
+        mayor=mayoraux;
+        vulnerables.clear();
+      }
+      else
+       if(mayoraux==mayor){
+         vulnerables.add(v);
+       }
+     }
+    }
+    return vulnerables;
+  }
 	//Luis
 
 	//3.........................................
@@ -197,7 +260,7 @@ public class MICONS {
 		viviendas.add(new Vivienda("Luis","05011045061","Calle 20 entre 23 y 21","Propiedad","Casa","Tipo I",false,3,3,4,2,1,1,5));
 		viviendas.add(new Vivienda("Ernesto","03061545181","Calle Fernanda entre C y B","Usufructo","Apartamento","Tipo III",true,3,4,4,1,0,1,3));
 		viviendas.add(new Vivienda("Diana","02092317632","Calle A entre D y C","Arrendamiento","Otro","Tipo IV",false,5,5,4,3,0,0,8));
-		viviendas.add(new Vivienda("Ana","01120564637","Calle Balear entre Piedra y Soto","Providencia","Boh�o","Tipo V",false,6,7,5,2,0,1,7));
+		viviendas.add(new Vivienda("Ana","01120564637","Calle Balear entre Piedra y Soto","Providencia","Boh�o","Tipo V",false,6,7,5,2,0,1,7));
 	}
 
 }
