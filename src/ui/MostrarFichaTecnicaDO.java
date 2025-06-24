@@ -20,11 +20,16 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JMenuBar;
 
+import clases.Afectacion;
+import clases.AfectacionPared;
+import clases.AfectacionTecho;
 import clases.FichaTecnicaDO;
 import clases.MICONS;
+import clases.Mueble;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 public class MostrarFichaTecnicaDO extends JFrame {
 	private FichaTecnicaDO ficha;
@@ -34,15 +39,7 @@ public class MostrarFichaTecnicaDO extends JFrame {
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
 	private JScrollPane scrollPaneAfectaciones;
-	private JPopupMenu popupMenuAfectaciones;
-	private JMenuItem mntmAgregar;
-	private JMenuItem mntmModificar;
-	private JMenuItem mntmEliminar;
 	private JScrollPane scrollPaneMuebles;
-	private JPopupMenu popupMenuMuebles;
-	private JMenuItem mntmAgregarMueble ;
-	private JMenuItem mntmModificarMueble;
-	private JMenuItem mntmEliminarMueble;
 	private JLabel lblAfectacionInmueble; 
 	private JLabel lblAfectacinVivienda; 
 	private JLabel lblFechaLevantamiento;
@@ -59,8 +56,8 @@ public class MostrarFichaTecnicaDO extends JFrame {
 		setBounds(100, 100, 320, 550);
 		setContentPane(getContentPane());
 		setJMenuBar(getBarraSuperior());
-		addPopup(getTableAfectaciones(), getPopupMenuAfectaciones());
-		addPopup(getTableMuebles(), getPopupMenuMuebles());
+		actualizarTableAfectaciones(ficha.getAfectaciones());
+		actualizarTableMuebles(ficha.getMuebles());
 	}
 
 	public JPanel getContentPane(){
@@ -116,52 +113,9 @@ public class MostrarFichaTecnicaDO extends JFrame {
 			tableAfectaciones.setFillsViewportHeight(true);
 			tableAfectaciones.setForeground(Color.ORANGE);
 			tableAfectaciones.setBackground(Color.DARK_GRAY);
-			tableAfectaciones.setModel(new DefaultTableModel(
-					new Object[][] {
-					},
-					new String[] {
-							"Tipo", "Material Predominante"
-					}
-					));			
+			tableAfectaciones.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Tipo", "Material Predominante"}));			
 		}
 		return tableAfectaciones;
-	}
-	public JPopupMenu getPopupMenuAfectaciones(){
-		if(popupMenuAfectaciones==null){
-			popupMenuAfectaciones = new JPopupMenu();
-			popupMenuAfectaciones.add(getMntmAgregar());
-			popupMenuAfectaciones.add(getMntmModificar());
-			popupMenuAfectaciones.add(getMntmEliminar());
-		}
-		return popupMenuAfectaciones;
-	}
-	public JMenuItem getMntmAgregar(){			
-		if(mntmAgregar==null){
-			mntmAgregar = new JMenuItem("Agregar");
-			mntmAgregar.setHorizontalAlignment(SwingConstants.RIGHT);
-			mntmAgregar.setBackground(Color.DARK_GRAY);
-			mntmAgregar.setForeground(Color.ORANGE);
-		
-		}
-		return mntmAgregar;
-	}
-	public JMenuItem getMntmModificar(){
-		if(mntmModificar==null){
-			mntmModificar = new JMenuItem("Modificar");
-			mntmModificar.setHorizontalAlignment(SwingConstants.RIGHT);
-			mntmModificar.setBackground(Color.DARK_GRAY);
-			mntmModificar.setForeground(Color.ORANGE);
-		}
-		return mntmModificar;
-	}
-	public JMenuItem getMntmEliminar(){	
-		if(mntmEliminar==null){
-			mntmEliminar = new JMenuItem("Eliminar");
-			mntmEliminar.setHorizontalAlignment(SwingConstants.RIGHT);
-			mntmEliminar.setBackground(Color.DARK_GRAY);
-			mntmEliminar.setForeground(Color.ORANGE);
-		}
-		return mntmEliminar;
 	}
 	public JScrollPane getScrollPaneMuebles(){
 		if(scrollPaneMuebles==null){
@@ -174,55 +128,12 @@ public class MostrarFichaTecnicaDO extends JFrame {
 	public JTable getTableMuebles(){
 		if(tableMuebles==null){
 			tableMuebles = new JTable();
-			tableMuebles.setModel(new DefaultTableModel(
-					new Object[][] {
-					},
-					new String[] {
-							"Mueble", "Cantidad"
-					}
-					));
+			tableMuebles.setModel(new DefaultTableModel(new Object[][] {}, new String[] {"Mueble", "Cantidad"}));
 			tableMuebles.setFillsViewportHeight(true);
 			tableMuebles.setForeground(Color.ORANGE);
 			tableMuebles.setBackground(Color.DARK_GRAY);
 		}
 		return tableMuebles;
-	}
-	public JPopupMenu getPopupMenuMuebles(){ 
-		if(popupMenuMuebles==null){
-			popupMenuMuebles = new JPopupMenu();
-			popupMenuMuebles.add(getMntmAgregarMueble());
-			popupMenuMuebles.add(getMntmModificarMueble());
-			popupMenuMuebles.add(getMntmEliminarMueble());
-		}
-		return popupMenuMuebles;
-	}
-	public JMenuItem getMntmAgregarMueble(){
-		if(mntmAgregarMueble==null){
-			mntmAgregarMueble = new JMenuItem("Agregar");
-			mntmAgregarMueble.setBackground(Color.DARK_GRAY);
-			mntmAgregarMueble.setHorizontalAlignment(SwingConstants.RIGHT);
-			mntmAgregarMueble.setForeground(Color.ORANGE);
-		}
-		return mntmAgregarMueble;
-	}
-	public JMenuItem getMntmModificarMueble(){
-		if(mntmModificarMueble==null){
-			mntmModificarMueble = new JMenuItem("Modificar");
-			mntmModificarMueble.setBackground(Color.DARK_GRAY);
-			mntmModificarMueble.setHorizontalAlignment(SwingConstants.RIGHT);
-			mntmModificarMueble.setForeground(Color.ORANGE);
-
-		}
-		return mntmModificarMueble;
-	}
-	public JMenuItem getMntmEliminarMueble(){
-		if(mntmEliminarMueble==null){
-			mntmEliminarMueble= new JMenuItem("Eliminar");
-			mntmEliminarMueble.setBackground(Color.DARK_GRAY);
-			mntmEliminarMueble.setHorizontalAlignment(SwingConstants.RIGHT);
-			mntmEliminarMueble.setForeground(Color.ORANGE);
-		}
-		return mntmEliminarMueble;
 	}
 	public JLabel getLblAfectacionInmueble(){		
 		if(lblAfectacionInmueble==null){
@@ -242,15 +153,18 @@ public class MostrarFichaTecnicaDO extends JFrame {
 	}
 	public JLabel getLblFechaLevantamiento(){
 		if(lblFechaLevantamiento==null){
-			lblFechaLevantamiento= new JLabel("Fecha Levantamiento:");
-			lblFechaLevantamiento.setBounds(10, 434, 133, 14);
+			lblFechaLevantamiento= new JLabel("Fecha Levantamiento: "
+		+ficha.getFechaLevantamiento().getDate()+"/"
+		+ficha.getFechaLevantamiento().getMonth()+"/"
+		+ficha.getFechaLevantamiento().getYear());
+			lblFechaLevantamiento.setBounds(10, 431, 282, 34);
 		}
 		return lblFechaLevantamiento;
 	}
 	public JLabel getLblId(){
 		if(lblId==null){
-			lblId = new JLabel("ID:");
-			lblId.setBounds(10, 462, 172, 14);
+			lblId = new JLabel("ID: "+ficha.getId().toString());
+			lblId.setBounds(10, 462, 282, 14);
 		}
 		return lblId;
 	}
@@ -282,16 +196,61 @@ public class MostrarFichaTecnicaDO extends JFrame {
 	}
 	public JLabel getLblJefeNucleo(){	
 		if(lblJefeNucleo==null){
-			lblJefeNucleo = new JLabel("Jefe de n\u00FAcleo:");
+			lblJefeNucleo = new JLabel("Jefe de n\u00FAcleo: "+ficha.getVivienda().getJefeNucleo().getNombre());
 			lblJefeNucleo.setBounds(10, 36, 282, 14);
 		}
 		return lblJefeNucleo;
 	}
 	public JLabel getLblDireccion(){
 		if(lblDireccion==null){
-			lblDireccion = new JLabel("Direcci\u00F3n:");
+			lblDireccion = new JLabel("Direcci\u00F3n: "+ficha.getVivienda().getDireccion());
 			lblDireccion.setBounds(10, 61, 282, 14);
 		}
 		return lblDireccion;
 	}
+
+	//Metodos
+	public void actualizarTableAfectaciones(ArrayList<Afectacion> afectaciones) {
+		DefaultTableModel model = (DefaultTableModel) tableAfectaciones.getModel();
+		model.setRowCount(0); // Limpiar la tabla
+
+		String tipo;
+		String materialPredominante;
+		String esDerrumbeTotal;
+		String esDeCarga;
+		if(afectaciones!=null)
+			for (int i = 0; i < afectaciones.size(); i++) {
+				if (afectaciones.get(i) instanceof AfectacionPared){				
+					AfectacionPared a =  ((AfectacionPared)afectaciones.get(i));
+					tipo = "Pared";
+					materialPredominante = a.getMaterialPredominante();
+					esDerrumbeTotal = a.getEsDerrumbeTotal()? "Total" : "Parcial";
+					esDeCarga= a.getEsDeCarga() ? "Sí" : "No";
+				}
+				else{			
+					AfectacionTecho a =  ((AfectacionTecho)afectaciones.get(i));
+					tipo = "Techo";	
+					materialPredominante = a.getMaterialPredominante();		
+					esDerrumbeTotal = a.getEsDerrumbeTotal()? "Total" : "Parcial";
+					esDeCarga="-";
+				}
+				Object[] newRow = new Object[] { tipo, materialPredominante, esDerrumbeTotal, esDeCarga};
+				model.addRow(newRow);			
+			}
+		getTableAfectaciones().setModel(model);
+	}
+	public void actualizarTableMuebles(ArrayList<Mueble> muebles) {
+		DefaultTableModel model = (DefaultTableModel) tableMuebles.getModel();
+		model.setRowCount(0); // Limpiar la tabla
+		if(muebles!=null)
+			for (int i = 0; i < muebles.size(); i++) {
+				Mueble m = muebles.get(i);
+				String nombre=m.getNombre();
+				String cantidad=((Integer)m.getCantidad()).toString();
+				Object[] newRow = new Object[]{nombre, cantidad};
+				model.addRow(newRow);			
+			}
+		getTableMuebles().setModel(model);
+	}		
+
 }

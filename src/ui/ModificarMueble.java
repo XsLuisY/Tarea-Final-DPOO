@@ -1,6 +1,6 @@
 package ui;
 
-import interfaces.GestionMuebles;
+import interfaces.AsignableMuebles;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -30,7 +30,7 @@ public class ModificarMueble extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	private FichaTecnicaDO ficha;
-	private GestionMuebles gestion;
+	private AsignableMuebles gestion;
 	private Mueble mueble;
 	
 	private JPanel contentPane;
@@ -43,7 +43,7 @@ public class ModificarMueble extends JFrame {
 	private JButton buttonModificar;
 
 
-	public ModificarMueble(GestionMuebles gestion, FichaTecnicaDO ficha, Mueble mueble) {
+	public ModificarMueble(AsignableMuebles gestion, FichaTecnicaDO ficha, Mueble mueble) {
 		
 		setType(Type.UTILITY);
 		setTitle("Modificar mueble");
@@ -141,8 +141,8 @@ public class ModificarMueble extends JFrame {
 			            JOptionPane.showMessageDialog(ModificarMueble.this, "La cantidad debe ser mayor que cero.", "Validación", JOptionPane.WARNING_MESSAGE);
 			        } else {
 			            try {
-			                boolean add = ficha.updtMueble(mueble.getNombre(), nombre, cantidad);
-			                if (add) {
+			                boolean updt = ficha.updtMueble(mueble.getNombre(), nombre, cantidad);
+			                if (updt) {
 			                    JOptionPane.showMessageDialog(ModificarMueble.this, "Mueble modificardo exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 			                    gestion.actualizarTableMuebles(ficha.getMuebles());
 			                    dispose();

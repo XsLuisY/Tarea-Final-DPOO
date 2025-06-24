@@ -8,27 +8,33 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JPopupMenu;
+
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Color;
+
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
 import javax.swing.JMenuBar;
 import javax.swing.table.DefaultTableModel;
+
 import clases.FichaTecnicaDO;
 import clases.MICONS;
 import clases.OficinaTramites;
+import clases.Vivienda;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class GestionFichaTecnicaDO extends JFrame {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private ArrayList<FichaTecnicaDO> fichas;
 	private OficinaTramites oficina;
 	private JMenuBar barraSuperior;
@@ -44,14 +50,14 @@ public class GestionFichaTecnicaDO extends JFrame {
 
 	public GestionFichaTecnicaDO(OficinaTramites oficina) {
 		setTitle("Gesti\u00F3n de Fichas T\u00E9cnicas");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
 		this.oficina=oficina;
 		fichas=oficina.getFichas();
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 		addPopup(getTableFichas(), getPopupMenu());
-
+		actualizarTableFichas(fichas);
 	}
 
 	public JMenuBar getBarraSuperior(){ 
@@ -134,7 +140,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 			menuItemAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();					
-					CrearFichaTecnicaDO c =new CrearFichaTecnicaDO(GestionFichaTecnicaDO.this);
+					CrearFichaTecnicaDO c =new CrearFichaTecnicaDO(GestionFichaTecnicaDO.this, oficina);
 					c.setVisible(true);					
 				}
 			});
@@ -146,13 +152,15 @@ public class GestionFichaTecnicaDO extends JFrame {
 			menuItemMostrar = new JMenuItem("Mostrar");
 			menuItemMostrar.setHorizontalAlignment(SwingConstants.RIGHT);
 			menuItemMostrar.setForeground(Color.ORANGE);
-			menuItemMostrar.setBackground(Color.DARK_GRAY);
+			menuItemMostrar.setBackground(Color.DARK_GRAY);			
 			menuItemMostrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
 					FichaTecnicaDO f = obtenerFichaTecnicaSeleccionada();
-					MostrarFichaTecnicaDO m = new MostrarFichaTecnicaDO(f);
-					m.setVisible(true);
+					if (f != null) {				
+						MostrarFichaTecnicaDO m = new MostrarFichaTecnicaDO(f);
+						m.setVisible(true);
+					} else 
+						JOptionPane.showMessageDialog(GestionFichaTecnicaDO.this, "Debes seleccionar una vivienda para mostrar.", "Aviso", JOptionPane.WARNING_MESSAGE);						
 				}
 			});
 		}
@@ -166,10 +174,15 @@ public class GestionFichaTecnicaDO extends JFrame {
 			menuItemModificar.setBackground(Color.DARK_GRAY);
 			menuItemModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
 					FichaTecnicaDO f = obtenerFichaTecnicaSeleccionada();
-					ModificarFichaTecnicaDO c = new ModificarFichaTecnicaDO(GestionFichaTecnicaDO.this, f);
-					c.setVisible(true);
+					if(f!=null){
+						dispose();
+						ModificarFichaTecnicaDO m = new ModificarFichaTecnicaDO(GestionFichaTecnicaDO.this, oficina, f);
+						m.setVisible(true);
+					}
+
+					else 
+						JOptionPane.showMessageDialog(null, "Debe seleccionar una Ficha Tecnica de Daños Ocacionados para modificar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 				}
 			});
 		}
@@ -181,6 +194,22 @@ public class GestionFichaTecnicaDO extends JFrame {
 			menuItemEliminar.setHorizontalAlignment(SwingConstants.RIGHT);
 			menuItemEliminar.setForeground(Color.ORANGE);
 			menuItemEliminar.setBackground(Color.DARK_GRAY);
+			menuItemEliminar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					FichaTecnicaDO f = obtenerFichaTecnicaSeleccionada();
+					if(f!=null){
+						int confirmar = JOptionPane.showConfirmDialog(GestionFichaTecnicaDO.this,"¿Seguro que deseas eliminar esta FTDO?","Confirmar eliminación",JOptionPane.YES_NO_OPTION);
+
+						if (confirmar == JOptionPane.YES_OPTION) {
+							oficina.deleteFichaTecnicaDO(f.getId());
+							JOptionPane.showMessageDialog(null, "Ficha Tecnica de Daños Ocacionados  eliminada con exito.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+							actualizarTableFichas(oficina.getFichas());
+
+						}
+					}else 
+						JOptionPane.showMessageDialog(null, "Debe seleccionar una Ficha Tecnica de Daños Ocacionados para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+				}
+			});
 		}
 		return menuItemEliminar;
 	}
@@ -203,9 +232,6 @@ public class GestionFichaTecnicaDO extends JFrame {
 		});
 	}
 	//Metodos
-	public OficinaTramites getOficinaTramites(){
-		return oficina;
-	}
 	public FichaTecnicaDO obtenerFichaTecnicaSeleccionada(){
 		FichaTecnicaDO f = null;
 		int pos = getTableFichas().getSelectedRow();
@@ -214,14 +240,14 @@ public class GestionFichaTecnicaDO extends JFrame {
 		}
 		return f;
 	}
-	public void actualizarTableFichas() {
+	public void actualizarTableFichas(ArrayList<FichaTecnicaDO> fichas) {
 		DefaultTableModel model = (DefaultTableModel) getTableFichas().getModel();
-		model.setRowCount(0); // Limpiar la tabla
+		model.setRowCount(0); //
 
-		for(FichaTecnicaDO f:  fichas){
-			String direccion=f.getVivienda().getDireccion();
+		for(FichaTecnicaDO f:  fichas){//TODO Revisar asignacion de direccion
+			String direccion = (f.getVivienda() != null) ? f.getVivienda().getDireccion() : "Sin dirección";
 			Date fechaLevantamiento=f.getFechaLevantamiento();
-			Object[] newRow = new Object[]{direccion, fechaLevantamiento, f.getId()};
+			Object[] newRow = new Object[]{direccion, fechaLevantamiento.getDate()+"/"+fechaLevantamiento.getMonth()+"/"+fechaLevantamiento.getYear(), f.getId()};
 			model.addRow(newRow);			
 		}
 		getTableFichas().setModel(model);

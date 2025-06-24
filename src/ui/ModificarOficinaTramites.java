@@ -94,6 +94,7 @@ public class ModificarOficinaTramites extends JDialog {
 					if (!oficinaModificar.equalsIgnoreCase(newConsejoPopular)) 				
 						try {
 							micons.updateOficinaTramites(oficinaModificar, newConsejoPopular);
+							gestion.actualizarListaOficinas();
 							JOptionPane.showMessageDialog(null, "Oficina actualizada exitosamente.");
 							dispose();
 						} catch (IllegalArgumentException ex) {

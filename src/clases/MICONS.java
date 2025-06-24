@@ -1,4 +1,5 @@
 package clases;
+
 import interfaces.Identificable;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class MICONS {
 
 	private ArrayList<OficinaTramites> oficinas;
 	private ArrayList<Vivienda> viviendas;
+	
 	//Singleton
 	public static MICONS getMICONS() {
 		if (micons == null)
@@ -26,10 +28,13 @@ public class MICONS {
 	//Encapsulamiento
 	public ArrayList<OficinaTramites> getOficinaTramites(){
 		return oficinas;
+	}	
+	public ArrayList<Vivienda> getViviendas(){
+		return viviendas;
 	}
+	
 	public static Boolean existUUID(UUID id){
-		Boolean exist=false;
-		for(int i=0; i<listaId.size()&& !exist; i++)
+		Boolean exist=false;		
 			if(listaId.containsKey(id))
 				exist=true;
 		return exist;
@@ -186,18 +191,18 @@ public class MICONS {
 		oficinas.add(new OficinaTramites("Arroyo Naranjo"));	
 		oficinas.add(new OficinaTramites("Boyeros"));	
 		oficinas.add(new OficinaTramites("Vedado"));	
-		oficinas.add(new OficinaTramites("10 de Octubre"));	
+		oficinas.add(new OficinaTramites("Diez de Octubre"));	
 		oficinas.add(new OficinaTramites("Cotorro"));	
 		oficinas.add(new OficinaTramites("Cerro"));	
 		oficinas.add(new OficinaTramites("La Lisa"));		
 	}
 
 	public void inicializarViviendas(){
-		viviendas.add(new Vivienda("Paco","05012045762","Calle J entre L y K","Propiedad","Casa","Tipo II",true,4,5,4,2,3,1,6));
-		viviendas.add(new Vivienda("Luis","05011045061","Calle 20 entre 23 y 21","Propiedad","Casa","Tipo I",false,3,3,4,2,1,1,5));
-		viviendas.add(new Vivienda("Ernesto","03061545181","Calle Fernanda entre C y B","Usufructo","Apartamento","Tipo III",true,3,4,4,1,0,1,3));
-		viviendas.add(new Vivienda("Diana","02092317632","Calle A entre D y C","Arrendamiento","Otro","Tipo IV",false,5,5,4,3,0,0,8));
-		viviendas.add(new Vivienda("Ana","01120564637","Calle Balear entre Piedra y Soto","Providencia","Bohío","Tipo V",false,6,7,5,2,0,1,7));
+		viviendas.add(new Vivienda("Paco","05012045762","Calle J entre L y K","Propiedad","Casa","Tipo II",true,4,5,2,2,3,1,6));
+		viviendas.add(new Vivienda("Luis","05011045061","Calle 20 entre 23 y 21","Propiedad","Casa","Tipo I",false,4,5,2,2,1,1,5));
+		viviendas.add(new Vivienda("Ernesto","03061545181","Calle Fernanda entre C y B","Usufructo","Apartamento","Tipo III",true,4,4,3,1,0,1,3));
+		viviendas.add(new Vivienda("Diana","02092317632","Calle A entre D y C","Arrendamiento","Otro","Tipo IV",false,4,5,3,3,0,0,8));
+		viviendas.add(new Vivienda("Ana","01120564637","Calle Balear entre Piedra y Soto","Providencia","Bohío","Tipo V",false,4,7,2,2,0,1,7));
 	}
 
 }

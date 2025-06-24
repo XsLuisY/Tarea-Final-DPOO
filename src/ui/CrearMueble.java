@@ -1,6 +1,6 @@
 package ui;
 
-import interfaces.GestionMuebles;
+import interfaces.AsignableMuebles;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -22,7 +22,7 @@ public class CrearMueble extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	private FichaTecnicaDO ficha;
-	private GestionMuebles gestion;
+	private AsignableMuebles gestion;
 	
 	private JPanel contentPane;
 	private JMenuBar barraSuperior;
@@ -34,7 +34,7 @@ public class CrearMueble extends JFrame {
 	private JButton buttonAgregar;
 
 
-	public CrearMueble(GestionMuebles gestion, FichaTecnicaDO ficha) {
+	public CrearMueble(AsignableMuebles gestion, FichaTecnicaDO ficha) {
 		this.gestion=gestion;
 		this.ficha=ficha;
 		

@@ -1,13 +1,12 @@
 package ui;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.JPopupMenu;
@@ -21,19 +20,19 @@ import javax.swing.JMenuBar;
 
 import clases.FichaTecnicaDO;
 import clases.MICONS;
-import clases.OficinaTramites;
+import clases.Material;
 import clases.Vivienda;
 
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.util.Date;
 import java.util.ArrayList;
 
 public class GestionViviendas extends JFrame {
+	private static final long serialVersionUID = 1L;
+
 	private MICONS micons;
 	private ArrayList<Vivienda> viviendas;
-
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
 	private JPanel contentPane;
@@ -49,12 +48,14 @@ public class GestionViviendas extends JFrame {
 		setTitle("GestiÃ³n de Viviendas");
 		setType(Type.UTILITY);
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 390, 300);
 		micons=MICONS.getMICONS();	
+		viviendas=micons.getViviendas();
 		setJMenuBar(getBarraSuperior());		
 		setContentPane(getContentPane());
-		addPopup(getTable(), getPopupMenu());
+		addPopup(getTableViviendas(), getPopupMenu());
+		actualizarTableViviendas();
 	}
 
 	public JMenuBar getBarraSuperior(){ 
@@ -94,11 +95,11 @@ public class GestionViviendas extends JFrame {
 		if(scrollPane==null){
 			scrollPane = new JScrollPane();
 			scrollPane.setBounds(10, 11, 364, 224);
-			scrollPane.setViewportView(getTable());
+			scrollPane.setViewportView(getTableViviendas());
 		}
 		return scrollPane;
 	}
-	public JTable getTable(){
+	public JTable getTableViviendas(){
 		if(table==null){
 			table = new JTable();
 			table.setFillsViewportHeight(true);
@@ -151,9 +152,15 @@ public class GestionViviendas extends JFrame {
 			menuItemMostrar.setBackground(Color.DARK_GRAY);
 			menuItemMostrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-					MostrarVivienda v =new MostrarVivienda();
-					v.setVisible(true);
+					Vivienda v = obtenerViviendaSeleccionada();
+					if (v != null) {
+						dispose();
+						MostrarVivienda m =new MostrarVivienda(v);
+						m.setVisible(true);
+					} else 
+						JOptionPane.showMessageDialog(GestionViviendas.this, "Debes seleccionar una vivienda para mostrar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+
+					
 				}
 			});
 		}
@@ -167,11 +174,17 @@ public class GestionViviendas extends JFrame {
 			menuItemModificar.setBackground(Color.DARK_GRAY);
 			menuItemModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-					ModificarVivienda v =new ModificarVivienda();
-					v.setVisible(true);
+					Vivienda v = obtenerViviendaSeleccionada();
+					if (v != null) {
+						dispose();
+						ModificarVivienda m =new ModificarVivienda(GestionViviendas.this, v);
+						m.setVisible(true);
+					} else 
+						JOptionPane.showMessageDialog(GestionViviendas.this, "Debes seleccionar una vivienda para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+
 				}
 			});
+
 		}
 		return menuItemModificar;
 	}
@@ -181,7 +194,22 @@ public class GestionViviendas extends JFrame {
 			menuItemEliminar.setHorizontalAlignment(SwingConstants.RIGHT);
 			menuItemEliminar.setForeground(Color.ORANGE);
 			menuItemEliminar.setBackground(Color.DARK_GRAY);
-			
+			menuItemEliminar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					Vivienda v = obtenerViviendaSeleccionada();
+					if(v!=null){
+						int confirmar = JOptionPane.showConfirmDialog(GestionViviendas.this,"¿Seguro que deseas eliminar esta FTDO?","Confirmar eliminación",JOptionPane.YES_NO_OPTION);
+
+						if (confirmar == JOptionPane.YES_OPTION) {
+							micons.deleteVivienda(v.getJefeNucleo().getCI());
+							JOptionPane.showMessageDialog(null, "Ficha Tecnica de Daños Ocacionados  eliminada con exito.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+							actualizarTableViviendas();
+
+						}
+					}else 
+						JOptionPane.showMessageDialog(null, "Debe seleccionar una Ficha Tecnica de Daños Ocacionados para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+				}
+			});
 		}
 		return menuItemEliminar;
 	}
@@ -203,7 +231,7 @@ public class GestionViviendas extends JFrame {
 			}
 		});
 	}
-	
+
 	public Vivienda obtenerViviendaSeleccionada(){
 		Vivienda v = null;
 		int pos = getTableViviendas().getSelectedRow();
@@ -217,9 +245,7 @@ public class GestionViviendas extends JFrame {
 		model.setRowCount(0); // Limpiar la tabla
 
 		for(Vivienda v:  viviendas){
-			String direccion=f.getVivienda().getDireccion();
-			Date fechaLevantamiento=f.getFechaLevantamiento();
-			Object[] newRow = new Object[]{direccion, fechaLevantamiento, f.getId()};
+			Object[] newRow = new Object[]{v.getJefeNucleo().getNombre(),v.getDireccion(), v.getJefeNucleo().getCI()};
 			model.addRow(newRow);			
 		}
 		getTableViviendas().setModel(model);

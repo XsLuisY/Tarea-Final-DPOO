@@ -1,7 +1,7 @@
 package ui;
 
 
-import interfaces.GestionAfectaciones;
+import interfaces.AsignableAfectaciones;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -33,7 +33,7 @@ public class ModificarAfectacion extends JFrame{
 
 	private static final long serialVersionUID = 1L;
 
-	private GestionAfectaciones gestion;
+	private AsignableAfectaciones gestion;
 	private FichaTecnicaDO ficha;
 	private Afectacion afectacion;
 
@@ -49,7 +49,7 @@ public class ModificarAfectacion extends JFrame{
 	private JComboBox<String> comboBoxEsDerrumbeTotal;
 	private JLabel lblGravedad;
 
-	public ModificarAfectacion(GestionAfectaciones gestion, FichaTecnicaDO ficha, Afectacion afectacion) {
+	public ModificarAfectacion(AsignableAfectaciones gestion, FichaTecnicaDO ficha, Afectacion afectacion) {
 		setTitle("Modificar afectación");
 		setType(Type.UTILITY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -167,17 +167,14 @@ public class ModificarAfectacion extends JFrame{
 							String tipo = seleccionTipo.toString();
 							String materialLimpio = material.trim();
 							boolean esDerrumbeTotal = seleccionGravedad.toString().equals("Total");
-
-							// Actualizar campos existentes
+						
 							afectacion.setMaterialPredominante(materialLimpio);
 							afectacion.setEsDerrumbeTotal(esDerrumbeTotal);
 
 							if (afectacion instanceof AfectacionPared) {
 								AfectacionPared pared = (AfectacionPared) afectacion;
 								pared.setEsDeCarga(tipo.equals("Pared de carga"));
-							}
-
-							// Tipo visual no se cambia (Pared <-> Techo), asumimos mismo tipo
+							}						
 							JOptionPane.showMessageDialog(ModificarAfectacion.this, "Afectación modificada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 							gestion.actualizarTableAfectaciones(ficha.getAfectaciones());
 							dispose();

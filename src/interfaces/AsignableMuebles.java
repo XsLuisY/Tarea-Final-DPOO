@@ -4,6 +4,6 @@ import java.util.ArrayList;
 
 import clases.Mueble;
 
-public interface GestionMuebles {
+public interface AsignableMuebles {
 	abstract void actualizarTableMuebles(ArrayList<Mueble> m);
 }

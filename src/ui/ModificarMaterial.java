@@ -55,11 +55,8 @@ public class ModificarMaterial extends JFrame {
 		this.oficina=oficina;
 		this.gestion=gestion;
 		this.material=material;
-		oficina.getMateriales();
-		
-		getTextFieldNombre().setText(material.getNombre());
-	    getComboBox().setSelectedItem(material.getUnidadMedida());
-	    getTextFieldPrecioUnitario().setText(String.valueOf(material.getPrecioUnitario()));
+
+		rellenarFormulario();
 	}
 
 	public JMenuBar getBarraSuperior(){
@@ -174,18 +171,29 @@ public class ModificarMaterial extends JFrame {
 					}
 
 					if (valido) {
-					    try {
-					    	oficina.updateMaterial(material.getId(), nombre, unidad, precio);
-					        gestion.actualizarTableMateriales(oficina.getMateriales());
-					        JOptionPane.showMessageDialog(null, "Material modificado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-					        dispose();
-					    } catch (IllegalArgumentException ex) {
-					        JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					    }
+						try {
+							oficina.updateMaterial(material.getId(), nombre, unidad, precio);
+							gestion.actualizarTableMateriales(oficina.getMateriales());
+							JOptionPane.showMessageDialog(null, "Material modificado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+							dispose();
+						} catch (IllegalArgumentException ex) {
+							JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+						}
 					}
 				}
 			});
 		}
 		return btnModificar;
 	}
+
+	//Metodos
+	private void rellenarFormulario() {
+		getTextFieldNombre().setText(material.getNombre());
+		getComboBox().setSelectedItem(material.getUnidadMedida());
+		getTextFieldPrecioUnitario().setText(String.valueOf(material.getPrecioUnitario()));
+
+	}
 }
+
+
+
