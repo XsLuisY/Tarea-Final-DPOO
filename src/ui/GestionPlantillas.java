@@ -31,8 +31,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class GestionPlantillas extends JFrame {
-	private OficinaTramites actualOficinaTramites;
+
+	private static GestionPlantillas gestionPlantillas;
+
+	private OficinaTramites oficina;
 	private MICONS micons;
+
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
 	private JPanel contentPane;
@@ -42,18 +46,27 @@ public class GestionPlantillas extends JFrame {
 	private JMenuItem mntmEliminar;
 	private JMenuItem mntmMostrar;
 
+	//Singleton
+	public static GestionPlantillas getGestionPlantillas(OficinaTramites oficina){
+		if(gestionPlantillas==null)
+			gestionPlantillas = new GestionPlantillas(oficina);
+		return gestionPlantillas;
+	}
 
-	public GestionPlantillas(OficinaTramites actualOficinaTramites) {
+	//Constructor
+	private GestionPlantillas(OficinaTramites oficina) {
 		setTitle("Plantillas");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 526, 300);
 		micons=MICONS.getMICONS();	
-		this.actualOficinaTramites = actualOficinaTramites;
+		this.oficina = oficina;
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 		addPopup(getTablePlantillas(), getPopupMenu());
 
 	}
+
+	//Atributos
 	public JPanel getContentPane(){
 		if(contentPane==null){
 			contentPane = new JPanel();
@@ -80,7 +93,7 @@ public class GestionPlantillas extends JFrame {
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					GestionOficinaTramites g = new GestionOficinaTramites( );
+					GestionOficinaTramites g = GestionOficinaTramites.getGestionOficinaTramites( );
 					g.setVisible(true);					
 				}
 			});
@@ -175,8 +188,8 @@ public class GestionPlantillas extends JFrame {
 	//----------------------------------------------------------------------------
 	public void mostrarPlantilla(){
 		int pos = tablePlantillas.getSelectedRow();
-		Plantilla p = actualOficinaTramites.getPlantillas().get(pos);
-		MostrarPlantilla m = new MostrarPlantilla (p);
+		Plantilla p = oficina.getPlantillas().get(pos);
+		MostrarPlantilla m = MostrarPlantilla.getMostrarPlantilla(p);
 		m.setVisible(true);
 	}
 }

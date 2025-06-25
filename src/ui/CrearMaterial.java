@@ -25,8 +25,9 @@ import clases.OficinaTramites;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
 public class CrearMaterial extends JFrame {
-
+	private static CrearMaterial crearMaterial;
 	private static final long serialVersionUID = 1L;
+	
 	private OficinaTramites oficina;
 	private GestionMateriales gestion;
 
@@ -40,11 +41,19 @@ public class CrearMaterial extends JFrame {
 	private JComboBox<String> comboBox;
 	private JLabel lblPrecioUnitario;
 	private JTextField textFieldPrecioUnitario;
-
-	public CrearMaterial(GestionMateriales gestion, OficinaTramites oficina) {
+	
+	//Singleton
+	public static CrearMaterial getCrearMaterial(GestionMateriales gestion, OficinaTramites oficina){
+		if(crearMaterial==null)
+			crearMaterial=new CrearMaterial(gestion, oficina);
+		return crearMaterial;
+	}
+	
+	//Constructor
+	private CrearMaterial(GestionMateriales gestion, OficinaTramites oficina) {
 		setTitle("Agregar material");
 		setType(Type.UTILITY);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 280, 190);
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getPanelAfectaciones());
@@ -53,7 +62,7 @@ public class CrearMaterial extends JFrame {
 		oficina.getMateriales();
 
 	}
-
+	//Atributos
 	public JMenuBar getBarraSuperior(){
 		if(barraSuperior==null){
 			barraSuperior = new JMenuBar();

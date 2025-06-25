@@ -30,7 +30,7 @@ import clases.FichaTecnicaDO;
 
 // ----------------------------------LISTO------------------------------------------
 public class ModificarAfectacion extends JFrame{
-
+	private static ModificarAfectacion modificarAfectacion;
 	private static final long serialVersionUID = 1L;
 
 	private AsignableAfectaciones gestion;
@@ -49,7 +49,15 @@ public class ModificarAfectacion extends JFrame{
 	private JComboBox<String> comboBoxEsDerrumbeTotal;
 	private JLabel lblGravedad;
 
-	public ModificarAfectacion(AsignableAfectaciones gestion, FichaTecnicaDO ficha, Afectacion afectacion) {
+	//Singleton
+	public static ModificarAfectacion getModificarAfectacion(AsignableAfectaciones gestion, FichaTecnicaDO ficha, Afectacion afectacion){
+		if(modificarAfectacion==null)
+			modificarAfectacion= new ModificarAfectacion(gestion,ficha,afectacion);
+		return modificarAfectacion;
+	}
+	
+	//Constructor
+	private ModificarAfectacion(AsignableAfectaciones gestion, FichaTecnicaDO ficha, Afectacion afectacion) {
 		setTitle("Modificar afectación");
 		setType(Type.UTILITY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,7 +71,8 @@ public class ModificarAfectacion extends JFrame{
 
 		rellenarFormulario();
 	}
-
+	
+	//Atributos
 	public JPanel getContentPane(){
 		if(contentPane==null){
 			contentPane = new JPanel();

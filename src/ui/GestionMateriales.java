@@ -31,7 +31,7 @@ import java.util.UUID;
 
 public class GestionMateriales extends JFrame {
 
-
+	private static GestionMateriales gestionMateriales;
 	private static final long serialVersionUID = 1L;
 
 	private OficinaTramites oficina;
@@ -47,9 +47,17 @@ public class GestionMateriales extends JFrame {
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
 
-	public GestionMateriales(OficinaTramites oficina) {
+	//Singleton
+	public static GestionMateriales getGestionMateriales(OficinaTramites oficina){
+		if(gestionMateriales==null)
+			gestionMateriales= new GestionMateriales(oficina);
+		return gestionMateriales;
+	}
+	
+	//Constructor
+	private GestionMateriales(OficinaTramites oficina) {
 		setTitle("Materiales");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
@@ -58,6 +66,8 @@ public class GestionMateriales extends JFrame {
 		materiales=oficina.getMateriales();
 		actualizarTableMateriales(materiales);
 	}
+
+	//Atributos
 	public JMenuBar getBarraSuperior(){ 
 		if(barraSuperior==null){
 			barraSuperior = new JMenuBar();
@@ -133,7 +143,7 @@ public class GestionMateriales extends JFrame {
 			menuItemAgregar.setBackground(Color.DARK_GRAY);
 			menuItemAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					CrearMaterial c = new CrearMaterial(GestionMateriales.this, oficina);
+					CrearMaterial c =CrearMaterial.getCrearMaterial(gestionMateriales, oficina);
 
 					c.setVisible(true);
 				}
@@ -151,7 +161,7 @@ public class GestionMateriales extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					Material m = getMaterialSeleccionado();
 					if (m != null) {
-						ModificarMaterial c = new ModificarMaterial(GestionMateriales.this, oficina, m);
+						ModificarMaterial c = ModificarMaterial.getModificarMaterial(gestionMateriales, oficina, m);
 						c.setVisible(true);
 					} else {
 						JOptionPane.showMessageDialog(GestionMateriales.this, "Debes seleccionar un material para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -181,7 +191,7 @@ public class GestionMateriales extends JFrame {
 								JOptionPane.showMessageDialog(GestionMateriales.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 							}
 						}
-					
+
 					} else {
 						JOptionPane.showMessageDialog(GestionMateriales.this, "Debes seleccionar un material para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE);
 					}

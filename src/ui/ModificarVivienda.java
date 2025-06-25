@@ -30,7 +30,8 @@ import clases.JefeNucleo;
 
 
 public class ModificarVivienda extends JFrame {
-
+	
+	private static ModificarVivienda modificarVivienda;
 	private static final long serialVersionUID = 1L;
 
 	private GestionViviendas gestion;
@@ -39,14 +40,12 @@ public class ModificarVivienda extends JFrame {
 
 
 	private JPanel contentPane;
-
 	private JMenuBar barraSuperior;
-
 	private JMenuItem mntmRegresar;
-
+	
 	private JRadioButton rdbtnSi;
 	private JRadioButton rdbtnNo;
-
+	
 	private final ButtonGroup buttonGroupFacilidadTemporal = new ButtonGroup();
 
 	private JTextField textFieldDireccion;
@@ -94,8 +93,16 @@ public class ModificarVivienda extends JFrame {
 	private JSpinner spinnerAncianos;
 	private JSpinner spinnerEmbarazadas;
 	private JSpinner spinnerNinios;
+	
+	//Singleton
+	public static ModificarVivienda getModificarVivienda(GestionViviendas gestion, Vivienda vivienda){
+		if(modificarVivienda==null)
+			modificarVivienda=new ModificarVivienda(gestion, vivienda);
+		return modificarVivienda;
+	}
+	
 	//Constructor
-	public ModificarVivienda(GestionViviendas gestion, Vivienda vivienda) {
+	private ModificarVivienda(GestionViviendas gestion, Vivienda vivienda) {
 		//FIX: posible error a la hora de rectificar el nombre, eliminado: this.gestionV= gestionV;
 		this.vivienda= vivienda;
 		setType(Type.UTILITY);
@@ -113,6 +120,7 @@ public class ModificarVivienda extends JFrame {
 		rellenarFormulario();
 	}
 
+	//Atributos
 	public JPanel getContentPane(){
 		if(contentPane==null){		
 			contentPane = new JPanel();
@@ -667,16 +675,5 @@ public class ModificarVivienda extends JFrame {
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
 
 

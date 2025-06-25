@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
+
 public class MICONS {
 	private static MICONS micons = null;
 	private static HashMap<UUID, Identificable> listaId = null;
@@ -22,6 +23,7 @@ public class MICONS {
 			micons = new MICONS();		
 		return micons;
 	}
+	
 	//Constructor 
 	private MICONS(){
 		oficinas = new ArrayList<OficinaTramites>();
@@ -162,7 +164,7 @@ public class MICONS {
 	//Anthony
 	// 1
 	public Map<String, Double> buscarAfectacionTipologiaConstructiva() {
-		// 1. Preparar contadores
+		//Preparar contadores
 		Map<String, Integer> totalPorTipo = new HashMap<>();
 		Map<String, Integer> danadasPorTipo = new HashMap<>();
 
@@ -173,7 +175,7 @@ public class MICONS {
 			danadasPorTipo.put(tipo, 0);
 		}
 
-		// 2. Recorrer todas las oficinas de trámites
+		// Recorrer todas las oficinas de trámites
 		for (OficinaTramites oficina : this.oficinas) {
 			for (FichaTecnicaDO ficha : oficina.getFichas()) {
 				Vivienda v = ficha.getVivienda();
@@ -189,7 +191,7 @@ public class MICONS {
 			}
 		}
 
-		// 3. Calcular porcentajes
+		// Calcular porcentajes
 		Map<String, Double> porcentajes = new LinkedHashMap<>();
 		for (String tipo : tipos) {
 			int total = totalPorTipo.get(tipo);

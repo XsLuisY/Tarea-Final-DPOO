@@ -29,7 +29,10 @@ import clases.FichaTecnicaDO;
 public class CrearAfectacion extends JFrame{
 
 	private static final long serialVersionUID = 1L;
+	private static CrearAfectacion crearAfectacion=null;
+
 	private AsignableAfectaciones gestion;
+
 	private JPanel contentPane;
 	private JPanel panelAfectaciones;
 	private JTextField textFieldMaterialPredominante;
@@ -43,16 +46,27 @@ public class CrearAfectacion extends JFrame{
 	private JLabel lblGravedad;
 	private FichaTecnicaDO ficha;
 
-	public CrearAfectacion(AsignableAfectaciones gestion, FichaTecnicaDO ficha) {
+	//Singleton
+	public static CrearAfectacion getCrearAfectacion(AsignableAfectaciones gestion, FichaTecnicaDO ficha){
+		if(crearAfectacion==null)
+			crearAfectacion=new CrearAfectacion(gestion, ficha);
+		return crearAfectacion;
+	}
+
+	//Constructor
+	private CrearAfectacion(AsignableAfectaciones gestion, FichaTecnicaDO ficha) {
 		setTitle("Agregar afectaci\u00F3n");
 		setType(Type.UTILITY);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 280, 170);		
 		this.ficha = ficha;
 		this.gestion=gestion;
 		setContentPane(getContentPane());
 		setJMenuBar(getBarraSuperior());
 	}
+
+
+	//Atributos
 	public JPanel getContentPane(){
 		if(contentPane==null){
 			contentPane = new JPanel();

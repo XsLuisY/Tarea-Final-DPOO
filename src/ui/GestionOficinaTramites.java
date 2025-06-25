@@ -50,7 +50,7 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 public class GestionOficinaTramites extends JFrame {
-
+	private static GestionOficinaTramites gestionOficinaTramites;
 	private MICONS micons ;
 	private ArrayList<OficinaTramites> oficinas;
 
@@ -68,11 +68,19 @@ public class GestionOficinaTramites extends JFrame {
 	private JMenuItem mntmFtdos;
 	private JMenuItem mntmPlantillas;
 
-	public GestionOficinaTramites() {
+	//Singleton
+	public static GestionOficinaTramites getGestionOficinaTramites(){
+		if(gestionOficinaTramites==null)
+			gestionOficinaTramites= new GestionOficinaTramites();
+		return gestionOficinaTramites;
+	}
+
+	//Constructor
+	private GestionOficinaTramites() {
 		setResizable(false);
 		setType(Type.UTILITY);
 		setTitle("Oficinas de Tramites");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
 		micons=MICONS.getMICONS();	
 		oficinas = micons.getOficinaTramites();
@@ -80,6 +88,8 @@ public class GestionOficinaTramites extends JFrame {
 		setContentPane(getPanel());
 		addPopup(getListOficinas(), getPopupMenu());
 	}
+
+	//Atributo
 	public JMenuBar getBarraSuperior(){ 
 		if(barraSuperior==null){
 			barraSuperior = new JMenuBar();
@@ -96,7 +106,7 @@ public class GestionOficinaTramites extends JFrame {
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					Principal p = new Principal( );
+					Principal p = Principal.getPrincipal();
 					p.setVisible(true);
 				}
 			});
@@ -164,7 +174,7 @@ public class GestionOficinaTramites extends JFrame {
 			menuItemAgregar.setBackground(Color.DARK_GRAY);
 			menuItemAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					CrearOficinaTramites c = new CrearOficinaTramites(GestionOficinaTramites.this);
+					CrearOficinaTramites c = CrearOficinaTramites.getCrearOficinaTramites(gestionOficinaTramites);
 					c.setVisible(true);
 				}
 			});
@@ -181,11 +191,10 @@ public class GestionOficinaTramites extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					OficinaTramites oficina = obtenerOficinaSeleccionada();
 					if (oficina != null) {
-						ModificarOficinaTramites m = new ModificarOficinaTramites(oficina, GestionOficinaTramites.this);
+						ModificarOficinaTramites m = ModificarOficinaTramites.getModificarOficinaTramites(oficina, gestionOficinaTramites);
 						m.setVisible(true);
 					} else {
-						JOptionPane.showMessageDialog(GestionOficinaTramites.this, "Debes seleccionar una oficina para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE
-								);
+						JOptionPane.showMessageDialog(gestionOficinaTramites, "Debes seleccionar una oficina para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE);
 					}
 				}
 			});
@@ -248,11 +257,11 @@ public class GestionOficinaTramites extends JFrame {
 
 					if (oficina != null) {
 						dispose();
-						GestionMateriales g= new GestionMateriales(oficina);
+						GestionMateriales g= GestionMateriales.getGestionMateriales(oficina);
 						g.setVisible(true);
 					} else 
 						JOptionPane.showMessageDialog(GestionOficinaTramites.this,"Debes seleccionar una oficina antes de continuar.","Aviso",JOptionPane.WARNING_MESSAGE);
-					
+
 				}
 			});
 		}
@@ -269,7 +278,7 @@ public class GestionOficinaTramites extends JFrame {
 
 					if (oficina != null) {
 						dispose();			       
-						GestionFichaTecnicaDO g =new GestionFichaTecnicaDO(oficina);
+						GestionFichaTecnicaDO g =GestionFichaTecnicaDO.getGestionFichaTecnicaDO(oficina);
 						g.setVisible(true);
 					} else
 						JOptionPane.showMessageDialog(GestionOficinaTramites.this,"Debes seleccionar una oficina antes de continuar.","Aviso",JOptionPane.WARNING_MESSAGE);
@@ -290,7 +299,7 @@ public class GestionOficinaTramites extends JFrame {
 
 					if (oficina != null) {
 						dispose();
-						GestionPlantillas g = new GestionPlantillas(oficina);
+						GestionPlantillas g = GestionPlantillas.getGestionPlantillas(oficina);
 						g.setVisible(true);
 					} else {
 						JOptionPane.showMessageDialog(

@@ -22,7 +22,9 @@ import java.awt.event.ActionEvent;
 
 
 public class ModificarOficinaTramites extends JDialog {
+	private static ModificarOficinaTramites modificarOficinaTramites;
 	private MICONS micons;
+
 	private JPanel contentPane;
 	private JTextField textField;
 	private JMenuBar barraSuperior;
@@ -32,7 +34,15 @@ public class ModificarOficinaTramites extends JDialog {
 	private OficinaTramites oficina;
 	private GestionOficinaTramites gestion;
 
-	public ModificarOficinaTramites(OficinaTramites oficina, GestionOficinaTramites gestion) {
+	//Singleton 
+	public static ModificarOficinaTramites getModificarOficinaTramites(OficinaTramites oficina, GestionOficinaTramites gestion){
+		if(modificarOficinaTramites==null)
+			modificarOficinaTramites = new ModificarOficinaTramites(oficina, gestion);
+		return modificarOficinaTramites;
+	}
+
+	//Constructor
+	private ModificarOficinaTramites(OficinaTramites oficina, GestionOficinaTramites gestion) {
 		super(gestion, "Modificar Oficina", true);
 		micons=MICONS.getMICONS();	
 		this.oficina=oficina;
@@ -47,6 +57,7 @@ public class ModificarOficinaTramites extends JDialog {
 
 	}
 
+	//Atributos
 	public JPanel getPane(){
 		if(contentPane==null){
 			contentPane = new JPanel();

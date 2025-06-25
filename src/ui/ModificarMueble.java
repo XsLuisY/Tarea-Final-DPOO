@@ -26,13 +26,13 @@ import clases.Material;
 import clases.Mueble;
 
 public class ModificarMueble extends JFrame {	
-
+	private static ModificarMueble modificarMueble;
 	private static final long serialVersionUID = 1L;
-	
+
 	private FichaTecnicaDO ficha;
 	private AsignableMuebles gestion;
 	private Mueble mueble;
-	
+
 	private JPanel contentPane;
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
@@ -42,9 +42,16 @@ public class ModificarMueble extends JFrame {
 	private JSpinner spinnerCantidad; 
 	private JButton buttonModificar;
 
+	//Singleton
+	public static ModificarMueble getModificarMueble(AsignableMuebles gestion, FichaTecnicaDO ficha, Mueble mueble){
+		if(modificarMueble==null)
+			modificarMueble= new ModificarMueble(gestion, ficha, mueble);
+		return modificarMueble;
+	}
 
-	public ModificarMueble(AsignableMuebles gestion, FichaTecnicaDO ficha, Mueble mueble) {
-		
+	//Constructor
+	private ModificarMueble(AsignableMuebles gestion, FichaTecnicaDO ficha, Mueble mueble) {
+
 		setType(Type.UTILITY);
 		setTitle("Modificar mueble");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,6 +64,7 @@ public class ModificarMueble extends JFrame {
 		rellenarFormulario();
 	}
 
+	//Atributos
 	public JMenuBar getBarraSuperior(){ 
 		if(barraSuperior==null){
 			barraSuperior = new JMenuBar();
@@ -131,27 +139,27 @@ public class ModificarMueble extends JFrame {
 			buttonModificar.setForeground(Color.ORANGE);
 			buttonModificar.setBounds(165, 73, 89, 23);
 			buttonModificar.addActionListener(new ActionListener() {
-			    public void actionPerformed(ActionEvent arg0) {
-			        String nombre = getTextFieldNombre().getText().trim();
-			        int cantidad = (int) getSpinnerCantidad().getValue();
+				public void actionPerformed(ActionEvent arg0) {
+					String nombre = getTextFieldNombre().getText().trim();
+					int cantidad = (int) getSpinnerCantidad().getValue();
 
-			        if (nombre.isEmpty()) {
-			            JOptionPane.showMessageDialog(ModificarMueble.this, "Debes ingresar el nombre del mueble.", "Validación", JOptionPane.WARNING_MESSAGE);
-			        } else if (cantidad <= 0) {
-			            JOptionPane.showMessageDialog(ModificarMueble.this, "La cantidad debe ser mayor que cero.", "Validación", JOptionPane.WARNING_MESSAGE);
-			        } else {
-			            try {
-			                boolean updt = ficha.updtMueble(mueble.getNombre(), nombre, cantidad);
-			                if (updt) {
-			                    JOptionPane.showMessageDialog(ModificarMueble.this, "Mueble modificardo exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-			                    gestion.actualizarTableMuebles(ficha.getMuebles());
-			                    dispose();
-			                }
-			            } catch (IllegalArgumentException ex) {
-			                JOptionPane.showMessageDialog(ModificarMueble.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			            }
-			        }
-			    }
+					if (nombre.isEmpty()) {
+						JOptionPane.showMessageDialog(ModificarMueble.this, "Debes ingresar el nombre del mueble.", "Validación", JOptionPane.WARNING_MESSAGE);
+					} else if (cantidad <= 0) {
+						JOptionPane.showMessageDialog(ModificarMueble.this, "La cantidad debe ser mayor que cero.", "Validación", JOptionPane.WARNING_MESSAGE);
+					} else {
+						try {
+							boolean updt = ficha.updtMueble(mueble.getNombre(), nombre, cantidad);
+							if (updt) {
+								JOptionPane.showMessageDialog(ModificarMueble.this, "Mueble modificardo exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+								gestion.actualizarTableMuebles(ficha.getMuebles());
+								dispose();
+							}
+						} catch (IllegalArgumentException ex) {
+							JOptionPane.showMessageDialog(ModificarMueble.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}
 			});
 
 		}
@@ -159,9 +167,9 @@ public class ModificarMueble extends JFrame {
 	}
 
 
-//Metodos
-private void rellenarFormulario() {
-    getTextFieldNombre().setText(mueble.getNombre());
-    getSpinnerCantidad().setValue(mueble.getCantidad());
-}
+	//Metodos
+	private void rellenarFormulario() {
+		getTextFieldNombre().setText(mueble.getNombre());
+		getSpinnerCantidad().setValue(mueble.getCantidad());
+	}
 }

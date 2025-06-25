@@ -28,23 +28,19 @@ import clases.JefeNucleo;
 
 
 public class CrearVivienda extends JFrame {
-
+	private static CrearVivienda crearVivienda;
 	private static final long serialVersionUID = 1L;
 
 	private GestionViviendas gestion;
 	private MICONS micons;
 	private Vivienda vivienda;
 
-
 	private JPanel contentPane;
-
 	private JMenuBar barraSuperior;
-
 	private JMenuItem mntmRegresar;
 
 	private JRadioButton rdbtnSi;
 	private JRadioButton rdbtnNo;
-
 	private final ButtonGroup buttonGroupFacilidadTemporal = new ButtonGroup();
 
 	private JTextField textFieldDireccion;
@@ -82,9 +78,6 @@ public class CrearVivienda extends JFrame {
 	private JLabel lblNinios;
 	private JLabel lblHabitantes;
 
-	private JButton btnEnviar;
-
-
 	private JSpinner spinnerLargo;
 	private JSpinner spinnerAncho;
 	private JSpinner spinnerAltura;
@@ -92,8 +85,18 @@ public class CrearVivienda extends JFrame {
 	private JSpinner spinnerAncianos;
 	private JSpinner spinnerEmbarazadas;
 	private JSpinner spinnerNinios;
+
+	private JButton btnEnviar;
+
+	//Singleton
+	public static CrearVivienda getCrearVivienda(GestionViviendas gestion){
+		if(crearVivienda==null)
+			crearVivienda=new CrearVivienda(gestion);
+		return crearVivienda;
+	}
+
 	//Constructor
-	public CrearVivienda(GestionViviendas gestion) {
+	private CrearVivienda(GestionViviendas gestion) {
 		//FIX: posible error a la hora de rectificar el nombre, eliminado: this.gestionV= gestionV;
 		vivienda= new Vivienda();
 		setType(Type.UTILITY);
@@ -110,6 +113,7 @@ public class CrearVivienda extends JFrame {
 		buttonGroupFacilidadTemporal.add(getRdbtnSi());
 	}
 
+	//Atributos
 	public JPanel getContentPane(){
 		if(contentPane==null){		
 			contentPane = new JPanel();

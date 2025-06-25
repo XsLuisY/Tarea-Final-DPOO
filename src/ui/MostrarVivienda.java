@@ -28,13 +28,11 @@ import java.awt.event.ActionEvent;
 
 
 public class MostrarVivienda extends JFrame {
-
+	private static MostrarVivienda mostrarVivienda;
 	private Vivienda vivienda;
 
 	private JPanel contentPane;
-
 	private JMenuBar barraSuperior;
-
 	private JMenuItem mntmRegresar;
 
 	private final ButtonGroup buttonGroupFacilidadTemporal = new ButtonGroup();
@@ -63,7 +61,15 @@ public class MostrarVivienda extends JFrame {
 	private JLabel lblHabitantes;
 	private JLabel lblId;
 
-	public MostrarVivienda(Vivienda vivienda) {
+	//Singleton
+	public static MostrarVivienda getMostrarVivienda(Vivienda vivienda){
+		if(mostrarVivienda==null)
+			mostrarVivienda=new MostrarVivienda(vivienda);
+		return mostrarVivienda;
+	}
+
+	//Constructor
+	private MostrarVivienda(Vivienda vivienda) {
 		setType(Type.UTILITY);
 		setAlwaysOnTop(true);
 		setResizable(false);
@@ -74,6 +80,8 @@ public class MostrarVivienda extends JFrame {
 		setJMenuBar(getBarraSuperior());	
 		setContentPane(getContentPane());
 	}
+
+	//Atributos
 	public JPanel getContentPane(){
 		if(contentPane==null){		
 			contentPane = new JPanel();

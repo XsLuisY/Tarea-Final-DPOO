@@ -29,7 +29,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JMenuBar;
 import javax.swing.JButton;
 
-import auxiliares.SeleccionarViviendas;
 import clases.Afectacion;
 import clases.AfectacionPared;
 import clases.AfectacionTecho;
@@ -44,8 +43,11 @@ import java.util.ArrayList;
 
 import javax.swing.JTextField;
 
+import utils.SeleccionarViviendas;
+
 public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaciones, AsignableMuebles, AsignableVivienda {	
 
+	private static ModificarFichaTecnicaDO modificarFichaTecnicaDO;
 	private static final long serialVersionUID = 1L;
 
 	private OficinaTramites oficina;
@@ -73,11 +75,18 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 	private JLabel lblAfectacionInmueble; 
 	private JLabel lblAfectacinVivienda; 
 	private JLabel lblViviendaAsociada; 
-	private JButton btnModificar;
 	private JTextField textDireccion;
-
 	private JButton btnAsignarVivienda;
-	public ModificarFichaTecnicaDO(GestionFichaTecnicaDO gestion, OficinaTramites oficina, FichaTecnicaDO ficha) {
+	private JButton btnModificar;
+
+	//Singleton
+	public static ModificarFichaTecnicaDO getModificarFichaTecnicaDO(GestionFichaTecnicaDO gestion, OficinaTramites oficina, FichaTecnicaDO ficha){
+		if(modificarFichaTecnicaDO==null)
+			modificarFichaTecnicaDO= new ModificarFichaTecnicaDO(gestion, oficina, ficha);
+		return modificarFichaTecnicaDO;
+	}
+	//Constructor
+	private ModificarFichaTecnicaDO(GestionFichaTecnicaDO gestion, OficinaTramites oficina, FichaTecnicaDO ficha) {
 		setType(Type.UTILITY);
 		setTitle("Ficha T\u00E9cnica de Da\u00F1os Ocacionados");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -96,6 +105,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 		rellenarFormulario();
 	}
 
+	//Atributos
 	public JPanel getContentPane(){
 		if(contentPane==null){
 			contentPane = new JPanel();
@@ -170,7 +180,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 			mntmAgregarAfectacion.setForeground(Color.ORANGE);
 			mntmAgregarAfectacion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					CrearAfectacion c = new CrearAfectacion(ModificarFichaTecnicaDO.this, ficha);
+					CrearAfectacion c = CrearAfectacion.getCrearAfectacion(modificarFichaTecnicaDO, ficha);
 					c.setVisible(true);
 				}
 			});
@@ -187,8 +197,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 				public void actionPerformed(ActionEvent e) {
 					Afectacion a= getAfectacionSeleccionada();
 					if (a != null) {
-						ModificarAfectacion m = new ModificarAfectacion(ModificarFichaTecnicaDO.this, ficha, a);
-						m.setVisible(true);
+						ModificarAfectacion.getModificarAfectacion(modificarFichaTecnicaDO, ficha, a).setVisible(true);
 					} else 
 						JOptionPane.showMessageDialog(ModificarFichaTecnicaDO.this, "Debes seleccionar una afectacion para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE );					
 				}
@@ -256,7 +265,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 			mntmAgregarMueble.setForeground(Color.ORANGE);
 			mntmAgregarMueble.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					CrearMueble c = new CrearMueble(ModificarFichaTecnicaDO.this, ficha);
+					CrearMueble c = CrearMueble.getCrearMueble(modificarFichaTecnicaDO, ficha);
 					c.setVisible(true);
 				}
 			});
@@ -273,7 +282,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 				public void actionPerformed(ActionEvent e) {
 					Mueble mueble= getMuebleSeleccionado();
 					if (mueble != null) {
-						ModificarMueble m = new ModificarMueble(ModificarFichaTecnicaDO.this, ficha, mueble);
+						ModificarMueble m = ModificarMueble.getModificarMueble(modificarFichaTecnicaDO, ficha, mueble);
 						m.setVisible(true);
 					} else 
 						JOptionPane.showMessageDialog(ModificarFichaTecnicaDO.this, "Debes seleccionar un mueble para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -422,37 +431,37 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 		String esDerrumbeTotal;
 		String esDeCarga;
 		if(afectaciones!=null)
-		for (int i = 0; i < afectaciones.size(); i++) {
-			if (afectaciones.get(i) instanceof AfectacionPared){				
-				AfectacionPared a =  ((AfectacionPared)afectaciones.get(i));
-				tipo = "Pared";
-				materialPredominante = a.getMaterialPredominante();
-				esDerrumbeTotal = a.getEsDerrumbeTotal()? "Total" : "Parcial";
-				esDeCarga= a.getEsDeCarga() ? "Sí" : "No";
+			for (int i = 0; i < afectaciones.size(); i++) {
+				if (afectaciones.get(i) instanceof AfectacionPared){				
+					AfectacionPared a =  ((AfectacionPared)afectaciones.get(i));
+					tipo = "Pared";
+					materialPredominante = a.getMaterialPredominante();
+					esDerrumbeTotal = a.getEsDerrumbeTotal()? "Total" : "Parcial";
+					esDeCarga= a.getEsDeCarga() ? "Sí" : "No";
+				}
+				else{			
+					AfectacionTecho a =  ((AfectacionTecho)afectaciones.get(i));
+					tipo = "Techo";	
+					materialPredominante = a.getMaterialPredominante();		
+					esDerrumbeTotal = a.getEsDerrumbeTotal()? "Total" : "Parcial";
+					esDeCarga="-";
+				}
+				Object[] newRow = new Object[] { tipo, materialPredominante, esDerrumbeTotal, esDeCarga};
+				model.addRow(newRow);			
 			}
-			else{			
-				AfectacionTecho a =  ((AfectacionTecho)afectaciones.get(i));
-				tipo = "Techo";	
-				materialPredominante = a.getMaterialPredominante();		
-				esDerrumbeTotal = a.getEsDerrumbeTotal()? "Total" : "Parcial";
-				esDeCarga="-";
-			}
-			Object[] newRow = new Object[] { tipo, materialPredominante, esDerrumbeTotal, esDeCarga};
-			model.addRow(newRow);			
-		}
 		getTableAfectaciones().setModel(model);
 	}
 	public void actualizarTableMuebles(ArrayList<Mueble> muebles) {
 		DefaultTableModel model = (DefaultTableModel) tableMuebles.getModel();
 		model.setRowCount(0); // Limpiar la tabla
 		if(muebles!=null)
-		for (int i = 0; i < muebles.size(); i++) {
-			Mueble m = muebles.get(i);
-			String nombre=m.getNombre();
-			String cantidad=((Integer)m.getCantidad()).toString();
-			Object[] newRow = new Object[]{nombre, cantidad};
-			model.addRow(newRow);			
-		}
+			for (int i = 0; i < muebles.size(); i++) {
+				Mueble m = muebles.get(i);
+				String nombre=m.getNombre();
+				String cantidad=((Integer)m.getCantidad()).toString();
+				Object[] newRow = new Object[]{nombre, cantidad};
+				model.addRow(newRow);			
+			}
 		getTableMuebles().setModel(model);
 	}
 	public Afectacion getAfectacionSeleccionada(){

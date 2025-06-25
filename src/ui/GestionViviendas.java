@@ -30,9 +30,11 @@ import java.util.ArrayList;
 
 public class GestionViviendas extends JFrame {
 	private static final long serialVersionUID = 1L;
-
+	private static GestionViviendas gestionViviendas;
+	
 	private MICONS micons;
 	private ArrayList<Vivienda> viviendas;
+	
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
 	private JPanel contentPane;
@@ -44,8 +46,16 @@ public class GestionViviendas extends JFrame {
 	private JMenuItem menuItemModificar;
 	private JMenuItem menuItemEliminar;
 
-	public GestionViviendas() {
-		setTitle("Gestión de Viviendas");
+	//Singleton
+	public static GestionViviendas getGestionViviendas(){
+		if(gestionViviendas==null)
+		gestionViviendas = new GestionViviendas();
+		return gestionViviendas;
+	}
+	
+	//Constructor
+	private GestionViviendas() {
+		setTitle("Gestion de Viviendas");
 		setType(Type.UTILITY);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -58,6 +68,7 @@ public class GestionViviendas extends JFrame {
 		actualizarTableViviendas();
 	}
 
+	//Atibutos
 	public JMenuBar getBarraSuperior(){ 
 		if(barraSuperior==null){
 			barraSuperior = new JMenuBar();
@@ -74,8 +85,7 @@ public class GestionViviendas extends JFrame {
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					Principal p=new Principal();
-					p.setVisible(true);
+					Principal.getPrincipal().setVisible(true);
 				}
 			});
 		}
@@ -137,7 +147,7 @@ public class GestionViviendas extends JFrame {
 			menuItemAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					CrearVivienda v = new CrearVivienda(GestionViviendas.this);
+					CrearVivienda v = CrearVivienda.getCrearVivienda(gestionViviendas);
 					v.setVisible(true);
 				}
 			});
@@ -155,12 +165,11 @@ public class GestionViviendas extends JFrame {
 					Vivienda v = obtenerViviendaSeleccionada();
 					if (v != null) {
 						dispose();
-						MostrarVivienda m =new MostrarVivienda(v);
-						m.setVisible(true);
+						MostrarVivienda.getMostrarVivienda(v).setVisible(true);
 					} else 
 						JOptionPane.showMessageDialog(GestionViviendas.this, "Debes seleccionar una vivienda para mostrar.", "Aviso", JOptionPane.WARNING_MESSAGE);
 
-					
+
 				}
 			});
 		}
@@ -177,7 +186,7 @@ public class GestionViviendas extends JFrame {
 					Vivienda v = obtenerViviendaSeleccionada();
 					if (v != null) {
 						dispose();
-						ModificarVivienda m =new ModificarVivienda(GestionViviendas.this, v);
+						ModificarVivienda m =ModificarVivienda.getModificarVivienda(GestionViviendas.this, v);
 						m.setVisible(true);
 					} else 
 						JOptionPane.showMessageDialog(GestionViviendas.this, "Debes seleccionar una vivienda para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE);
