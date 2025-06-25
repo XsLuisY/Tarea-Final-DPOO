@@ -18,12 +18,12 @@ import javax.swing.JMenuBar;
 import clases.FichaTecnicaDO;
 
 public class CrearMueble extends JFrame {	
-
+	private static CrearMueble crearMueble;
 	private static final long serialVersionUID = 1L;
-	
+
 	private FichaTecnicaDO ficha;
 	private AsignableMuebles gestion;
-	
+
 	private JPanel contentPane;
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
@@ -33,19 +33,27 @@ public class CrearMueble extends JFrame {
 	private JSpinner spinnerCantidad; 
 	private JButton buttonAgregar;
 
+	//Singleton
+		public static CrearMueble getCrearMueble(AsignableMuebles gestion, FichaTecnicaDO ficha){
+			if(crearMueble==null)
+				crearMueble=new CrearMueble(gestion,ficha);
+			return crearMueble;
+		}
 
-	public CrearMueble(AsignableMuebles gestion, FichaTecnicaDO ficha) {
+	//Constructor
+	private CrearMueble(AsignableMuebles gestion, FichaTecnicaDO ficha) {
 		this.gestion=gestion;
 		this.ficha=ficha;
-		
+
 		setType(Type.UTILITY);
 		setTitle("Agregar mueble");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 280, 170);		
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 	}
-
+	
+	//Atributos
 	public JMenuBar getBarraSuperior(){ 
 		if(barraSuperior==null){
 			barraSuperior = new JMenuBar();
@@ -120,27 +128,27 @@ public class CrearMueble extends JFrame {
 			buttonAgregar.setForeground(Color.ORANGE);
 			buttonAgregar.setBounds(165, 73, 89, 23);
 			buttonAgregar.addActionListener(new ActionListener() {
-			    public void actionPerformed(ActionEvent arg0) {
-			        String nombre = getTextFieldNombre().getText().trim();
-			        int cantidad = (int) getSpinnerCantidad().getValue();
+				public void actionPerformed(ActionEvent arg0) {
+					String nombre = getTextFieldNombre().getText().trim();
+					int cantidad = (int) getSpinnerCantidad().getValue();
 
-			        if (nombre.isEmpty()) {
-			            JOptionPane.showMessageDialog(CrearMueble.this, "Debes ingresar el nombre del mueble.", "Validación", JOptionPane.WARNING_MESSAGE);
-			        } else if (cantidad <= 0) {
-			            JOptionPane.showMessageDialog(CrearMueble.this, "La cantidad debe ser mayor que cero.", "Validación", JOptionPane.WARNING_MESSAGE);
-			        } else {
-			            try {
-			                boolean add = ficha.addMueble(nombre, cantidad);
-			                if (add) {
-			                    JOptionPane.showMessageDialog(CrearMueble.this, "Mueble agregado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-			                    gestion.actualizarTableMuebles(ficha.getMuebles());
-			                    dispose();
-			                }
-			            } catch (IllegalArgumentException ex) {
-			                JOptionPane.showMessageDialog(CrearMueble.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			            }
-			        }
-			    }
+					if (nombre.isEmpty()) {
+						JOptionPane.showMessageDialog(CrearMueble.this, "Debes ingresar el nombre del mueble.", "Validación", JOptionPane.WARNING_MESSAGE);
+					} else if (cantidad <= 0) {
+						JOptionPane.showMessageDialog(CrearMueble.this, "La cantidad debe ser mayor que cero.", "Validación", JOptionPane.WARNING_MESSAGE);
+					} else {
+						try {
+							boolean add = ficha.addMueble(nombre, cantidad);
+							if (add) {
+								JOptionPane.showMessageDialog(CrearMueble.this, "Mueble agregado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+								gestion.actualizarTableMuebles(ficha.getMuebles());
+								dispose();
+							}
+						} catch (IllegalArgumentException ex) {
+							JOptionPane.showMessageDialog(CrearMueble.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}
 			});
 
 		}

@@ -16,10 +16,12 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
 
+import Reportes.Reporte_1;
 import clases.MICONS;
 
 public class Principal extends JFrame {
-
+	
+	private static Principal principal;
 	private MICONS micons;
 
 	private JPanel contentPane;
@@ -37,7 +39,15 @@ public class Principal extends JFrame {
 	private JButton btnHacerLevantamiento;
 	private JMenuItem mntmCerrarPrograma;
 
-	public Principal() {
+	//Singleton
+	public static Principal getPrincipal(){
+		if(principal==null)
+			principal=new Principal();
+		return principal;
+	}
+	
+	//Constructor
+	private Principal() {
 		micons=MICONS.getMICONS();	
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,7 +56,8 @@ public class Principal extends JFrame {
 		setContentPane(getContentPane());
 		setJMenuBar(getBarraSuperior());
 	}
-
+	
+	//Atributos
 	public JPanel getContentPane(){
 		if(contentPane==null){			
 			contentPane = new JPanel();
@@ -104,8 +115,7 @@ public class Principal extends JFrame {
 			mnGestionarViviendas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					GestionViviendas gestionViviendas = new GestionViviendas();
-					gestionViviendas.setVisible(true);
+					GestionViviendas.getGestionViviendas().setVisible(true);
 				}
 			});
 		}
@@ -118,8 +128,7 @@ public class Principal extends JFrame {
 			mntmGestionarOficinas.setForeground(Color.ORANGE);
 			mntmGestionarOficinas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					GestionOficinaTramites gestionOficinaTramites = new GestionOficinaTramites();
-					gestionOficinaTramites.setVisible(true);
+					GestionOficinaTramites.getGestionOficinaTramites().setVisible(true);
 				}
 			});
 		}
@@ -142,8 +151,14 @@ public class Principal extends JFrame {
 	public JMenuItem getMntmDistribucinPorcentual(){ 
 		if(mntmDistribucinPorcentual==null){
 			mntmDistribucinPorcentual = new JMenuItem("Distribuci\u00F3n porcentual de da\u00F1os en viviendas (Tipo I-IV)");
+			mntmDistribucinPorcentual.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					Reporte_1.getReporte_1(micons.buscarAfectacionTipologiaConstructiva()).setVisible(true);
+				}
+			});
 			mntmDistribucinPorcentual.setForeground(Color.ORANGE);
 			mntmDistribucinPorcentual.setBackground(Color.DARK_GRAY);
+			
 		}
 		return  mntmDistribucinPorcentual;
 	}

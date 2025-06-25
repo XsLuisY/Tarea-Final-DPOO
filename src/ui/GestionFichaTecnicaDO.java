@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class GestionFichaTecnicaDO extends JFrame {
-
+	private static GestionFichaTecnicaDO gestionFichaTecnicaDO;
 	private static final long serialVersionUID = 1L;
 
 	private ArrayList<FichaTecnicaDO> fichas;
@@ -48,7 +48,15 @@ public class GestionFichaTecnicaDO extends JFrame {
 	private JMenuItem menuItemModificar;
 	private JMenuItem menuItemEliminar;
 
-	public GestionFichaTecnicaDO(OficinaTramites oficina) {
+	//Singleton
+	public static GestionFichaTecnicaDO getGestionFichaTecnicaDO(OficinaTramites oficina){		
+		if(gestionFichaTecnicaDO==null)
+			gestionFichaTecnicaDO=new GestionFichaTecnicaDO(oficina);
+		return gestionFichaTecnicaDO;
+	}
+
+	//Constructor
+	private GestionFichaTecnicaDO(OficinaTramites oficina) {
 		setTitle("Gesti\u00F3n de Fichas T\u00E9cnicas");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
@@ -60,6 +68,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 		actualizarTableFichas(fichas);
 	}
 
+	//Atributos
 	public JMenuBar getBarraSuperior(){ 
 		if(barraSuperior==null){
 			barraSuperior = new JMenuBar();
@@ -76,7 +85,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					GestionOficinaTramites g = new GestionOficinaTramites();
+					GestionOficinaTramites g = GestionOficinaTramites.getGestionOficinaTramites();
 					g.setVisible(true);
 				}
 			});
@@ -140,7 +149,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 			menuItemAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();					
-					CrearFichaTecnicaDO c =new CrearFichaTecnicaDO(GestionFichaTecnicaDO.this, oficina);
+					CrearFichaTecnicaDO c =CrearFichaTecnicaDO.getCrearFichaTecnicaDO(gestionFichaTecnicaDO , oficina);
 					c.setVisible(true);					
 				}
 			});
@@ -177,7 +186,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 					FichaTecnicaDO f = obtenerFichaTecnicaSeleccionada();
 					if(f!=null){
 						dispose();
-						ModificarFichaTecnicaDO m = new ModificarFichaTecnicaDO(GestionFichaTecnicaDO.this, oficina, f);
+						ModificarFichaTecnicaDO m = ModificarFichaTecnicaDO.getModificarFichaTecnicaDO(gestionFichaTecnicaDO, oficina, f);
 						m.setVisible(true);
 					}
 

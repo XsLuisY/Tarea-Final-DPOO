@@ -35,7 +35,9 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 public class MostrarPlantilla extends JFrame {
+	private static MostrarPlantilla mostrarPlantilla;
 	private Plantilla plantilla;
+
 	private JPanel contentPane;
 	private JTable tableCubicacion;
 	private JTable tableMuebles;
@@ -69,7 +71,15 @@ public class MostrarPlantilla extends JFrame {
 	private JLabel lblHabitantes;
 	private JLabel lblId;
 
-	public MostrarPlantilla(Plantilla plantilla) {
+	//Singleton 
+	public static MostrarPlantilla getMostrarPlantilla(Plantilla plantilla){
+		if(mostrarPlantilla==null)
+			mostrarPlantilla=new MostrarPlantilla(plantilla);
+		return mostrarPlantilla;
+	}
+
+	//Constructor
+	private MostrarPlantilla(Plantilla plantilla) {
 		setTitle("Plantilla");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 870, 485);
@@ -82,6 +92,7 @@ public class MostrarPlantilla extends JFrame {
 		actualizarTableCubicacion(plantilla.getCubicacion());
 	}
 
+	//Atributos
 	public JMenuBar getBarraSuperior(){
 		if(barraSuperior==null){
 			barraSuperior = new JMenuBar();

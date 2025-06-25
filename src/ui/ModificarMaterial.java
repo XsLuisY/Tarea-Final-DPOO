@@ -28,7 +28,7 @@ import clases.OficinaTramites;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
 public class ModificarMaterial extends JFrame {
-
+	private static ModificarMaterial modificarMaterial;
 	private static final long serialVersionUID = 1L;
 	private OficinaTramites oficina;
 	private Material material;
@@ -45,7 +45,15 @@ public class ModificarMaterial extends JFrame {
 	private JLabel lblPrecioUnitario;
 	private JTextField textFieldPrecioUnitario;
 
-	public ModificarMaterial(GestionMateriales gestion, OficinaTramites oficina, Material material) {
+	//Singleton
+	public static ModificarMaterial getModificarMaterial(GestionMateriales gestion, OficinaTramites oficina, Material material){
+		if(modificarMaterial==null)
+			modificarMaterial= new ModificarMaterial(gestion, oficina, material);
+			return modificarMaterial;
+	}
+	
+	//Constuctor
+	private ModificarMaterial(GestionMateriales gestion, OficinaTramites oficina, Material material) {
 		setTitle("Modificar material");
 		setType(Type.UTILITY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,6 +67,7 @@ public class ModificarMaterial extends JFrame {
 		rellenarFormulario();
 	}
 
+	//Atributos
 	public JMenuBar getBarraSuperior(){
 		if(barraSuperior==null){
 			barraSuperior = new JMenuBar();

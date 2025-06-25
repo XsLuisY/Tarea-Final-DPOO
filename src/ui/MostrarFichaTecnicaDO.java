@@ -32,7 +32,9 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 public class MostrarFichaTecnicaDO extends JFrame {
+	private static MostrarFichaTecnicaDO mostrarFichaTecnicaDO;
 	private FichaTecnicaDO ficha;
+
 	private JPanel contentPane;
 	private JTable tableMuebles;
 	private JTable tableAfectaciones;
@@ -48,6 +50,14 @@ public class MostrarFichaTecnicaDO extends JFrame {
 	private JLabel lblJefeNucleo;
 	private JLabel lblDireccion;
 
+	//Singleton
+	public static MostrarFichaTecnicaDO getMostrarFichaTecnicaDO(FichaTecnicaDO ficha){
+		if(mostrarFichaTecnicaDO==null)
+			mostrarFichaTecnicaDO=new MostrarFichaTecnicaDO(ficha);
+		return mostrarFichaTecnicaDO;
+	}
+
+	//Constructor
 	public MostrarFichaTecnicaDO(FichaTecnicaDO ficha) {
 		this.ficha=ficha;
 		setType(Type.UTILITY);
@@ -60,6 +70,7 @@ public class MostrarFichaTecnicaDO extends JFrame {
 		actualizarTableMuebles(ficha.getMuebles());
 	}
 
+	//Atributos
 	public JPanel getContentPane(){
 		if(contentPane==null){
 			contentPane = new JPanel();
@@ -154,9 +165,9 @@ public class MostrarFichaTecnicaDO extends JFrame {
 	public JLabel getLblFechaLevantamiento(){
 		if(lblFechaLevantamiento==null){
 			lblFechaLevantamiento= new JLabel("Fecha Levantamiento: "
-		+ficha.getFechaLevantamiento().getDate()+"/"
-		+ficha.getFechaLevantamiento().getMonth()+"/"
-		+ficha.getFechaLevantamiento().getYear());
+					+ficha.getFechaLevantamiento().getDate()+"/"
+					+ficha.getFechaLevantamiento().getMonth()+"/"
+					+ficha.getFechaLevantamiento().getYear());
 			lblFechaLevantamiento.setBounds(10, 431, 282, 34);
 		}
 		return lblFechaLevantamiento;

@@ -40,14 +40,14 @@ public class Login extends JFrame {
 	private JLabel lblUsuario;
 	private JButton btnIniciar;
 	private MICONS micons;
-	
+
 	//Singleton
 	public static Login getLogin() {
 		if (login == null)
 			login = new Login();		
 		return login;
 	}
-	
+
 	//Constructor
 	private Login() {		
 		setTitle("Inicio de Sesión");
@@ -64,6 +64,7 @@ public class Login extends JFrame {
 		contentPane.add(getPanel());
 	}
 
+	//Atributos
 	public JPanel getPanel(){
 		if(panel==null){
 			panel = new JPanel();
@@ -136,7 +137,7 @@ public class Login extends JFrame {
 					if (usuario.equals("admin") && password.equals("1234")){
 						JOptionPane.showMessageDialog(null, "¡Bienvenido administrador!");
 						dispose();
-						new Principal().setVisible(true);
+						Principal.getPrincipal().setVisible(true);
 					}
 					else 
 						JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.");

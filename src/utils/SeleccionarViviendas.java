@@ -1,4 +1,4 @@
-package auxiliares;
+package utils;
 
 import interfaces.AsignableVivienda;
 

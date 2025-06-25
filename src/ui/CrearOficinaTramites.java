@@ -24,9 +24,11 @@ import java.awt.event.ActionEvent;
 public class CrearOficinaTramites extends JDialog {
 
 	private static final long serialVersionUID = 1L;
+	private static CrearOficinaTramites crearOficinaTramites;
 
 	private MICONS micons;
 	private GestionOficinaTramites gestion;
+
 	private JPanel contentPane;
 	private JTextField textField;
 	private JMenuBar barraSuperior;
@@ -34,7 +36,15 @@ public class CrearOficinaTramites extends JDialog {
 	private JButton btnEnviar;
 	private JLabel lblConsejoPopular;
 
-	public CrearOficinaTramites(GestionOficinaTramites gestion) {
+	//Singleton
+	public static CrearOficinaTramites getCrearOficinaTramites(GestionOficinaTramites gestion){
+		if(crearOficinaTramites==null)
+			crearOficinaTramites = new CrearOficinaTramites(gestion);
+		return crearOficinaTramites;
+	}
+
+	//Constructor
+	private CrearOficinaTramites(GestionOficinaTramites gestion) {
 		super(gestion, "Crear Oficina de Trámites", true);
 		micons=MICONS.getMICONS();	
 		this.gestion=gestion;
@@ -46,6 +56,7 @@ public class CrearOficinaTramites extends JDialog {
 		setContentPane(getPane());
 	}
 
+	//Atributos
 	public JPanel getPane(){
 		if(contentPane==null){
 			contentPane = new JPanel();
