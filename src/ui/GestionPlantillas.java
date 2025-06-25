@@ -19,16 +19,21 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JMenuBar;
 import javax.swing.table.DefaultTableModel;
 
 import clases.MICONS;
+import clases.Mueble;
 import clases.OficinaTramites;
 import clases.Plantilla;
+import clases.Vivienda;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.Date;
+import java.util.ArrayList;
 
 public class GestionPlantillas extends JFrame {
 
@@ -63,6 +68,8 @@ public class GestionPlantillas extends JFrame {
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 		addPopup(getTablePlantillas(), getPopupMenu());
+		
+		actualizarTablePlantillas();
 
 	}
 
@@ -115,13 +122,7 @@ public class GestionPlantillas extends JFrame {
 			tablePlantillas.setForeground(Color.ORANGE);
 			tablePlantillas.setFillsViewportHeight(true);
 			tablePlantillas.setBackground(Color.DARK_GRAY);
-			tablePlantillas.setModel(new DefaultTableModel(
-					new Object[][] {
-					},
-					new String[] {
-							"Dirección","Fecha Levantamiento", "ID", "Precio Total"
-					}
-					));
+			tablePlantillas.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Dirección","Fecha Levantamiento", "ID", "Precio Total"}));
 			tablePlantillas.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					if (e.getClickCount() == 2) 
@@ -151,7 +152,7 @@ public class GestionPlantillas extends JFrame {
 			mntmMostrar.setBackground(Color.DARK_GRAY);
 			mntmMostrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-
+mostrarPlantilla();
 				}
 			});
 		}
@@ -163,6 +164,23 @@ public class GestionPlantillas extends JFrame {
 			mntmEliminar.setHorizontalAlignment(SwingConstants.RIGHT);
 			mntmEliminar.setForeground(Color.ORANGE);
 			mntmEliminar.setBackground(Color.DARK_GRAY);
+			mntmEliminar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					int pos = tablePlantillas.getSelectedRow();
+					Plantilla p = oficina.getPlantillas().get(pos);
+					if(p!=null){
+						int confirmar = JOptionPane.showConfirmDialog(gestionPlantillas,"¿Seguro que deseas eliminar esta FTDO?","Confirmar eliminación",JOptionPane.YES_NO_OPTION);
+
+						if (confirmar == JOptionPane.YES_OPTION) {
+							oficina.deletePlantilla(p.getId());
+							JOptionPane.showMessageDialog(null, "Plantilla  eliminada con exito.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+							actualizarTablePlantillas();
+
+						}
+					}else 
+						JOptionPane.showMessageDialog(null, "Debe seleccionar una plantilla para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+				}
+			});
 		}
 		return mntmEliminar;
 	}
@@ -187,9 +205,38 @@ public class GestionPlantillas extends JFrame {
 
 	//----------------------------------------------------------------------------
 	public void mostrarPlantilla(){
-		int pos = tablePlantillas.getSelectedRow();
-		Plantilla p = oficina.getPlantillas().get(pos);
+		//TODO Hacer metodo obtener plantilla seleccionada
+		Plantilla p = obtenerPlantillaSeleccionada();
 		MostrarPlantilla m = MostrarPlantilla.getMostrarPlantilla(p);
 		m.setVisible(true);
 	}
+	public void actualizarTablePlantillas() {
+		ArrayList<Plantilla> plantillas=oficina.getPlantillas();
+		DefaultTableModel model = (DefaultTableModel) getTablePlantillas().getModel();
+		model.setRowCount(0); // Limpiar la tabla
+		if(plantillas!=null)
+			//"Dirección","Fecha Levantamiento", "ID", "Precio Total"
+			for (int i = 0; i < plantillas.size(); i++) {
+				Plantilla p = plantillas.get(i);
+				String direccion=p.getFichaTecnicaDO().getVivienda().getDireccion();
+				java.util.Date fecha=p.getFichaTecnicaDO().getFechaLevantamiento();	
+				String id=p.getId().toString();
+				Object[] newRow = new Object[]{direccion, fecha.getDate()+"/"+fecha.getMonth()+"/"+fecha.getYear(),id, p.calcularPrecioTotal()};
+				model.addRow(newRow);			
+			}
+		getTablePlantillas().setModel(model);
+	}	
+	public Plantilla obtenerPlantillaSeleccionada(){
+		Plantilla p = null;
+		int pos = getTablePlantillas().getSelectedRow();
+		if (pos >= 0 && pos < oficina.getPlantillas().size()) {
+			p=oficina.getPlantillas().get(pos);
+		}
+		return p;
+	}
 }
+
+
+
+
+

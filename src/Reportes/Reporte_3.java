@@ -16,6 +16,8 @@ import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Reporte_3 extends JFrame {
 
@@ -39,10 +41,10 @@ public class Reporte_3 extends JFrame {
 	//Constructor
 	private Reporte_3(Map<String, Integer> totalPorAfectacion) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 230, 180);
+		this.totalPorAfectacion=totalPorAfectacion;
+		setBounds(100, 100, 333, 251);
 		setJMenuBar(getMenuBar_1());
 		setContentPane(getContentPane());
-		this.totalPorAfectacion=totalPorAfectacion;
 	}
 
 	//Atributos 
@@ -65,21 +67,21 @@ public class Reporte_3 extends JFrame {
 			txtpnElementoConstructivoMs.setForeground(Color.ORANGE);
 			txtpnElementoConstructivoMs.setBackground(Color.DARK_GRAY);
 			txtpnElementoConstructivoMs.setText("Elementos constructivos afectados en el conjunto de viviendas evaluadas:\r\n");
-			txtpnElementoConstructivoMs.setBounds(10, 11, 104, 95);
+			txtpnElementoConstructivoMs.setBounds(10, 11, 163, 166);
 		}
 		return txtpnElementoConstructivoMs;
 	}
 	public JLabel getLblPared() {
 		if (lblPared == null) {
 			lblPared = new JLabel("Pared: "+totalPorAfectacion.get("AfectacionPared").toString());
-			lblPared.setBounds(124, 30, 80, 14);
+			lblPared.setBounds(183, 46, 124, 14);
 		}
 		return lblPared;
 	}
 	public JLabel getLblTecho() {
 		if (lblTecho == null) {
 			lblTecho = new JLabel("Techo: "+totalPorAfectacion.get("AfectacionTecho").toString());
-			lblTecho.setBounds(124, 70, 80, 14);
+			lblTecho.setBounds(183, 115, 124, 14);
 		}
 		return lblTecho;
 	}
@@ -95,6 +97,11 @@ public class Reporte_3 extends JFrame {
 	public JMenuItem getMntmRegresar() {
 		if (mntmRegresar == null) {
 			mntmRegresar = new JMenuItem("Regresar");
+			mntmRegresar.addActionListener(new ActionListener() {
+								public void actionPerformed(ActionEvent arg0) {
+				dispose();
+								}
+			});
 			mntmRegresar.setBackground(Color.DARK_GRAY);
 			mntmRegresar.setForeground(Color.ORANGE);
 		}

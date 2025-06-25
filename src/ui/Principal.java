@@ -17,6 +17,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 
 import Reportes.Reporte_1;
+import Reportes.Reporte_2;
+import Reportes.Reporte_3;
+import Reportes.Reporte_4;
 import clases.MICONS;
 
 public class Principal extends JFrame {
@@ -38,6 +41,7 @@ public class Principal extends JFrame {
 	private JMenuItem mntmCerrarSesion; 
 	private JButton btnHacerLevantamiento;
 	private JMenuItem mntmCerrarPrograma;
+	private JMenuItem mntmBuscar;
 
 	//Singleton
 	public static Principal getPrincipal(){
@@ -76,6 +80,7 @@ public class Principal extends JFrame {
 			barraSuperior.setBackground(Color.DARK_GRAY);
 			barraSuperior.add(getGestion());
 			barraSuperior.add(getReportes());
+			barraSuperior.add(getMntmBuscar());
 			barraSuperior.add(getMntmCerrarSesion());			
 			barraSuperior.add(getMntmCerrarPrograma());
 		}
@@ -165,6 +170,11 @@ public class Principal extends JFrame {
 	public JMenuItem getMntmViviendasConMayor(){
 		if(mntmViviendasConMayor==null){
 			mntmViviendasConMayor = new JMenuItem("Viviendas con mayor n\u00FAmero de habitantes vulnerables");
+			mntmViviendasConMayor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					Reporte_2.getReporte_2(micons.buscarViviendasMasVulnerables()).setVisible(true);
+				}
+			});
 			mntmViviendasConMayor.setForeground(Color.ORANGE);
 			mntmViviendasConMayor.setBackground(Color.DARK_GRAY);
 		}
@@ -173,6 +183,11 @@ public class Principal extends JFrame {
 	public JMenuItem getMntmElementoAfectadoMs(){
 		if(mntmElementoAfectadoMs==null){
 			mntmElementoAfectadoMs= new JMenuItem("Elemento afectado m\u00E1s frecuente (techo/pared)");
+			mntmElementoAfectadoMs.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				Reporte_3.getReporte_3(micons.mostrarCantElementoAfectado()).setVisible(true);
+				}
+			});
 			mntmElementoAfectadoMs.setForeground(Color.ORANGE);
 			mntmElementoAfectadoMs.setBackground(Color.DARK_GRAY);			
 		}
@@ -183,6 +198,11 @@ public class Principal extends JFrame {
 	public JMenuItem getMntmCubicacionesConMayor(){
 		if(mntmCubicacionesConMayor == null){
 			mntmCubicacionesConMayor = new JMenuItem("Cubicaciones con mayor costo por material");
+			mntmCubicacionesConMayor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					Reporte_4.getReporte_4(micons.mostrarMaterialMasCaro()).setVisible(true);
+				}
+			});
 			mntmCubicacionesConMayor.setForeground(Color.ORANGE);
 			mntmCubicacionesConMayor.setBackground(Color.DARK_GRAY);			
 		}
@@ -207,10 +227,38 @@ public class Principal extends JFrame {
 	public JButton getBtnHacerLevantamiento(){
 		if(btnHacerLevantamiento==null){
 			btnHacerLevantamiento= new JButton("Hacer Levantamiento");
+			btnHacerLevantamiento.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					GestionOficinaTramites.getGestionOficinaTramites().setVisible(true);
+				}
+			});
 			btnHacerLevantamiento.setBackground(Color.DARK_GRAY);
 			btnHacerLevantamiento.setForeground(Color.ORANGE);
 			btnHacerLevantamiento.setBounds(364, 266, 170, 23);			
 		}
 		return btnHacerLevantamiento;
 	}
+	public JMenuItem getMntmBuscar() {
+		if (mntmBuscar == null) {
+			mntmBuscar = new JMenuItem("Buscar");
+			mntmBuscar.setBackground(Color.DARK_GRAY);
+			mntmBuscar.setForeground(Color.ORANGE);
+			mntmBuscar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				Buscar.getBuscar().setVisible(true);
+				}
+			});
+	
+		}
+		return mntmBuscar;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
