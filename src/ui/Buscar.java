@@ -44,11 +44,11 @@ public class Buscar extends JFrame {
 	private JButton btnBuscar;
 	private JTextPane txtpn;
 
-public static Buscar getBuscar(){
-	if(buscar==null)
-		buscar=new Buscar();
-	return buscar;
-}
+	public static Buscar getBuscar(){
+		if(buscar==null)
+			buscar=new Buscar();
+		return buscar;
+	}
 	private Buscar() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 300, 240);
@@ -108,7 +108,8 @@ public static Buscar getBuscar(){
 			btnBuscar = new JButton("Buscar");
 			btnBuscar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-
+					buscarID();
+					limpiarCampos();
 				}
 			});
 			btnBuscar.setForeground(Color.ORANGE);
@@ -139,9 +140,9 @@ public static Buscar getBuscar(){
 				}
 			else
 				JOptionPane.showMessageDialog(buscar, "El id ingresado es incorrecto.", "Aviso", JOptionPane.WARNING_MESSAGE);
-			else 
-				JOptionPane.showMessageDialog(buscar, "Ingresado un id.", "Aviso", JOptionPane.WARNING_MESSAGE);
-		}
+		else 
+			JOptionPane.showMessageDialog(buscar, "Ingresado un id.", "Aviso", JOptionPane.WARNING_MESSAGE);
+	}
 
 	public void mostrarMaterial(Material m){		
 		getTxtpn().setText("\tMaterial\nNombre:"+m.getNombre()+"\nUnidad de Medida: "+m.getUnidadMedida()+"\nPrecio Unitario: "+m.getPrecioUnitario());
@@ -167,4 +168,9 @@ public static Buscar getBuscar(){
 		}
 		return txtpn;
 	}
+	private void limpiarCampos() {
+		getTextField().setText("");
+		getTxtpn().setText("");
+	}
+
 }

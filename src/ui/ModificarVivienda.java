@@ -185,6 +185,7 @@ public class ModificarVivienda extends JFrame {
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					limpiarCampos();
 					dispose();
 				}
 			});
@@ -489,9 +490,10 @@ public class ModificarVivienda extends JFrame {
 							if(micons.updateVivienda(nombre, vivienda.getJefeNucleo().getCI(), direccion, documentoLegal, tipologiaHabitacional, tipologiaConstructiva ,facilidadTemporal, largo, ancho, altura, cantidadNinios, cantidadAncianos, cantidadEmbarazadas, totalPersonas)){
 								// Mostrar mensaje de Éxito
 								JOptionPane.showMessageDialog(null, "Vivienda guardada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+								limpiarCampos();
 								dispose();	//cambio: cerrar ventana si se agrega correctamente la vivienda
-								gestion.actualizarTableViviendas();	//actualizar lista viviendas
-								gestion.setVisible(true);
+								gestion.actualizarTableViviendas();	//actualizar lista viviendas							gestion.setVisible(true);
+								
 							}
 						} catch (IllegalArgumentException ex){ 
 							JOptionPane.showMessageDialog(ModificarVivienda.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -672,6 +674,28 @@ public class ModificarVivienda extends JFrame {
 		getSpinnerAncianos().setValue(vivienda.getCantAncianos());;
 		getSpinnerEmbarazadas().setValue(vivienda.getCantEmbarazadas());;
 		getSpinnerNinios().setValue(vivienda.getCantNinos());;
+	}
+//Metodo 
+	private void limpiarCampos() {
+
+		getTextFieldNombre().setText("");
+		getTextFieldCI().setText("");
+		getTextFieldDireccion().setText("");
+
+		getComboBoxDocumentoLegal().setSelectedIndex(0);
+		getComboBoxTipologiaHabitacional().setSelectedIndex(0);
+		getComboBoxTipologiaConstructiva().setSelectedIndex(0);
+
+		getRdbtnSi().setSelected(false);
+		getRdbtnNo().setSelected(false);
+
+		getSpinnerLargo().setValue(1);
+		getSpinnerAncho().setValue(1);
+		getSpinnerAltura().setValue(1);
+		getSpinnerTotal().setValue(1);
+		getSpinnerAncianos().setValue(0);
+		getSpinnerEmbarazadas().setValue(0);
+		getSpinnerNinios().setValue(0);
 	}
 
 }

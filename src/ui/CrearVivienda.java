@@ -178,6 +178,7 @@ public class CrearVivienda extends JFrame {
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					limpiarCampos();
 					dispose();
 				}
 			});
@@ -488,14 +489,13 @@ public class CrearVivienda extends JFrame {
 						vivienda.setLargo(largo);
 
 						// Agregar vivienda a la lista
-						if(micons.addVivienda(vivienda)){
-							// Mostrar mensaje de Éxito
-							JOptionPane.showMessageDialog(null, "Vivienda guardada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+						if(micons.addVivienda(vivienda)){						
+							JOptionPane.showMessageDialog(null, "Vivienda guardada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);							
 							gestion.actualizarTableViviendas();	//actualizar lista viviendas
-							dispose();	//cambio: cerrar ventana si se agrega correctamente la vivienda
+							limpiarCampos();
+							dispose();
 						}
 
-						// Opcional: limpiar formulario o crear nueva instancia vivienda
 						//TODO Quitar:	vivienda = new Vivienda();
 
 					} catch (ParseException ex) {
@@ -655,5 +655,28 @@ public class CrearVivienda extends JFrame {
 		}
 		return lblNinios;
 	}
+	//Metodos
+	private void limpiarCampos() {
+
+		getTextFieldNombre().setText("");
+		getTextFieldCI().setText("");
+		getTextFieldDireccion().setText("");
+
+		getComboBoxDocumentoLegal().setSelectedIndex(0);
+		getComboBoxTipologiaHabitacional().setSelectedIndex(0);
+		getComboBoxTipologiaConstructiva().setSelectedIndex(0);
+
+		getRdbtnSi().setSelected(false);
+		getRdbtnNo().setSelected(false);
+
+		getSpinnerLargo().setValue(1);
+		getSpinnerAncho().setValue(1);
+		getSpinnerAltura().setValue(1);
+		getSpinnerTotal().setValue(1);
+		getSpinnerAncianos().setValue(0);
+		getSpinnerEmbarazadas().setValue(0);
+		getSpinnerNinios().setValue(0);
+	}
+
 }
 

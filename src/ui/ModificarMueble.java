@@ -80,6 +80,7 @@ public class ModificarMueble extends JFrame {
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					limpiarCampos();
 					dispose();
 				}
 			});
@@ -153,6 +154,7 @@ public class ModificarMueble extends JFrame {
 							if (updt) {
 								JOptionPane.showMessageDialog(ModificarMueble.this, "Mueble modificardo exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 								gestion.actualizarTableMuebles(ficha.getMuebles());
+								limpiarCampos();
 								dispose();
 							}
 						} catch (IllegalArgumentException ex) {
@@ -172,4 +174,9 @@ public class ModificarMueble extends JFrame {
 		getTextFieldNombre().setText(mueble.getNombre());
 		getSpinnerCantidad().setValue(mueble.getCantidad());
 	}
+	private void limpiarCampos() {
+        getTextFieldNombre().setText("");
+        getSpinnerCantidad().setValue(1);
+}
+
 }

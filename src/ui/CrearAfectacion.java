@@ -91,6 +91,7 @@ public class CrearAfectacion extends JFrame{
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					limpiarCampos();
 					dispose();
 				}
 			});			
@@ -176,6 +177,7 @@ public class CrearAfectacion extends JFrame{
 							if (add) {
 								JOptionPane.showMessageDialog(CrearAfectacion.this, "Afectación agregada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 								gestion.actualizarTableAfectaciones(ficha.getAfectaciones());
+								limpiarCampos();
 								dispose();
 							} else {
 								JOptionPane.showMessageDialog(CrearAfectacion.this, "No se pudo agregar la afectación.", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -206,5 +208,12 @@ public class CrearAfectacion extends JFrame{
 		}
 		return lblGravedad;
 	}
-
+	
+	//Metodos
+	private void limpiarCampos() {
+	  
+	        getTextFieldMaterialPredominante().setText("");	 
+	        getComboBoxTipoAfectacion().setSelectedIndex(0);	
+	    	getComboBoxEsDerrumbeTotal().setSelectedIndex(0);
+	}
 }

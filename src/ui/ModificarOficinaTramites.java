@@ -85,6 +85,7 @@ public class ModificarOficinaTramites extends JDialog {
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					limpiarCampos();
 					dispose();
 				}
 			});
@@ -107,7 +108,8 @@ public class ModificarOficinaTramites extends JDialog {
 							micons.updateOficinaTramites(oficinaModificar, newConsejoPopular);
 							gestion.actualizarListaOficinas();
 							JOptionPane.showMessageDialog(null, "Oficina actualizada exitosamente.");
-							dispose();
+							 limpiarCampos();
+							 dispose();
 						} catch (IllegalArgumentException ex) {
 							JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al actualizar", JOptionPane.ERROR_MESSAGE);
 						}
@@ -137,5 +139,10 @@ public class ModificarOficinaTramites extends JDialog {
 		}
 		return textField ;
 	}
+//Metodo
+	private void limpiarCampos() {
+        getTextField().setText("");
+}
+
 }
 
