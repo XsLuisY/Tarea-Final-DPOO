@@ -1,4 +1,4 @@
-package Reportes;
+package reportes;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;

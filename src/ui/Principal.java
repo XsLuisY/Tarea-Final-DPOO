@@ -16,11 +16,15 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
 
-import Reportes.Reporte_1;
-import Reportes.Reporte_2;
-import Reportes.Reporte_3;
-import Reportes.Reporte_4;
 import clases.MICONS;
+
+import javax.swing.JTextPane;
+
+import reportes.Reporte_1;
+import reportes.Reporte_2;
+import reportes.Reporte_3;
+import reportes.Reporte_4;
+import javax.swing.JLabel;
 
 public class Principal extends JFrame {
 	
@@ -42,6 +46,7 @@ public class Principal extends JFrame {
 	private JButton btnHacerLevantamiento;
 	private JMenuItem mntmCerrarPrograma;
 	private JMenuItem mntmBuscar;
+	private JTextPane lblnotaElPrograma;
 
 	//Singleton
 	public static Principal getPrincipal(){
@@ -68,7 +73,8 @@ public class Principal extends JFrame {
 			contentPane.setBackground(Color.ORANGE);
 			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 			contentPane.setLayout(null);
-			contentPane.add(getBtnHacerLevantamiento());	
+			contentPane.add(getBtnHacerLevantamiento());
+			contentPane.add(getLblnotaElPrograma());
 		}
 		return contentPane;
 	}
@@ -92,7 +98,6 @@ public class Principal extends JFrame {
 			mntmCerrarPrograma= new JMenuItem("Cerrar Programa");
 			mntmCerrarPrograma.setBackground(Color.DARK_GRAY);
 			mntmCerrarPrograma.setForeground(Color.ORANGE);
-			mntmCerrarPrograma.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmCerrarPrograma.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
@@ -144,7 +149,6 @@ public class Principal extends JFrame {
 		if(reportes==null){
 			reportes = new JMenu("Reportes");
 			reportes.setBackground(Color.DARK_GRAY);
-			reportes.setHorizontalAlignment(SwingConstants.CENTER);
 			reportes.setForeground(Color.ORANGE);
 			reportes.add(getMntmDistribucinPorcentual());
 			reportes.add(getMntmViviendasConMayor());
@@ -213,7 +217,6 @@ public class Principal extends JFrame {
 			mntmCerrarSesion = new JMenuItem("Cerrar Sesi\u00F3n");
 			mntmCerrarSesion.setBackground(Color.DARK_GRAY);
 			mntmCerrarSesion.setForeground(Color.ORANGE);
-			mntmCerrarSesion.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmCerrarSesion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
@@ -252,13 +255,14 @@ public class Principal extends JFrame {
 		}
 		return mntmBuscar;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public JTextPane getLblnotaElPrograma() {
+		if (lblnotaElPrograma == null) {
+			lblnotaElPrograma = new JTextPane();
+			lblnotaElPrograma.setBackground(Color.DARK_GRAY);
+			lblnotaElPrograma.setForeground(Color.ORANGE);
+			lblnotaElPrograma.setText("Nota: \r\nEl programa es\u00E1 conformado por JPopMenu's con las opciones de agregar, mostrar, etc.\r\n\r\nHay 8 Viviendas inicializadas\r\nOficinas de Tramites inicializadas con materiales\r\nOficina de Tramites \"Arroyo Naranjo\" inicializada con 3 Fichas Tecnicas de Da\u00F1os Ocacionados y sus respectivas Plantillas \r\n");
+			lblnotaElPrograma.setBounds(10, 28, 524, 227);
+		}
+		return lblnotaElPrograma;
+	}
 }
