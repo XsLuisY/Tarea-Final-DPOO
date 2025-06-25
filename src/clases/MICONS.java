@@ -23,7 +23,7 @@ public class MICONS {
 			micons = new MICONS();		
 		return micons;
 	}
-	
+
 	//Constructor 
 	private MICONS(){
 		oficinas = new ArrayList<OficinaTramites>();
@@ -166,45 +166,30 @@ public class MICONS {
 
 	//Anthony
 	// 1
-	public Map<String, Double> buscarAfectacionTipologiaConstructiva() {
-		//Preparar contadores
-		Map<String, Integer> totalPorTipo = new HashMap<>();
-		Map<String, Integer> danadasPorTipo = new HashMap<>();
-
-		// Inicializar contadores para todos los tipos I-V
+	public Map<String, Double> buscarAfectacionTipologiaConstructiva() {		
+		Map<String, Integer> conteoPorTipo = new LinkedHashMap<>();
 		String[] tipos = {"Tipo I", "Tipo II", "Tipo III", "Tipo IV", "Tipo V"};
 		for (String tipo : tipos) {
-			totalPorTipo.put(tipo, 0);
-			danadasPorTipo.put(tipo, 0);
+			conteoPorTipo.put(tipo, 0);
 		}
 
-		// Recorrer todas las oficinas de tr√°mites
-		for (OficinaTramites oficina : this.oficinas) {
-			for (FichaTecnicaDO ficha : oficina.getFichas()) {
-				Vivienda v = ficha.getVivienda();
-				String tipo = v.getTipologiaConstructiva();
+		int totalViviendas = viviendas.size();
 
-				// Actualizar contador total
-				totalPorTipo.put(tipo, totalPorTipo.get(tipo) + 1);
-
-				// Verificar da√±os (muebles o afectaciones)
-				if (!ficha.getMuebles().isEmpty() || !ficha.getAfectaciones().isEmpty()) {
-					danadasPorTipo.put(tipo, danadasPorTipo.get(tipo) + 1);
-				}
-			}
+		for (Vivienda v : viviendas) {
+			String tipo = v.getTipologiaConstructiva();		      
+			conteoPorTipo.put(tipo, conteoPorTipo.get(tipo) + 1);		       
 		}
 
-		// Calcular porcentajes
 		Map<String, Double> porcentajes = new LinkedHashMap<>();
-		for (String tipo : tipos) {
-			int total = totalPorTipo.get(tipo);
-			int danadas = danadasPorTipo.get(tipo);
-
-			porcentajes.put(tipo, total > 0 ? (danadas * 100.0) / total : 0.0);
+		for (String tipo : conteoPorTipo.keySet()) {
+			int cantidad = conteoPorTipo.get(tipo);
+			double porcentaje = totalViviendas > 0 ? (cantidad * 100.0) / totalViviendas : 0.0;
+			porcentajes.put(tipo, porcentaje);
 		}
 
 		return porcentajes;
 	}
+
 
 	// 2
 	public ArrayList<Vivienda> buscarViviendasMasVulnerables(){
@@ -214,14 +199,13 @@ public class MICONS {
 		if(viviendas!=null){
 			for(Vivienda v: viviendas){
 				mayoraux= v.getCantNinos()+v.getCantAncianos()+v.getCantEmbarazadas();
-				if(mayoraux>mayor){
-					mayor=mayoraux;
+				if (mayoraux > mayor) {
+					mayor = mayoraux;
 					vulnerables.clear();
+					vulnerables.add(v); 
+				} else if (mayoraux == mayor) {
+					vulnerables.add(v);
 				}
-				else
-					if(mayoraux==mayor){
-						vulnerables.add(v);
-					}
 			}
 		}
 		return vulnerables;
@@ -237,8 +221,11 @@ public class MICONS {
 
 		for (OficinaTramites o : micons.getOficinaTramites()) 
 			for (FichaTecnicaDO f : o.getFichas())	    
-				for (Afectacion a : f.getAfectaciones())
-					totalPorAfectacion.put(a.getClass().toString(), totalPorAfectacion.get(a.getClass().toString())+1);				
+				for (Afectacion a : f.getAfectaciones()){
+					String tipo = a.getClass().getSimpleName(); // m·s limpio que toString()
+					int cantidad = totalPorAfectacion.getOrDefault(tipo, 0);
+					totalPorAfectacion.put(tipo, cantidad + 1);  
+				}				
 		return totalPorAfectacion;
 	}
 
@@ -275,10 +262,10 @@ public class MICONS {
 		oficinas.add(new OficinaTramites("Cotorro"));	
 		oficinas.add(new OficinaTramites("Cerro"));	
 		oficinas.add(new OficinaTramites("La Lisa"));
-		
+
 		oficinas.get(0).inicializarFichasTecnicas();
 		oficinas.get(0).inicializarPlantillas();
-		
+
 	}
 
 	public void inicializarViviendas(){
@@ -290,7 +277,7 @@ public class MICONS {
 		viviendas.add(new Vivienda("Pedro PÈrez", "04012166621","Calle 12 123", "Propiedad", "Casa", "Tipo II", true, 7, 6, 3, 1, 1, 0,3));
 		viviendas.add(new Vivienda( "Carlos DÌaz", "90031212345","Calle MartÌ 89", "Usufructo", "Casa", "Tipo I",false, 7.5, 4.5, 3, 1, 0, 1,5));
 		viviendas.add(new Vivienda( "Luisa GÛmez", "88020312345", "Ave 51 456","Arrendamiento", "Apartamento", "Tipo III",false, 8.0,4, 3, 0, 2, 0, 4));
-	 
+
 	}
 
 }

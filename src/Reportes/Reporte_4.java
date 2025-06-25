@@ -72,12 +72,12 @@ public class Reporte_4 extends JFrame {
 
 	//Constructor
 	private Reporte_4(ArrayList<Cubicacion> cubicaciones) {
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 635, 260);
-		setJMenuBar(getMenuBar_1());
-		setContentPane(getContentPane());
 		micons=MICONS.getMICONS();
 		this.cubicaciones=cubicaciones;
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 490, 400);
+		setJMenuBar(getMenuBar_1());
+		setContentPane(getContentPane());
 	}
 
 	//Atributos 
@@ -106,6 +106,12 @@ public class Reporte_4 extends JFrame {
 	public JMenuItem getMntmRegresar() {
 		if (mntmRegresar == null) {
 			mntmRegresar = new JMenuItem("Regresar");
+			mntmRegresar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				
+				dispose();
+				}
+			});
 			mntmRegresar.setBackground(Color.DARK_GRAY);
 			mntmRegresar.setForeground(Color.ORANGE);
 		}
@@ -118,7 +124,7 @@ public class Reporte_4 extends JFrame {
 			txtCubicacionesConMayor.setForeground(Color.ORANGE);
 			txtCubicacionesConMayor.setBackground(Color.DARK_GRAY);
 			txtCubicacionesConMayor.setText("   Cubicaciones con mayor costo por material:");
-			txtCubicacionesConMayor.setBounds(420, 15, 190, 46);
+			txtCubicacionesConMayor.setBounds(10, 11, 455, 20);
 		}
 		return txtCubicacionesConMayor;
 	}
@@ -126,7 +132,7 @@ public class Reporte_4 extends JFrame {
 	public JScrollPane getScrollPaneCubicacion(){
 		if(scrollPaneCubicacion==null){
 			scrollPaneCubicacion= new JScrollPane();
-			scrollPaneCubicacion.setBounds(10, 34, 400, 152);
+			scrollPaneCubicacion.setBounds(10, 174, 455, 152);
 			scrollPaneCubicacion.setViewportView(getTableCubicacion());
 		}
 		return scrollPaneCubicacion;
@@ -148,7 +154,7 @@ public class Reporte_4 extends JFrame {
 			txtCubicacion.setBackground(Color.DARK_GRAY);
 			txtCubicacion.setForeground(Color.ORANGE);
 			txtCubicacion.setText("Cubicacion: ");
-			txtCubicacion.setBounds(10, 15, 400, 20);
+			txtCubicacion.setBounds(10, 155, 455, 20);
 			txtCubicacion.setColumns(10);
 		}
 		return txtCubicacion;
@@ -156,7 +162,7 @@ public class Reporte_4 extends JFrame {
 	public JScrollPane getScrollPane_1() {
 		if (scrollPane_1 == null) {
 			scrollPane_1 = new JScrollPane();
-			scrollPane_1.setBounds(420, 61, 190, 125);
+			scrollPane_1.setBounds(10, 31, 455, 113);
 			scrollPane_1.setViewportView(getList());
 		}
 		return scrollPane_1;

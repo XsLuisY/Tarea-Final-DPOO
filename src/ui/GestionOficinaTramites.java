@@ -67,6 +67,7 @@ public class GestionOficinaTramites extends JFrame {
 	private JMenuItem mntmMateriales;
 	private JMenuItem mntmFtdos;
 	private JMenuItem mntmPlantillas;
+	private JTextField txtSeleccioneUnaOficina;
 
 	//Singleton
 	public static GestionOficinaTramites getGestionOficinaTramites(){
@@ -120,13 +121,14 @@ public class GestionOficinaTramites extends JFrame {
 			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 			contentPane.setLayout(null);
 			contentPane.add(getScrollPane());
+			contentPane.add(getTxtSeleccioneUnaOficina());
 		}
 		return contentPane;
 	}
 	public JScrollPane getScrollPane(){
 		if(scrollPane==null){
 			scrollPane= new JScrollPane();
-			scrollPane.setBounds(10, 11, 374, 225);
+			scrollPane.setBounds(10, 42, 374, 194);
 			scrollPane.setViewportView(getListOficinas());
 		}
 		return scrollPane;
@@ -346,6 +348,19 @@ public class GestionOficinaTramites extends JFrame {
 			o= oficinas.get(pos);
 		}
 		return o;
+	}
+	public JTextField getTxtSeleccioneUnaOficina() {
+		if (txtSeleccioneUnaOficina == null) {
+			txtSeleccioneUnaOficina = new JTextField();
+			txtSeleccioneUnaOficina.setHorizontalAlignment(SwingConstants.CENTER);
+			txtSeleccioneUnaOficina.setText("Seleccione una Oficina de Tramites: ");
+			txtSeleccioneUnaOficina.setEditable(false);
+			txtSeleccioneUnaOficina.setForeground(Color.ORANGE);
+			txtSeleccioneUnaOficina.setBackground(Color.DARK_GRAY);
+			txtSeleccioneUnaOficina.setBounds(10, 11, 374, 20);
+			txtSeleccioneUnaOficina.setColumns(10);
+		}
+		return txtSeleccioneUnaOficina;
 	}
 }
 

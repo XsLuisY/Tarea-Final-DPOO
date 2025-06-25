@@ -26,6 +26,8 @@ import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 
 import clases.Vivienda;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Reporte_2 extends JFrame {
 
@@ -49,13 +51,15 @@ public class Reporte_2 extends JFrame {
 	//Constructor
 	private Reporte_2(ArrayList<Vivienda> viviendas) {
 		setResizable(false);
+		this.viviendas=viviendas;
 		setType(Type.UTILITY);
 		setModalExclusionType(ModalExclusionType.TOOLKIT_EXCLUDE);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 340, 265);
+		setBounds(100, 100, 380, 265);
 		setJMenuBar(getMenuBar_1());
 		setContentPane(getContentPane());	
-		this.viviendas=viviendas;
+		actualizarTableViviendas();		
+		
 	}
 	public JPanel getContentPane(){
 		if(contentPane==null){
@@ -80,6 +84,11 @@ public class Reporte_2 extends JFrame {
 	public JMenuItem getMntmRegresar() {
 		if (mntmRegresar == null) {
 			mntmRegresar = new JMenuItem("Regresar");
+			mntmRegresar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				dispose();
+				}
+			});
 			mntmRegresar.setBackground(Color.DARK_GRAY);
 			mntmRegresar.setForeground(Color.ORANGE);
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
@@ -93,7 +102,7 @@ public class Reporte_2 extends JFrame {
 			txtViviendasConMayor.setBackground(Color.DARK_GRAY);
 			txtViviendasConMayor.setForeground(Color.ORANGE);
 			txtViviendasConMayor.setText("Viviendas con mayor concentraci\u00F3n de personas vulnerables");
-			txtViviendasConMayor.setBounds(10, 11, 314, 20);
+			txtViviendasConMayor.setBounds(10, 11, 354, 20);
 			txtViviendasConMayor.setColumns(10);
 		}
 		return txtViviendasConMayor;
@@ -101,7 +110,7 @@ public class Reporte_2 extends JFrame {
 	public JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(10, 30, 314, 171);
+			scrollPane.setBounds(10, 30, 354, 171);
 			scrollPane.setRowHeaderView(getTableViviendas());
 		}
 		return scrollPane;
