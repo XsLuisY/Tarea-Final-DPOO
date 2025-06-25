@@ -65,7 +65,7 @@ public class Vivienda{
 	}
 	public void setDocumentoLegal(String documentoLegal) {
 		if (documentoLegal != null && !documentoLegal.trim().isEmpty()) {
-			if(documentoLegal.matches("[a-zA-ZÃ¡Ã©Ã­Ã³ÃºÃ�Ã‰Ã�Ã“ÃšÃ±Ã‘ ]+"))
+			if(documentoLegal.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ1234567890 ]+"))
 				this.documentoLegal = documentoLegal.trim().replaceAll("\\s+", " ");
 			else
 				throw new IllegalArgumentException("El documento legal no debe tener caracteres especiales");
@@ -78,7 +78,7 @@ public class Vivienda{
 	}
 	public void setTipologiaHabitacional(String tipologiaHabitacional) {
 		if (tipologiaHabitacional != null && !tipologiaHabitacional.trim().isEmpty()) {
-			if(tipologiaHabitacional.matches("[a-zA-ZñÑñáéíóúÁÉÍÓÚ ]+"))
+			if(tipologiaHabitacional.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ1234567890 ]+"))
 				this.tipologiaHabitacional = tipologiaHabitacional.trim().replaceAll("\\s+", " ");
 			else
 				throw new IllegalArgumentException("La tipologia habitacional no debe tener caracteres especiales");
@@ -91,7 +91,7 @@ public class Vivienda{
 	}
 	public void setTipologiaConstructiva(String tipologiaConstructiva) {
 		if (tipologiaConstructiva != null && !tipologiaConstructiva.trim().isEmpty()) {
-			if(tipologiaConstructiva.matches("[a-zA-ZñÑñáéíóúÁÉÍÓÚ ]+"))
+			if(tipologiaConstructiva.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ1234567890 ]+"))
 				this.tipologiaConstructiva = tipologiaConstructiva.trim().replaceAll("\\s+", " ");
 			else
 				throw new IllegalArgumentException("La tipologia constructiva no debe tener caracteres especiales");
@@ -178,14 +178,12 @@ public class Vivienda{
 		return totalHabitantes;
 	}
 	public void setTotalHabitantes(int totalHabitantes) {
-   if (totalHabitantes <(cantNinios+cantAncianos+cantEmbarazadas) || totalHabitantes >40) {
-    throw new IllegalArgumentException("El total de habitantes no puede ser menor al total de ninios, ancianos y embarazadas juntos ni mayor a 40");
+		if (totalHabitantes <(cantNinios+cantAncianos+cantEmbarazadas) || totalHabitantes >40) {
+			throw new IllegalArgumentException("El total de habitantes no puede ser menor al total de ninios, ancianos y embarazadas juntos ni mayor a 40");
+		}
+		else
+			this.totalHabitantes = totalHabitantes;
+	}
 }
-else
-		this.totalHabitantes = totalHabitantes;
-	}
-	}
-		
 
-}
 

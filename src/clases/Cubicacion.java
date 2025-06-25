@@ -14,6 +14,10 @@ public class Cubicacion  {
 		materiales = new ArrayList<MaterialACubicar>();
 		setId();
 	}
+	public Cubicacion(ArrayList<MaterialACubicar> materiales){
+		this.materiales = materiales;
+		setId();
+	}
 
 	//Encapsulamiento
 	public UUID getId() {

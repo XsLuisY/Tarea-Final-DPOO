@@ -31,6 +31,9 @@ public class MICONS {
 		listaId = new HashMap<UUID, Identificable>();
 	}
 	//Encapsulamiento
+	public HashMap<UUID, Identificable> getListaId(){
+		return listaId;
+	}
 	public ArrayList<OficinaTramites> getOficinaTramites(){
 		return oficinas;
 	}	
@@ -271,7 +274,11 @@ public class MICONS {
 		oficinas.add(new OficinaTramites("Diez de Octubre"));	
 		oficinas.add(new OficinaTramites("Cotorro"));	
 		oficinas.add(new OficinaTramites("Cerro"));	
-		oficinas.add(new OficinaTramites("La Lisa"));		
+		oficinas.add(new OficinaTramites("La Lisa"));
+		
+		oficinas.get(0).inicializarFichasTecnicas();
+		oficinas.get(0).inicializarPlantillas();
+		
 	}
 
 	public void inicializarViviendas(){
@@ -279,7 +286,11 @@ public class MICONS {
 		viviendas.add(new Vivienda("Luis","05011045061","Calle 20 entre 23 y 21","Propiedad","Casa","Tipo I",false,4,5,2,2,1,1,5));
 		viviendas.add(new Vivienda("Ernesto","03061545181","Calle Fernanda entre C y B","Usufructo","Apartamento","Tipo III",true,4,4,3,1,0,1,3));
 		viviendas.add(new Vivienda("Diana","02092317632","Calle A entre D y C","Arrendamiento","Otro","Tipo IV",false,4,5,3,3,0,0,8));
-		viviendas.add(new Vivienda("Ana","01120564637","Calle Balear entre Piedra y Soto","Providencia","Bohio","Tipo V",false,4,7,2,2,0,1,7));
+		viviendas.add(new Vivienda("Ana","01120564637","Calle Balear entre Piedra y Soto","Providencia","Bohio","Tipo V",false,4,7,2,2,0,1,7));		
+		viviendas.add(new Vivienda("Pedro Pérez", "04012166621","Calle 12 123", "Propiedad", "Casa", "Tipo II", true, 7, 6, 3, 1, 1, 0,3));
+		viviendas.add(new Vivienda( "Carlos Díaz", "90031212345","Calle Martí 89", "Usufructo", "Casa", "Tipo I",false, 7.5, 4.5, 3, 1, 0, 1,5));
+		viviendas.add(new Vivienda( "Luisa Gómez", "88020312345", "Ave 51 456","Arrendamiento", "Apartamento", "Tipo III",false, 8.0,4, 3, 0, 2, 0, 4));
+	 
 	}
 
 }

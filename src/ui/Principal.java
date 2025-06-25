@@ -38,6 +38,7 @@ public class Principal extends JFrame {
 	private JMenuItem mntmCerrarSesion; 
 	private JButton btnHacerLevantamiento;
 	private JMenuItem mntmCerrarPrograma;
+	private JMenuItem mntmBuscar;
 
 	//Singleton
 	public static Principal getPrincipal(){
@@ -76,6 +77,7 @@ public class Principal extends JFrame {
 			barraSuperior.setBackground(Color.DARK_GRAY);
 			barraSuperior.add(getGestion());
 			barraSuperior.add(getReportes());
+			barraSuperior.add(getMntmBuscar());
 			barraSuperior.add(getMntmCerrarSesion());			
 			barraSuperior.add(getMntmCerrarPrograma());
 		}
@@ -207,10 +209,38 @@ public class Principal extends JFrame {
 	public JButton getBtnHacerLevantamiento(){
 		if(btnHacerLevantamiento==null){
 			btnHacerLevantamiento= new JButton("Hacer Levantamiento");
+			btnHacerLevantamiento.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					GestionOficinaTramites.getGestionOficinaTramites().setVisible(true);
+				}
+			});
 			btnHacerLevantamiento.setBackground(Color.DARK_GRAY);
 			btnHacerLevantamiento.setForeground(Color.ORANGE);
 			btnHacerLevantamiento.setBounds(364, 266, 170, 23);			
 		}
 		return btnHacerLevantamiento;
 	}
+	public JMenuItem getMntmBuscar() {
+		if (mntmBuscar == null) {
+			mntmBuscar = new JMenuItem("Buscar");
+			mntmBuscar.setBackground(Color.DARK_GRAY);
+			mntmBuscar.setForeground(Color.ORANGE);
+			mntmBuscar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				Buscar.getBuscar().setVisible(true);
+				}
+			});
+	
+		}
+		return mntmBuscar;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

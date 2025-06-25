@@ -23,7 +23,7 @@ public class AfectacionTecho extends Afectacion{
 		if (materialPredominante == null)
 		throw new NullPointerException("El material predominante no debe ser null");
 		if(!materialPredominante.trim().isEmpty()) {
-			if(materialPredominante.matches("[a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1234567890 ]+"))
+			if(materialPredominante.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ1234567890 ]+"))
 				this.materialPredominante = materialPredominante.trim().replaceAll("\\s+", " ");
 			else
 				throw new IllegalArgumentException("El material predominante no debe estar vacÃ­o y solo debe tener letras");
