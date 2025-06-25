@@ -204,23 +204,29 @@ public class Reporte_4 extends JFrame {
 			}
 		getTableCubicacion().setModel(model);
 	}
-	private static void addPopup(Component component, final JPopupMenu popup) {
-		component.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-			public void mouseReleased(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-			private void showMenu(MouseEvent e) {
-				popup.show(e.getComponent(), e.getX(), e.getY());
-			}
-		});
-	}
+	private void addPopup(final JList<?> listComponent, final JPopupMenu popup) {
+	    listComponent.addMouseListener(new MouseAdapter() {
+	        private void showPopup(MouseEvent e) {
+	            int index = listComponent.locationToIndex(e.getPoint());
+	            if (index >= 0) {
+	                listComponent.setSelectedIndex(index);
+	                popup.show(e.getComponent(), e.getX(), e.getY());
+	            }
+	        }
+	        @Override
+	        public void mousePressed(MouseEvent e) {
+	            if (e.isPopupTrigger()) {
+	                showPopup(e);
+	            }
+	        }
+	        @Override
+	        public void mouseReleased(MouseEvent e) {
+	            if (e.isPopupTrigger()) {
+	                showPopup(e);
+	            }
+	        }
+	    });
+}
 	public JPopupMenu getPopupMenu() {
 		if (popupMenu == null) {
 			popupMenu = new JPopupMenu();
@@ -239,7 +245,8 @@ public class Reporte_4 extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					Cubicacion c = obtenerCubicacionSeleccionada();
 					if (c != null) {
-						actualizarTableCubicacion(c);						
+						actualizarTableCubicacion(c);	
+						txtCubicacion.setText("Cubicacion: " + c.getId().toString());
 					} else {
 						JOptionPane.showMessageDialog(reporte_4, "Debes seleccionar una cubicacion para mostrar.", "Aviso", JOptionPane.WARNING_MESSAGE);
 					}

@@ -311,7 +311,7 @@ public ArrayList<MaterialACubicar> generarCubicacion(FichaTecnicaDO ficha){
 			boolean exist=false;		            
 			for (int i=0;i<getMateriales().size() && !exist ;i++) {
 				Material m= getMateriales().get(i);
-				if (m.getNombre().equalsIgnoreCase(nombreMaterial)) {
+				if (m.getNombre().trim().equalsIgnoreCase(nombreMaterial.trim())){
 					material = m;
 					exist=true;
 				}
