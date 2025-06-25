@@ -237,16 +237,21 @@ public class MICONS {
 		ArrayList<Cubicacion> cubicaciones = new ArrayList<Cubicacion>();
 		ArrayList<Cubicacion> auxCubicaciones = new ArrayList<Cubicacion>();
 
-		for(OficinaTramites o: oficinas){
-			auxCubicaciones=o.buscarCubicacionesMayorCosto();
-			auxCostoM=auxCubicaciones.get(0).calcularPrecioTotal();
+		for (OficinaTramites o : oficinas) {
+		    auxCubicaciones = o.buscarCubicacionesMayorCosto();
 
-			if(auxCostoM>costoM){							
-				costoM=auxCostoM;
-				cubicaciones.clear();
-			}
-			if(costoM==auxCostoM)
-				cubicaciones.addAll(auxCubicaciones);
+		    if (!auxCubicaciones.isEmpty()) {
+		        auxCostoM = auxCubicaciones.get(0).calcularPrecioTotal();
+
+		        if (auxCostoM > costoM) {
+		            costoM = auxCostoM;
+		            cubicaciones.clear();
+		        }
+
+		        if (auxCostoM == costoM) {
+		            cubicaciones.addAll(auxCubicaciones);
+		        }
+		    }
 		}
 		return cubicaciones;
 	}
