@@ -20,6 +20,7 @@ public class Runner {
 					micons.inicializarViviendas();
 					for(OficinaTramites o: micons.getOficinaTramites())
 						o.inicializarMateriales();					
+					micons.inicializarPlantillaArroyoNaranjo();
 					Login frame = Login.getLogin();
 					frame.setVisible(true);
 				} catch (Exception e) {
