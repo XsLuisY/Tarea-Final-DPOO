@@ -132,6 +132,7 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 			mntmRegresar.setBackground(Color.DARK_GRAY);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					limpiarCampos();
 					dispose();
 				}
 			});
@@ -388,6 +389,7 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 								if(add){									
 									JOptionPane.showMessageDialog(null, "Ficha Tecnica de Daños Ocacionados agregada exitosamente.");			            
 									gestion.actualizarTableFichas(oficina.getFichas());								
+									limpiarCampos();
 									dispose();
 								} else 
 									JOptionPane.showMessageDialog(null, "Ya existe una Ficha Tecnica de Daños Ocacionados asociada a esta vivienda.", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -477,7 +479,20 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 			m=muebles.get(pos);
 		return m;
 	}
+	private void limpiarCampos() {
+	
+			getTextDireccion().setText("");
 
+		if (getTableAfectaciones() != null) {
+			DefaultTableModel model = (DefaultTableModel) tableAfectaciones.getModel();
+			model.setRowCount(0);
+		}
+
+		if (getTableMuebles() != null) {
+			DefaultTableModel model = (DefaultTableModel) tableMuebles.getModel();
+			model.setRowCount(0);
+		}
+	}
 	public void actualizarViviendaAsociada(){
 		getTextDireccion().setText(ficha.getVivienda().getDireccion());
 	}

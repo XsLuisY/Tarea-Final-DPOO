@@ -84,6 +84,7 @@ public class CrearOficinaTramites extends JDialog {
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {					
+					limpiarCampos();
 					dispose();
 				}
 			});
@@ -105,6 +106,7 @@ public class CrearOficinaTramites extends JDialog {
 						if(agregado){									
 							JOptionPane.showMessageDialog(null, "Oficina agregada exitosamente.");			            
 							gestion.actualizarListaOficinas();
+							limpiarCampos();
 							dispose();
 						} else 
 							JOptionPane.showMessageDialog(null, "Ya existe una oficina con ese nombre.", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -131,5 +133,14 @@ public class CrearOficinaTramites extends JDialog {
 		}
 		return textField ;
 	}
+
+//Metodos
+	private void limpiarCampos() {
+	        getTextField().setText("");
+	}
+
+
 }
+
+
 

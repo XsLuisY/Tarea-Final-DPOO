@@ -69,6 +69,7 @@ public class CrearMueble extends JFrame {
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					limpiarCampos();
 					dispose();
 				}
 			});
@@ -142,6 +143,7 @@ public class CrearMueble extends JFrame {
 							if (add) {
 								JOptionPane.showMessageDialog(CrearMueble.this, "Mueble agregado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 								gestion.actualizarTableMuebles(ficha.getMuebles());
+								limpiarCampos();
 								dispose();
 							}
 						} catch (IllegalArgumentException ex) {
@@ -154,4 +156,17 @@ public class CrearMueble extends JFrame {
 		}
 		return buttonAgregar;
 	}
+	
+	private void limpiarCampos() {
+	        getTextFieldNombre().setText("");
+	        getSpinnerCantidad().setValue(1);
+	}
+	
+//Metodo
+
+
+
+
+
+
 }

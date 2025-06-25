@@ -97,6 +97,7 @@ public class ModificarAfectacion extends JFrame{
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					limpiarCampos();
 					dispose();
 				}
 			});			
@@ -186,6 +187,7 @@ public class ModificarAfectacion extends JFrame{
 							}						
 							JOptionPane.showMessageDialog(ModificarAfectacion.this, "Afectación modificada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 							gestion.actualizarTableAfectaciones(ficha.getAfectaciones());
+							limpiarCampos();
 							dispose();
 						} catch (Exception ex) {
 							JOptionPane.showMessageDialog(ModificarAfectacion.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -225,5 +227,11 @@ public class ModificarAfectacion extends JFrame{
 		} else 
 			getComboBoxTipoAfectacion().setSelectedItem(((AfectacionPared)afectacion).getEsDeCarga() ? "Pared de carga" : "Pared");
 	}
+	private void limpiarCampos() {
+		  
+        getTextFieldMaterialPredominante().setText("");	 
+        getComboBoxTipoAfectacion().setSelectedIndex(0);	
+    	getComboBoxEsDerrumbeTotal().setSelectedIndex(0);
+}
 }
 

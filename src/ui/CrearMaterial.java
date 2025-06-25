@@ -27,7 +27,7 @@ import com.jgoodies.forms.factories.DefaultComponentFactory;
 public class CrearMaterial extends JFrame {
 	private static CrearMaterial crearMaterial;
 	private static final long serialVersionUID = 1L;
-	
+
 	private OficinaTramites oficina;
 	private GestionMateriales gestion;
 
@@ -41,14 +41,14 @@ public class CrearMaterial extends JFrame {
 	private JComboBox<String> comboBox;
 	private JLabel lblPrecioUnitario;
 	private JTextField textFieldPrecioUnitario;
-	
+
 	//Singleton
 	public static CrearMaterial getCrearMaterial(GestionMateriales gestion, OficinaTramites oficina){
 		if(crearMaterial==null)
 			crearMaterial=new CrearMaterial(gestion, oficina);
 		return crearMaterial;
 	}
-	
+
 	//Constructor
 	private CrearMaterial(GestionMateriales gestion, OficinaTramites oficina) {
 		setTitle("Agregar material");
@@ -75,6 +75,7 @@ public class CrearMaterial extends JFrame {
 			mntmRegresar = new JMenuItem("Regresar");
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					limpiarCampos();
 					dispose();
 				}
 			});
@@ -175,18 +176,33 @@ public class CrearMaterial extends JFrame {
 					}
 
 					if (valido) {
-					    try {
-					        oficina.addMaterial(nombre, unidad, precio);
-					        gestion.actualizarTableMateriales(oficina.getMateriales());
-					        JOptionPane.showMessageDialog(null, "Material agregado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-					        dispose();
-					    } catch (IllegalArgumentException ex) {
-					        JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					    }
+						try {
+							oficina.addMaterial(nombre, unidad, precio);
+							gestion.actualizarTableMateriales(oficina.getMateriales());
+							JOptionPane.showMessageDialog(null, "Material agregado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+							limpiarCampos();
+							dispose();
+						} catch (IllegalArgumentException ex) {
+							JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+						}
 					}
 				}
 			});
 		}
 		return btnAgregar;
 	}
+
+	//Metodos
+	private void limpiarCampos() {
+	        getTextFieldNombre().setText("");
+	        getComboBox().setSelectedIndex(0);
+	        getTextFieldPrecioUnitario().setText("");
+	}
 }
+
+
+
+
+
+
+

@@ -80,6 +80,7 @@ public class ModificarMaterial extends JFrame {
 			mntmRegresar = new JMenuItem("Regresar");
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					limpiarCampos();
 					dispose();
 				}
 			});
@@ -184,6 +185,7 @@ public class ModificarMaterial extends JFrame {
 							oficina.updateMaterial(material.getId(), nombre, unidad, precio);
 							gestion.actualizarTableMateriales(oficina.getMateriales());
 							JOptionPane.showMessageDialog(null, "Material modificado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+							limpiarCampos();
 							dispose();
 						} catch (IllegalArgumentException ex) {
 							JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -200,8 +202,13 @@ public class ModificarMaterial extends JFrame {
 		getTextFieldNombre().setText(material.getNombre());
 		getComboBox().setSelectedItem(material.getUnidadMedida());
 		getTextFieldPrecioUnitario().setText(String.valueOf(material.getPrecioUnitario()));
-
+		
 	}
+	private void limpiarCampos() {
+        getTextFieldNombre().setText("");
+        getComboBox().setSelectedIndex(0);
+        getTextFieldPrecioUnitario().setText("");
+}
 }
 
 
