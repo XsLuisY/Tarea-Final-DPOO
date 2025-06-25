@@ -238,20 +238,20 @@ public class MICONS {
 		ArrayList<Cubicacion> auxCubicaciones = new ArrayList<Cubicacion>();
 
 		for (OficinaTramites o : oficinas) {
-		    auxCubicaciones = o.buscarCubicacionesMayorCosto();
+			auxCubicaciones = o.buscarCubicacionesMayorCosto();
 
-		    if (!auxCubicaciones.isEmpty()) {
-		        auxCostoM = auxCubicaciones.get(0).calcularPrecioTotal();
+			if (!auxCubicaciones.isEmpty()) {
+				auxCostoM = auxCubicaciones.get(0).calcularPrecioTotal();
 
-		        if (auxCostoM > costoM) {
-		            costoM = auxCostoM;
-		            cubicaciones.clear();
-		        }
+				if (auxCostoM > costoM) {
+					costoM = auxCostoM;
+					cubicaciones.clear();
+					cubicaciones.addAll(auxCubicaciones); // importante mover aquí
+				} else if (auxCostoM == costoM) {
+					cubicaciones.addAll(auxCubicaciones);
+				}
 
-		        if (auxCostoM == costoM) {
-		            cubicaciones.addAll(auxCubicaciones);
-		        }
-		    }
+			}
 		}
 		return cubicaciones;
 	}
@@ -267,12 +267,13 @@ public class MICONS {
 		oficinas.add(new OficinaTramites("Cotorro"));	
 		oficinas.add(new OficinaTramites("Cerro"));	
 		oficinas.add(new OficinaTramites("La Lisa"));
+	}
+	public void inicializarPlantillaArroyoNaranjo(){
 
 		oficinas.get(0).inicializarFichasTecnicas();
 		oficinas.get(0).inicializarPlantillas();
 
 	}
-
 	public void inicializarViviendas(){
 		viviendas.add(new Vivienda("Paco","05012045762","Calle J entre L y K","Propiedad","Casa","Tipo II",true,4,5,2,2,3,1,6));
 		viviendas.add(new Vivienda("Luis","05011045061","Calle 20 entre 23 y 21","Propiedad","Casa","Tipo I",false,4,5,2,2,1,1,5));
