@@ -38,6 +38,6 @@ else
 	}
 	
 
-	//M�todos
+	//Metodos
 
 }

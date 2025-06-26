@@ -29,15 +29,13 @@ public void setNombre(String nombre) {
       throw new IllegalArgumentException("El nombre solo debe tener letras");
    }
    else
-		throw new IllegalArgumentException("El nombre no puede estar vacío o ser null");
+		throw new IllegalArgumentException("El nombre no puede estar vacio o ser null");
 }
 public String getCI() {
 	return ci;
 }
 public void setCI(String id) {
-
-		//int num;
-
+	
 		if(!id.replaceAll(" ", "").equalsIgnoreCase("") && id.matches("[0-9]+") && id.length() == 11){
 			SimpleDateFormat fecha = new SimpleDateFormat("yyMMdd"); 
 			fecha.setLenient(false);
@@ -46,9 +44,9 @@ public void setCI(String id) {
 				fecha.parse(id.substring(0, 6));
 				this.ci = id;
 			}catch(ParseException e){
-				throw new IllegalArgumentException("Los 6 primeros dígitos del carnet de identidad deben representar la fecha real");
+				throw new IllegalArgumentException("Los 6 primeros digitos del carnet de identidad deben representar la fecha real");
 			}
 		}else
-			throw new IllegalArgumentException("El carnet de identidad debe estar compuesto por 11 dígitos");
+			throw new IllegalArgumentException("El carnet de identidad debe estar compuesto por 11 digitos");
 	}
 }

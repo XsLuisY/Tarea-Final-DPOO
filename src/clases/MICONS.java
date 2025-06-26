@@ -222,7 +222,7 @@ public class MICONS {
 		for (OficinaTramites o : micons.getOficinaTramites()) 
 			for (FichaTecnicaDO f : o.getFichas())	    
 				for (Afectacion a : f.getAfectaciones()){
-					String tipo = a.getClass().getSimpleName(); // más limpio que toString()
+					String tipo = a.getClass().getSimpleName();
 					int cantidad = totalPorAfectacion.getOrDefault(tipo, 0);
 					totalPorAfectacion.put(tipo, cantidad + 1);  
 				}				
@@ -246,7 +246,7 @@ public class MICONS {
 				if (auxCostoM > costoM) {
 					costoM = auxCostoM;
 					cubicaciones.clear();
-					cubicaciones.addAll(auxCubicaciones); // importante mover aquí
+					cubicaciones.addAll(auxCubicaciones); 
 				} else if (auxCostoM == costoM) {
 					cubicaciones.addAll(auxCubicaciones);
 				}
@@ -283,7 +283,6 @@ public class MICONS {
 		viviendas.add(new Vivienda("Pedro Pérez", "04012166621","Calle 12 123", "Propiedad", "Casa", "Tipo II", true, 7, 6, 3, 1, 1, 0,3));
 		viviendas.add(new Vivienda( "Carlos Díaz", "90031212345","Calle Martí 89", "Usufructo", "Casa", "Tipo I",false, 7.5, 4.5, 3, 1, 0, 1,5));
 		viviendas.add(new Vivienda( "Luisa Gómez", "88020312345", "Ave 51 456","Arrendamiento", "Apartamento", "Tipo III",false, 8.0,4, 3, 0, 2, 0, 4));
-
 	}
 
 }
