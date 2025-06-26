@@ -33,22 +33,26 @@ import java.util.UUID;
 import javax.swing.JTextPane;
 
 public class Buscar extends JFrame {
+
 	private static Buscar buscar;
 	private MICONS micons;
 
-	private JPanel contentPane;
 	private JMenuBar menuBar;
-	private JMenuItem mntmRegresar;
-	private JLabel lblIngreseElId;
-	private JTextField textField;
+	private JMenuItem mntmRegresar;	
+	private JPanel contentPane;
+	private JLabel lblIngreseElId;	
+	private JTextField textField;	
+	private JTextPane txtpn;	
 	private JButton btnBuscar;
-	private JTextPane txtpn;
 
+	//Singleton
 	public static Buscar getBuscar(){
 		if(buscar==null)
 			buscar=new Buscar();
 		return buscar;
 	}
+
+	//Constructor
 	private Buscar() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 300, 240);
@@ -64,6 +68,8 @@ public class Buscar extends JFrame {
 		contentPane.add(getTxtpn());
 		micons=MICONS.getMICONS();
 	}
+
+	//Atributos
 
 	public JMenuBar getMenuBar_1() {
 		if (menuBar == null) {
@@ -102,6 +108,16 @@ public class Buscar extends JFrame {
 			textField.setColumns(10);
 		}
 		return textField;
+	}
+	public JTextPane getTxtpn() {
+		if (txtpn == null) {
+			txtpn = new JTextPane();
+			txtpn.setEditable(false);
+			txtpn.setBackground(Color.DARK_GRAY);
+			txtpn.setForeground(Color.ORANGE);
+			txtpn.setBounds(10, 69, 155, 97);
+		}
+		return txtpn;
 	}
 	public JButton getBtnBuscar() {
 		if (btnBuscar == null) {
@@ -143,11 +159,9 @@ public class Buscar extends JFrame {
 		else 
 			JOptionPane.showMessageDialog(buscar, "Ingresado un id.", "Aviso", JOptionPane.WARNING_MESSAGE);
 	}
-
 	public void mostrarMaterial(Material m){		
 		getTxtpn().setText("\tMaterial\nNombre:"+m.getNombre()+"\nUnidad de Medida: "+m.getUnidadMedida()+"\nPrecio Unitario: "+m.getPrecioUnitario());
 	}
-
 	public void mostrarAfectacion(Afectacion a){	
 		if(a instanceof AfectacionTecho)
 			getTxtpn().setText("\tAfectacion\nTipo: Techo"+"nMaterial Predominante: "+a.getMaterialPredominante());
@@ -157,17 +171,6 @@ public class Buscar extends JFrame {
 			getTxtpn().setText("\tAfectacion\nTipo: Pared"+"nMaterial Predominante: "+a.getMaterialPredominante());
 	}
 
-
-	public JTextPane getTxtpn() {
-		if (txtpn == null) {
-			txtpn = new JTextPane();
-			txtpn.setEditable(false);
-			txtpn.setBackground(Color.DARK_GRAY);
-			txtpn.setForeground(Color.ORANGE);
-			txtpn.setBounds(10, 69, 155, 97);
-		}
-		return txtpn;
-	}
 	private void limpiarCampos() {
 		getTextField().setText("");
 		getTxtpn().setText("");

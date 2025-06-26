@@ -40,7 +40,7 @@ public class AfectacionPared extends Afectacion{
       if(materialPredominante.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ1234567890 ]+"))
 				this.materialPredominante = materialPredominante.trim().replaceAll("\\s+", " ");
 			else
-				throw new IllegalArgumentException("El material predominante no debe estar vacÃ­o y solo debe tener letras");
+				throw new IllegalArgumentException("El material predominante no debe estar vacio y solo debe tener letras");
 		}
 	}
 	public String getMaterialPredominante(){
@@ -49,6 +49,8 @@ public class AfectacionPared extends Afectacion{
 	public UUID getId(){
 		return id;
 	}
+	
+	@Override
 	public void setId(){
 		do
 			id=UUID.randomUUID();		

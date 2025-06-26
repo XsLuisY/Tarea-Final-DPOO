@@ -36,9 +36,6 @@ public class AfectacionTecho extends Afectacion{
 	public UUID getId(){
 		return id;
 	}
-	public void setId(UUID id){
-		this.id= id;
-	}
 	@Override
 	public void setId() {
 		do

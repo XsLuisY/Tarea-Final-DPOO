@@ -19,7 +19,7 @@ public class Plantilla {
 	public void setCubicacion(Cubicacion cubicacion){
 		if(cubicacion!=null)
 			this.cubicacion= cubicacion;
-		else throw new IllegalArgumentException("La cubicación no puede ser nula");
+		else throw new IllegalArgumentException("La cubicacion no puede ser nula");
 	}
 	public Cubicacion getCubicacion(){
 		return cubicacion;
@@ -27,7 +27,7 @@ public class Plantilla {
 	public void setFichaTecnicaDO(FichaTecnicaDO ficha){
 		if(ficha!=null)
 			this.ficha= ficha;	
-		else throw new IllegalArgumentException("La Ficha Técnica de Daños Ocasionados no puede ser nula");
+		else throw new IllegalArgumentException("La Ficha Tecnica de Da�os Ocasionados no puede ser nula");
 	}
 	public FichaTecnicaDO getFichaTecnicaDO(){
 		return ficha;

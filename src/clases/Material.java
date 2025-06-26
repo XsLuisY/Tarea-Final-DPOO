@@ -21,8 +21,8 @@ public class Material {
 		if(nombre!=null && !nombre.trim().isEmpty())
 			if(nombre.matches("[a-zA-ZÒ—·ÈÌÛ˙¡…Õ”⁄1234567890 ]+"))
 				this.nombre=nombre.trim().replaceAll("\\s+", " ");		
-			else throw new IllegalArgumentException("El nombre del Consejo Popular no puede contiene n√∫meros o caracteres no v√°lidos.");
-		else throw new IllegalArgumentException("El nombre del Consejo Popular no puede estar vac√≠o.");		
+			else throw new IllegalArgumentException("El nombre del Consejo Popular no puede contiene numeros o caracteres no validos.");
+		else throw new IllegalArgumentException("El nombre del Consejo Popular no puede estar vacio.");		
 	}
 	public String getNombre(){
 		return nombre;		
@@ -53,5 +53,5 @@ public class Material {
 		while(MICONS.existUUID(id));
 	}
 
-	//M√©todos
+	//Metodos
  }

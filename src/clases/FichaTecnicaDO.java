@@ -76,7 +76,7 @@ public class FichaTecnicaDO {
 		  if(mueble!=null){
 		    muebles.add(mueble);
 		    add= true;
-		  }
+		  }new NullPointerException("El mueble no puede ser");
 		}
 		else throw new IllegalArgumentException("Este Mueble ya existe");
 		return add;
@@ -122,7 +122,7 @@ public class FichaTecnicaDO {
 	public boolean addAfectacion(String tipo, String material, boolean esDerrumbeTotal) {
 		boolean add = false;
 		if (material==null || material.isEmpty())
-			throw new IllegalArgumentException("Debes ingresar el material predominante.");
+			throw new IllegalArgumentException("Se debe ingresar el material predominante.");
 		else
 			if (tipo.equals(TECHO)) 
 				add =addAfectacionTecho(esDerrumbeTotal, material);
@@ -141,7 +141,7 @@ public class FichaTecnicaDO {
 			afectaciones.add(a);	
 			add=true;
 		}
-		else throw new IllegalArgumentException("Esta Afectacion ya existe");
+		else throw new IllegalArgumentException("Esta afectacion ya existe");
 		return add;
 	}
 	public Boolean addAfectacionPared(Boolean esDerrumbeTotal, String materialPredominante, Boolean esDeCarga){
@@ -175,7 +175,7 @@ public class FichaTecnicaDO {
 			a.setMaterialPredominante(materialPredominante);
 			a.setEsDeCarga(esDeCarga);
 			updt=true;
-		}else throw new IllegalArgumentException("Esta Afectacion no existe");
+		}else throw new IllegalArgumentException("Esta afectacion no existe");
 		return updt;
 	}
 	public Boolean updtAfectacionTecho(UUID id, Boolean esDerrumbeTotal, String materialPredominante){
@@ -186,7 +186,7 @@ public class FichaTecnicaDO {
 			a.setEsDerrumbeTotal(esDerrumbeTotal);
 			a.setMaterialPredominante(materialPredominante);
 			updt=true;
-		}else throw new IllegalArgumentException("Esta Afectacion no existe");
+		}else throw new IllegalArgumentException("Esta afectacion no existe");
 		return updt;
 	}
 	/*Delete*/ public Boolean delAfectacion(UUID id){
@@ -194,7 +194,7 @@ public class FichaTecnicaDO {
 
 		if(del)			
 			afectaciones.remove(readAfectacion(id));
-		else throw new IllegalArgumentException("Esta Afectacion no existe");
+		else throw new IllegalArgumentException("Esta afectacion no existe");
 
 		return del;
 	}

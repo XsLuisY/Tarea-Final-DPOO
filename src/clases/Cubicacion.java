@@ -40,11 +40,11 @@ public class Cubicacion  {
 		Boolean add=false;
 		MaterialACubicar m= readMaterialACubicar(material);
 		if(m==null){
-		  MaterialACubicar materialA= new MaterialACubicar(material,cantidad);
-		  if(materialA!=null){
-			  materiales.add(materialA);
+		  MaterialACubicar materialACubicar= new MaterialACubicar(material,cantidad);
+		  if(materialACubicar!=null){
+			  materiales.add(materialACubicar);
 		    add= true;
-		  }
+		  }	else throw new NullPointerException("El material no puede ser null");
 		}
 		else throw new IllegalArgumentException("Este Material ya existe");
 		return add;
@@ -57,7 +57,7 @@ public class Cubicacion  {
 			if(materiales.get(i).getMaterial().equals(material)){
 				m = materiales.get(i);
 				found=true;
-			}					
+			}				
 		return m; 			
 	}
 	/*Update*/public Boolean updateMaterialACubicar(Material material, double newCantidad){
