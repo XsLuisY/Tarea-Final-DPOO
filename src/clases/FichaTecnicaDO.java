@@ -74,7 +74,7 @@ public class FichaTecnicaDO implements Identificable{
 		do
 			id=UUID.randomUUID();
 		while(MICONS.getMICONS().getListaId().containsKey(id));
-		MICONS.getMICONS().getListaId().put(id, this);
+		MICONS.getMICONS().getListaId().put(id, FichaTecnicaDO.this);
 	}
 
 	public void tieneAfectaciones(ArrayList<Mueble> muebles, ArrayList<Afectacion> afectaciones){

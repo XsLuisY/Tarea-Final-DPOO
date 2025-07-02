@@ -308,7 +308,7 @@ public class GestionOficinaTramites extends JFrame {
 	}
 
 	public void addOficinaTramites(){
-		CrearOficinaTramites.getCrearOficinaTramites(gestionOficinaTramites).setVisible(true);
+		new CrearOficinaTramites(gestionOficinaTramites).setVisible(true);
 	}
 	public void updtOficinaTramites(){
 		OficinaTramites oficina = obtenerOficinaSeleccionada();

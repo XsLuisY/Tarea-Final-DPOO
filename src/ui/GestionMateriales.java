@@ -229,7 +229,7 @@ public class GestionMateriales extends JFrame {
 		return m;
 	}
 	public void addMaterial(){
-		CrearMaterial.getCrearMaterial(gestionMateriales, oficina).setVisible(true);
+		new CrearMaterial(gestionMateriales, oficina).setVisible(true);
 	}
 	public void modMaterial(){
 		Material m = getSelectedMaterial();

@@ -45,7 +45,6 @@ public class MostrarVivienda extends JFrame {
 	private JLabel lblEmbarazadas;
 	private JLabel lblNinos;
 	private JLabel lblHabitantes;
-	private JLabel lblId;
 
 	//Singleton
 	public static MostrarVivienda getMostrarVivienda(Vivienda vivienda){
@@ -94,7 +93,6 @@ public class MostrarVivienda extends JFrame {
 			contentPane.add(getLblEmbarazadas());
 			contentPane.add(getLblNinos());
 			contentPane.add(getLblHabitantes());
-			contentPane.add(getLblId());
 
 
 		}
@@ -266,14 +264,6 @@ public class MostrarVivienda extends JFrame {
 			lblHabitantes.setBounds(11, 283, 125, 14);
 		}
 		return lblHabitantes;
-	}
-	public JLabel getLblId(){
-		if(lblId==null){
-			lblId = new JLabel("ID:");
-			lblId.setHorizontalAlignment(SwingConstants.CENTER);
-			lblId.setBounds(11, 412, 273, 14);
-		}
-		return lblId;
 	}
 
 	//Metodos

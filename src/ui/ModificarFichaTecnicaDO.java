@@ -459,7 +459,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 	}
 
 	public void addAfectacion(){
-		CrearAfectacion.getCrearAfectacion(modificarFichaTecnicaDO, ficha).setVisible(true);
+		new CrearAfectacion(modificarFichaTecnicaDO, ficha).setVisible(true);
 	}
 	public void modAfectacion(){
 		Afectacion a= getAfectacionSeleccionada();
@@ -489,7 +489,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 	}
 
 	public void addMueble(){
-		CrearMueble.getCrearMueble(modificarFichaTecnicaDO, ficha).setVisible(true);
+		new CrearMueble(modificarFichaTecnicaDO, ficha).setVisible(true);
 	}
 	public void modMueble(){
 		Mueble mueble= getMuebleSeleccionado();

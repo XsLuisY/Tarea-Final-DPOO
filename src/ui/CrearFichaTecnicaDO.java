@@ -80,26 +80,18 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 	private JButton btnAsignarVivienda;
 	private JButton btnEnviar;
 
-	//Singleton
-	public static CrearFichaTecnicaDO getCrearFichaTecnicaDO(GestionFichaTecnicaDO gestion, OficinaTramites oficina){
-		if(crearFichaTecnicaDO==null
-				|| !crearFichaTecnicaDO.gestion.equals(gestion)
-				|| !crearFichaTecnicaDO.oficina.equals(oficina))
-			crearFichaTecnicaDO=new CrearFichaTecnicaDO(gestion, oficina);
-		return crearFichaTecnicaDO;
-	}
-
+	
 	//Constructor
-	private CrearFichaTecnicaDO(GestionFichaTecnicaDO gestion, OficinaTramites oficina) {
-		setType(Type.UTILITY);
-		setTitle("Ficha T\u00E9cnica de Da\u00F1os Ocacionados");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 320, 500); 	
+	public CrearFichaTecnicaDO(GestionFichaTecnicaDO gestion, OficinaTramites oficina) {
 		this.gestion=gestion;		
 		this.oficina=oficina;
 		ficha=new FichaTecnicaDO();	
 		afectaciones=ficha.getAfectaciones();
 		muebles=ficha.getMuebles();				
+		setType(Type.UTILITY);
+		setTitle("Ficha T\u00E9cnica de Da\u00F1os Ocacionados");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 320, 500); 	
 		setContentPane(getContentPane());
 		setJMenuBar(getBarraSuperior());
 		addPopup(getTableAfectaciones(), getPopupMenuAfectaciones());
@@ -188,7 +180,7 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 			mntmAgregarAfectacion.setForeground(Color.ORANGE);
 			mntmAgregarAfectacion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					CrearAfectacion c = CrearAfectacion.getCrearAfectacion(CrearFichaTecnicaDO.this, ficha);
+					CrearAfectacion c = new CrearAfectacion(CrearFichaTecnicaDO.this, ficha);
 					c.setVisible(true);
 				}
 			});
@@ -274,7 +266,7 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 			mntmAgregarMueble.setForeground(Color.ORANGE);
 			mntmAgregarMueble.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					CrearMueble c = CrearMueble.getCrearMueble(crearFichaTecnicaDO, ficha);
+					CrearMueble c = new CrearMueble(crearFichaTecnicaDO, ficha);
 					c.setVisible(true);
 				}
 			});
@@ -485,6 +477,8 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 				else{																			
 					if(oficina.addFichaTecnicaDO(vivienda, ficha.getAfectaciones(), ficha.getMuebles())){									
 						JOptionPane.showMessageDialog(crearFichaTecnicaDO, "Ficha Tecnica de Daños Ocacionados agregada exitosamente.");			            
+						oficina.addCubicacion(ficha);
+						oficina.addPlantilla( oficina.getDictamenes().get(ficha), ficha);
 						gestion.updtTableFichas(oficina.getFichas());								
 						limpiarCampos();
 						dispose();
