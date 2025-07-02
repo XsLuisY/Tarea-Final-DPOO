@@ -81,7 +81,10 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 
 	//Singleton
 	public static ModificarFichaTecnicaDO getModificarFichaTecnicaDO(GestionFichaTecnicaDO gestion, OficinaTramites oficina, FichaTecnicaDO ficha){
-		if(modificarFichaTecnicaDO==null)
+		if(modificarFichaTecnicaDO==null
+				|| !modificarFichaTecnicaDO.gestion.equals(gestion)
+				|| !modificarFichaTecnicaDO.oficina.equals(oficina)
+				|| !modificarFichaTecnicaDO.ficha.equals(ficha))
 			modificarFichaTecnicaDO= new ModificarFichaTecnicaDO(gestion, oficina, ficha);
 		return modificarFichaTecnicaDO;
 	}
@@ -139,8 +142,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 			mntmRegresar.setBackground(Color.DARK_GRAY);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					limpiarCampos();
-					dispose();
+					regresar();
 				}
 			});
 		}
@@ -181,8 +183,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 			mntmAgregarAfectacion.setForeground(Color.ORANGE);
 			mntmAgregarAfectacion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					CrearAfectacion c = CrearAfectacion.getCrearAfectacion(modificarFichaTecnicaDO, ficha);
-					c.setVisible(true);
+					addAfectacion();
 				}
 			});
 		}
@@ -196,11 +197,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 			mntmModificarAfectacion.setForeground(Color.ORANGE);
 			mntmModificarAfectacion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Afectacion a= getAfectacionSeleccionada();
-					if (a != null) {
-						ModificarAfectacion.getModificarAfectacion(modificarFichaTecnicaDO, ficha, a).setVisible(true);
-					} else 
-						JOptionPane.showMessageDialog(ModificarFichaTecnicaDO.this, "Debes seleccionar una afectacion para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE );					
+					modAfectacion();	
 				}
 			});
 		}
@@ -214,16 +211,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 			mntmEliminarAfectacion.setForeground(Color.ORANGE);
 			mntmEliminarAfectacion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Afectacion afectacion = getAfectacionSeleccionada();
-					if (afectacion != null) {
-						int confirmar = JOptionPane.showConfirmDialog(ModificarFichaTecnicaDO.this, "¿Seguro que deseas eliminar la afectación seleccionada?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION );
-
-						if (confirmar == JOptionPane.YES_OPTION) { 
-							ficha.delAfectacion(afectacion.getId()); 
-							actualizarTableAfectaciones(ficha.getAfectaciones());}
-					} else {
-						JOptionPane.showMessageDialog( ModificarFichaTecnicaDO.this, "Debes seleccionar una afectación para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE );
-					}
+					delAfectacion();
 				}
 			});
 		}
@@ -266,8 +254,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 			mntmAgregarMueble.setForeground(Color.ORANGE);
 			mntmAgregarMueble.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					CrearMueble c = CrearMueble.getCrearMueble(modificarFichaTecnicaDO, ficha);
-					c.setVisible(true);
+					addMueble();
 				}
 			});
 		}
@@ -281,13 +268,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 			mntmModificarMueble.setForeground(Color.ORANGE);
 			mntmModificarMueble.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Mueble mueble= getMuebleSeleccionado();
-					if (mueble != null) {
-						ModificarMueble m = ModificarMueble.getModificarMueble(modificarFichaTecnicaDO, ficha, mueble);
-						m.setVisible(true);
-					} else 
-						JOptionPane.showMessageDialog(ModificarFichaTecnicaDO.this, "Debes seleccionar un mueble para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE);
-
+					modMueble();
 				}
 			});
 		}
@@ -301,20 +282,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 			mntmEliminarMueble.setForeground(Color.ORANGE);
 			mntmEliminarMueble.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					int fila = getTableMuebles().getSelectedRow();
-					if (fila >= 0) {
-						String nombre = (String) getTableMuebles().getValueAt(fila, 0);
-						int confirmar = JOptionPane.showConfirmDialog(ModificarFichaTecnicaDO.this,"¿Seguro que deseas eliminar el mueble \"" + nombre + "\"?","Confirmar eliminación",JOptionPane.YES_NO_OPTION);
-						if (confirmar == JOptionPane.YES_OPTION) 
-							try {
-								ficha.delMueble(nombre);
-								actualizarTableMuebles(ficha.getMuebles());
-							} catch (IllegalArgumentException ex) {
-								JOptionPane.showMessageDialog(ModificarFichaTecnicaDO.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-							}			            
-					} else 
-						JOptionPane.showMessageDialog( ModificarFichaTecnicaDO.this,"Debes seleccionar un mueble para eliminar.","Aviso", JOptionPane.WARNING_MESSAGE);
-
+					delMueble();
 				}
 			});
 		}
@@ -345,8 +313,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 			btnAsignarVivienda.setBounds(10, 387, 116, 23);
 			btnAsignarVivienda.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					SeleccionarViviendas s = new SeleccionarViviendas(ModificarFichaTecnicaDO.this, ficha);
-					s.setVisible(true);							
+					asignarVivienda();						
 				}
 			});
 		}
@@ -354,7 +321,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 	}
 	public JTextField getTextDireccion(){
 		if(textDireccion==null){
-			textDireccion = new JTextField();
+			textDireccion = new JTextField("No hay una vivienda asignada");
 			textDireccion.setEditable(false);
 			textDireccion.setBounds(136, 362, 156, 20);
 			textDireccion.setColumns(10);
@@ -377,26 +344,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 			btnModificar.setBounds(205, 403, 89, 23);
 			btnModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					try{
-						if (ficha.getAfectaciones().isEmpty() && ficha.getMuebles().isEmpty())
-							JOptionPane.showMessageDialog(ModificarFichaTecnicaDO.this,"La ficha técnica debe contener al menos una afectación o un mueble.","Validación", JOptionPane.WARNING_MESSAGE);						
-						else
-							if(ficha.getVivienda()==null)
-								JOptionPane.showMessageDialog(ModificarFichaTecnicaDO.this,"La ficha técnica debe Estar asociada a una vivienda.","Validación", JOptionPane.WARNING_MESSAGE);
-							else
-							{														
-								boolean updt = oficina.updateFichaTecnicaDO(ficha.getId(), vivienda);
-								if(updt){									
-									JOptionPane.showMessageDialog(null, "Ficha Tecnica de Daños Ocacionados modificada exitosamente.");			            
-									gestion.actualizarTableFichas(oficina.getFichas());								
-									limpiarCampos();
-									dispose();
-								} else 
-									JOptionPane.showMessageDialog(null, "Ya existe una Ficha Tecnica de Daños Ocacionados asociada a esta vivienda.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-							}
-					}catch (IllegalArgumentException ex) {
-						JOptionPane.showMessageDialog(ModificarFichaTecnicaDO.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					}
+					modificar();
 				}
 			}
 
@@ -482,7 +430,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 	}
 
 	public void actualizarViviendaAsociada(){
-		getTextDireccion().setText(ficha.getVivienda().getDireccion());
+		getTextDireccion().setText(vivienda.getDireccion());
 	}
 	private void rellenarFormulario(){
 		actualizarViviendaAsociada();
@@ -490,19 +438,109 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 		actualizarTableMuebles(muebles);
 	}
 	private void limpiarCampos() {
-		
+
 		getTextDireccion().setText("");
 
-	if (getTableAfectaciones() != null) {
-		DefaultTableModel model = (DefaultTableModel) tableAfectaciones.getModel();
-		model.setRowCount(0);
+		if (getTableAfectaciones() != null) {
+			DefaultTableModel model = (DefaultTableModel) tableAfectaciones.getModel();
+			model.setRowCount(0);
+		}
+
+		if (getTableMuebles() != null) {
+			DefaultTableModel model = (DefaultTableModel) tableMuebles.getModel();
+			model.setRowCount(0);
+		}
 	}
 
-	if (getTableMuebles() != null) {
-		DefaultTableModel model = (DefaultTableModel) tableMuebles.getModel();
-		model.setRowCount(0);
+
+	public void regresar(){
+		limpiarCampos();
+		dispose();
 	}
-}
+
+	public void addAfectacion(){
+		CrearAfectacion.getCrearAfectacion(modificarFichaTecnicaDO, ficha).setVisible(true);
+	}
+	public void modAfectacion(){
+		Afectacion a= getAfectacionSeleccionada();
+		if (a != null) 
+			ModificarAfectacion.getModificarAfectacion(modificarFichaTecnicaDO, ficha, a).setVisible(true);
+		else 
+			JOptionPane.showMessageDialog(modificarFichaTecnicaDO, "Debes seleccionar una afectacion para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE );					
+
+	}
+	public void delAfectacion(){
+		Afectacion afectacion = getAfectacionSeleccionada();
+		if (afectacion != null) {
+			int confirmar = JOptionPane.showConfirmDialog(modificarFichaTecnicaDO, "¿Seguro que deseas eliminar la afectación seleccionada?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION );
+			if (confirmar == JOptionPane.YES_OPTION) { 
+				try{
+					ficha.delAfectacion(afectacion.getId()); 
+					actualizarTableAfectaciones(ficha.getAfectaciones());
+				}catch (IllegalArgumentException e) {
+					JOptionPane.showMessageDialog(modificarFichaTecnicaDO , e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+
+		} else {
+			JOptionPane.showMessageDialog(modificarFichaTecnicaDO, "Debes seleccionar una afectación para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE );
+		}
+
+	}
+
+	public void addMueble(){
+		CrearMueble.getCrearMueble(modificarFichaTecnicaDO, ficha).setVisible(true);
+	}
+	public void modMueble(){
+		Mueble mueble= getMuebleSeleccionado();
+		if (mueble != null) 
+			ModificarMueble.getModificarMueble(modificarFichaTecnicaDO, ficha, mueble).setVisible(true);
+		else 
+			JOptionPane.showMessageDialog(modificarFichaTecnicaDO, "Debes seleccionar un mueble para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+
+	}
+	public void delMueble(){
+		int fila = getTableMuebles().getSelectedRow();
+		if (fila >= 0) {
+			String nombre = (String) getTableMuebles().getValueAt(fila, 0);
+			int confirmar = JOptionPane.showConfirmDialog(ModificarFichaTecnicaDO.this,"¿Seguro que deseas eliminar el mueble \"" + nombre + "\"?","Confirmar eliminación",JOptionPane.YES_NO_OPTION);
+			if (confirmar == JOptionPane.YES_OPTION) 
+				try {
+					ficha.delMueble(nombre);
+					actualizarTableMuebles(ficha.getMuebles());
+				} catch (IllegalArgumentException e){ 
+					JOptionPane.showMessageDialog(modificarFichaTecnicaDO, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+		} else 
+			JOptionPane.showMessageDialog(modificarFichaTecnicaDO,"Debes seleccionar un mueble para eliminar.","Aviso", JOptionPane.WARNING_MESSAGE);
+	}
+
+	public void asignarVivienda(){
+		SeleccionarViviendas.getSeleccionarViviendas(modificarFichaTecnicaDO , ficha).setVisible(true);	
+	}
+
+	public void setVivienda(Vivienda vivienda){		
+		this.vivienda=vivienda;
+	}
+	public void modificar(){
+		try{
+			if (ficha.getAfectaciones().isEmpty() && ficha.getMuebles().isEmpty())
+				JOptionPane.showMessageDialog(modificarFichaTecnicaDO ,"La ficha técnica debe contener al menos una afectación o un mueble.","Validación", JOptionPane.WARNING_MESSAGE);						
+			else
+				if(ficha.getVivienda()==null)
+					JOptionPane.showMessageDialog(modificarFichaTecnicaDO ,"La ficha técnica debe Estar asociada a una vivienda.","Validación", JOptionPane.WARNING_MESSAGE);
+				else
+				{																			
+					if(oficina.updateFichaTecnicaDO(ficha.getId(), vivienda)){									
+						JOptionPane.showMessageDialog(modificarFichaTecnicaDO , "Ficha Tecnica de Daños Ocacionados modificada exitosamente.");			            
+						gestion.updtTableFichas(oficina.getFichas());												
+						dispose();
+					} 
+				}
+		}catch (IllegalArgumentException e) {
+			JOptionPane.showMessageDialog(modificarFichaTecnicaDO , e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
 }
 
 

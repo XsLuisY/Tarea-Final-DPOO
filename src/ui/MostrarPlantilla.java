@@ -38,19 +38,26 @@ public class MostrarPlantilla extends JFrame {
 	private static MostrarPlantilla mostrarPlantilla;
 	private Plantilla plantilla;
 
-	private JPanel contentPane;
-	private JTable tableCubicacion;
-	private JTable tableMuebles;
-	private JTable tableAfectaciones;
 	private JMenuItem mntmRegresar;
 	private JMenuBar barraSuperior;
+
+	private JPanel contentPane;
+
+	private JScrollPane scrollPaneCubicacion;
+	private JTable tableCubicacion;
+
+	private JScrollPane scrollPaneAfectacion;
+	private JTable tableAfectaciones;
+
+	private JScrollPane scrollPaneMuebles;
+	private JTable tableMuebles;
+
 	private JLabel lblJefeNucleo;
 	private JLabel lblCI;
 	private JLabel lblDireccion;
 	private JLabel lblFacilidadTemporal;
 	private JLabel lblTipologiaConstructiva;
 	private JLabel lblTipologiaHabitacional;
-	private JScrollPane scrollPaneAfectacion;
 	private JLabel lblCubicacion;
 	private JLabel lblMuebles;
 	private JLabel lblAfectacion;
@@ -63,8 +70,6 @@ public class MostrarPlantilla extends JFrame {
 	private JLabel lblAncho;
 	private JLabel lblLargo;
 	private JLabel lblDocumentoLegal;
-	private JScrollPane scrollPaneMuebles;
-	private JScrollPane scrollPaneCubicacion;
 	private JLabel lblPrecioTotal;
 	private JLabel lblDimensiones;
 	private JLabel lblDatosVivienda;
@@ -73,7 +78,8 @@ public class MostrarPlantilla extends JFrame {
 
 	//Singleton 
 	public static MostrarPlantilla getMostrarPlantilla(Plantilla plantilla){
-		if(mostrarPlantilla==null)
+		if(mostrarPlantilla==null
+				|| !mostrarPlantilla.plantilla.equals(plantilla))
 			mostrarPlantilla=new MostrarPlantilla(plantilla);
 		return mostrarPlantilla;
 	}
@@ -87,34 +93,10 @@ public class MostrarPlantilla extends JFrame {
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 
-		actualizarTableAfectaciones(plantilla.getFichaTecnicaDO().getAfectaciones());
-		actualizarTableMuebles(plantilla.getFichaTecnicaDO().getMuebles());
-		actualizarTableCubicacion(plantilla.getCubicacion());
+		rellenarFormulario();
 	}
 
 	//Atributos
-	public JMenuBar getBarraSuperior(){
-		if(barraSuperior==null){
-			barraSuperior = new JMenuBar();
-			barraSuperior.setBackground(Color.DARK_GRAY);
-			barraSuperior.setForeground(Color.ORANGE);
-			barraSuperior.add(getMntmRegresar());
-		}
-		return barraSuperior;
-	}
-	public JMenuItem getMntmRegresar(){
-		if(mntmRegresar==null){
-			mntmRegresar = new JMenuItem("Regresar");
-			mntmRegresar.setBackground(Color.DARK_GRAY);
-			mntmRegresar.setForeground(Color.ORANGE);
-			mntmRegresar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-				}
-			});
-		}
-		return mntmRegresar;
-	}
 	public JPanel getContentPane(){
 		if(contentPane==null){			
 			contentPane = new JPanel();
@@ -150,6 +132,86 @@ public class MostrarPlantilla extends JFrame {
 			contentPane.add(getLblId());
 		}
 		return contentPane;
+	}
+
+	public JMenuBar getBarraSuperior(){
+		if(barraSuperior==null){
+			barraSuperior = new JMenuBar();
+			barraSuperior.setBackground(Color.DARK_GRAY);
+			barraSuperior.setForeground(Color.ORANGE);
+			barraSuperior.add(getMntmRegresar());
+		}
+		return barraSuperior;
+	}
+	public JMenuItem getMntmRegresar(){
+		if(mntmRegresar==null){
+			mntmRegresar = new JMenuItem("Regresar");
+			mntmRegresar.setBackground(Color.DARK_GRAY);
+			mntmRegresar.setForeground(Color.ORANGE);
+			mntmRegresar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					regresar();	
+				}
+			});
+		}
+		return mntmRegresar;
+	}
+
+	public JScrollPane getScrollPaneAfectacion(){
+		if( scrollPaneAfectacion==null){
+			scrollPaneAfectacion= new JScrollPane();
+			scrollPaneAfectacion.setBounds(342, 48, 240, 139);
+			scrollPaneAfectacion.setViewportView(getTableAfectaciones());
+		}
+		return scrollPaneAfectacion;
+	}
+	public JTable getTableAfectaciones(){
+		if(tableAfectaciones ==null){
+			tableAfectaciones = new JTable();
+			tableAfectaciones.setFillsViewportHeight(true);
+			tableAfectaciones.setForeground(Color.ORANGE);
+			tableAfectaciones.setBackground(Color.DARK_GRAY);
+			tableAfectaciones.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Tipo", "Material Predominante"}));
+		}
+		return tableAfectaciones ;
+	}
+
+	public JScrollPane getScrollPaneMuebles(){
+		if(scrollPaneMuebles==null){
+			scrollPaneMuebles = new JScrollPane();
+			scrollPaneMuebles.setBounds(592, 48, 240, 139);
+			scrollPaneMuebles.setViewportView(getTableMuebles());
+		}
+		return scrollPaneMuebles;
+	}
+	public JTable getTableMuebles(){
+		if(tableMuebles ==null){
+			tableMuebles = new JTable();
+			tableMuebles.setFillsViewportHeight(true);
+			tableMuebles.setForeground(Color.ORANGE);
+			tableMuebles.setBackground(Color.DARK_GRAY);
+			tableMuebles.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Mueble", "Cantidad"}));
+		}
+		return tableMuebles ;
+	}
+
+	public JScrollPane getScrollPaneCubicacion(){
+		if(scrollPaneCubicacion==null){
+			scrollPaneCubicacion= new JScrollPane();
+			scrollPaneCubicacion.setBounds(342, 223, 490, 163);
+			scrollPaneCubicacion.setViewportView(getTableCubicacion());
+		}
+		return scrollPaneCubicacion;
+	}
+	public JTable getTableCubicacion(){
+		if(tableCubicacion==null){
+			tableCubicacion = new JTable();
+			tableCubicacion.setBackground(Color.DARK_GRAY);
+			tableCubicacion.setForeground(Color.ORANGE);
+			tableCubicacion.setFillsViewportHeight(true);
+			tableCubicacion.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Nombre", "u/medida", "Precio unitario", "Cantidad", "Precio Total"}));
+		}
+		return tableCubicacion;
 	}
 
 	public JLabel getLblJefeNucleo(){
@@ -252,10 +314,7 @@ public class MostrarPlantilla extends JFrame {
 	}
 	public JLabel getLblFechaLevantamiento(){
 		if( lblFechaLevantamiento==null){
-			lblFechaLevantamiento= new JLabel("Fecha del Levantamiento: "
-					+plantilla.getFichaTecnicaDO().getFechaLevantamiento().getDate()+"/"
-					+plantilla.getFichaTecnicaDO().getFechaLevantamiento().getMonth()+"/"
-					+plantilla.getFichaTecnicaDO().getFechaLevantamiento().getYear());
+			lblFechaLevantamiento= new JLabel("Fecha del Levantamiento: ");
 			lblFechaLevantamiento.setBounds(10, 304, 214, 14);
 		}
 		return lblFechaLevantamiento;
@@ -283,60 +342,6 @@ public class MostrarPlantilla extends JFrame {
 			lblCubicacion.setBounds(342, 198, 490, 14);
 		}
 		return lblCubicacion;
-	}
-	public JScrollPane getScrollPaneAfectacion(){
-		if( scrollPaneAfectacion==null){
-			scrollPaneAfectacion= new JScrollPane();
-			scrollPaneAfectacion.setBounds(342, 48, 240, 139);
-			scrollPaneAfectacion.setViewportView(getTableAfectaciones());
-		}
-		return scrollPaneAfectacion;
-	}
-	public JTable getTableAfectaciones(){
-		if(tableAfectaciones ==null){
-			tableAfectaciones = new JTable();
-			tableAfectaciones.setFillsViewportHeight(true);
-			tableAfectaciones.setForeground(Color.ORANGE);
-			tableAfectaciones.setBackground(Color.DARK_GRAY);
-			tableAfectaciones.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Tipo", "Material Predominante"}));
-		}
-		return tableAfectaciones ;
-	}
-	public JScrollPane getScrollPaneMuebles(){
-		if(scrollPaneMuebles==null){
-			scrollPaneMuebles = new JScrollPane();
-			scrollPaneMuebles.setBounds(592, 48, 240, 139);
-			scrollPaneMuebles.setViewportView(getTableMuebles());
-		}
-		return scrollPaneMuebles;
-	}
-	public JTable getTableMuebles(){
-		if(tableMuebles ==null){
-			tableMuebles = new JTable();
-			tableMuebles.setFillsViewportHeight(true);
-			tableMuebles.setForeground(Color.ORANGE);
-			tableMuebles.setBackground(Color.DARK_GRAY);
-			tableMuebles.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Mueble", "Cantidad"}));
-		}
-		return tableMuebles ;
-	}
-	public JScrollPane getScrollPaneCubicacion(){
-		if(scrollPaneCubicacion==null){
-			scrollPaneCubicacion= new JScrollPane();
-			scrollPaneCubicacion.setBounds(342, 223, 490, 163);
-			scrollPaneCubicacion.setViewportView(getTableCubicacion());
-		}
-		return scrollPaneCubicacion;
-	}
-	public JTable getTableCubicacion(){
-		if(tableCubicacion==null){
-			tableCubicacion = new JTable();
-			tableCubicacion.setBackground(Color.DARK_GRAY);
-			tableCubicacion.setForeground(Color.ORANGE);
-			tableCubicacion.setFillsViewportHeight(true);
-			tableCubicacion.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Nombre", "u/medida", "Precio unitario", "Cantidad", "Precio Total"}));
-		}
-		return tableCubicacion;
 	}
 	public JLabel getLblPrecioTotal(){
 		if( lblPrecioTotal==null){
@@ -375,13 +380,25 @@ public class MostrarPlantilla extends JFrame {
 			lblId= new JLabel("ID:");
 			lblId.setForeground(Color.DARK_GRAY);
 			lblId.setBounds(10, 397, 322, 14);
-
 		}
 		return lblId;
 	}
 
 	//Metodos
 
+	public void regresar(){
+		dispose();
+	}
+
+	public void showFecha(){ 
+		getLblFechaLevantamiento().setText(getLblFechaLevantamiento().getText()
+				+plantilla.getFichaTecnicaDO().getFechaLevantamiento().getDate()+"/"
+				+plantilla.getFichaTecnicaDO().getFechaLevantamiento().getMonth()+"/"
+				+plantilla.getFichaTecnicaDO().getFechaLevantamiento().getYear());
+	}
+	public void showID(){
+		getLblId().setText(getLblId().getText()+plantilla.getId().toString());
+	}
 	public void actualizarTableAfectaciones(ArrayList<Afectacion> afectaciones) {
 		DefaultTableModel model = (DefaultTableModel) getTableAfectaciones().getModel();
 		model.setRowCount(0); // Limpiar la tabla
@@ -440,4 +457,13 @@ public class MostrarPlantilla extends JFrame {
 			}
 		getTableCubicacion().setModel(model);
 	}
+
+	public void rellenarFormulario(){
+		showFecha();
+		showID();
+		actualizarTableAfectaciones(plantilla.getFichaTecnicaDO().getAfectaciones());
+		actualizarTableMuebles(plantilla.getFichaTecnicaDO().getMuebles());
+		actualizarTableCubicacion(plantilla.getCubicacion());
+	}
+
 }

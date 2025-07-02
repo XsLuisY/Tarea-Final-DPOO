@@ -1,6 +1,6 @@
 package ui;
 
-import javax.swing.ButtonModel;
+
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JFrame;
@@ -26,11 +26,10 @@ import javax.swing.JMenuItem;
 
 import clases.MICONS;
 import clases.Vivienda;
-import clases.JefeNucleo;
 
 
 public class ModificarVivienda extends JFrame {
-	
+
 	private static ModificarVivienda modificarVivienda;
 	private static final long serialVersionUID = 1L;
 
@@ -42,10 +41,10 @@ public class ModificarVivienda extends JFrame {
 	private JPanel contentPane;
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
-	
+
 	private JRadioButton rdbtnSi;
 	private JRadioButton rdbtnNo;
-	
+
 	private final ButtonGroup buttonGroupFacilidadTemporal = new ButtonGroup();
 
 	private JTextField textFieldDireccion;
@@ -93,14 +92,16 @@ public class ModificarVivienda extends JFrame {
 	private JSpinner spinnerAncianos;
 	private JSpinner spinnerEmbarazadas;
 	private JSpinner spinnerNinios;
-	
+
 	//Singleton
 	public static ModificarVivienda getModificarVivienda(GestionViviendas gestion, Vivienda vivienda){
-		if(modificarVivienda==null)
+		if(modificarVivienda==null
+				|| !modificarVivienda.gestion.equals(gestion)
+				|| !modificarVivienda.vivienda.equals(vivienda))
 			modificarVivienda=new ModificarVivienda(gestion, vivienda);
 		return modificarVivienda;
 	}
-	
+
 	//Constructor
 	private ModificarVivienda(GestionViviendas gestion, Vivienda vivienda) {
 		//FIX: posible error a la hora de rectificar el nombre, eliminado: this.gestionV= gestionV;
@@ -185,8 +186,7 @@ public class ModificarVivienda extends JFrame {
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					limpiarCampos();
-					dispose();
+					regresar();
 				}
 			});
 		}
@@ -195,7 +195,6 @@ public class ModificarVivienda extends JFrame {
 	public JTextField getTextFieldDireccion(){
 		if(textFieldDireccion==null){
 			textFieldDireccion = new JTextField();
-			textFieldDireccion.setEditable(false);
 			textFieldDireccion.setColumns(10);
 			textFieldDireccion.setBounds(88, 135, 196, 19);
 			textFieldDireccion.getDocument().addDocumentListener(new DocumentListener() {
@@ -355,7 +354,6 @@ public class ModificarVivienda extends JFrame {
 	public JTextField getTextFieldNombre(){
 		if(textFieldNombre==null){
 			textFieldNombre = new JTextField();
-			textFieldNombre.setEditable(false);
 			textFieldNombre.setBounds(88, 42, 196, 20);
 			textFieldNombre.setColumns(10);
 			textFieldNombre.getDocument().addDocumentListener(new DocumentListener() {
@@ -406,8 +404,8 @@ public class ModificarVivienda extends JFrame {
 					try {
 						vivienda.getJefeNucleo().setCI(textFieldCI.getText());
 						lblErrorCI.setVisible(false);
-					} catch (IllegalArgumentException ex) {
-						lblErrorCI.setText(ex.getMessage());
+					} catch (IllegalArgumentException e) {
+						lblErrorCI.setText(e.getMessage());
 						lblErrorCI.setVisible(true);
 					}
 				}
@@ -429,80 +427,7 @@ public class ModificarVivienda extends JFrame {
 			btnModificar.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					try {
-						// Validar campos de texto no vacÃ­os
-						if (getTextFieldNombre().getText().trim().isEmpty()) {
-							throw new IllegalArgumentException("Debe ingresar el nombre del jefe de núcleo.");
-						}
-						String nombre=getTextFieldNombre().getText().trim();				
-						if (getTextFieldDireccion().getText().trim().isEmpty()) {
-							throw new IllegalArgumentException("Debe ingresar la dirección.");
-						}
-						String direccion=getTextFieldDireccion().getText().trim();
-						
-						// Validar que se haya seleccionado un RadioButton (Facilidad Temporal)
-						if (!getRdbtnSi().isSelected() && !getRdbtnNo().isSelected()) {
-							throw new IllegalArgumentException("Debe seleccionar una opción para Facilidad Temporal.");
-						}
-						Boolean facilidadTemporal = getRdbtnSi().isSelected();
-					
-						// Validar ComboBoxes (que tengan selección)
-						if (getComboBoxTipologiaConstructiva().getSelectedIndex() == -1) {
-							throw new IllegalArgumentException("Debe seleccionar un tipo de construcción.");
-						}
-						String tipologiaConstructiva=(String) getComboBoxTipologiaConstructiva().getSelectedItem();						
-
-						if (getComboBoxTipologiaHabitacional().getSelectedIndex() == -1) {
-							throw new IllegalArgumentException("Debe seleccionar un tipo habitacional.");
-						}
-						String tipologiaHabitacional=(String) getComboBoxTipologiaHabitacional().getSelectedItem();
-
-						if (getComboBoxDocumentoLegal().getSelectedIndex() == -1) {
-							throw new IllegalArgumentException("Debe seleccionar un documento legal.");
-						}
-						String documentoLegal=(String) getComboBoxDocumentoLegal().getSelectedItem();	
-
-						// Validar spinners con commitEdit para aplicar valor y lanzar excepción si inválido
-						getSpinnerNinios().commitEdit();
-						getSpinnerAncianos().commitEdit();
-						getSpinnerEmbarazadas().commitEdit();
-						getSpinnerTotal().commitEdit();
-						getSpinnerAltura().commitEdit();
-						getSpinnerAncho().commitEdit();
-						getSpinnerLargo().commitEdit();
-						
-						// Obtener valores de spinners
-						int cantidadNinios = (Integer) getSpinnerNinios().getValue();
-						int cantidadAncianos = (Integer) getSpinnerAncianos().getValue();
-						int cantidadEmbarazadas = (Integer) getSpinnerEmbarazadas().getValue();
-						int totalPersonas = (Integer) getSpinnerTotal().getValue();
-						double altura = (Double) getSpinnerAltura().getValue();
-						double ancho = (Double) getSpinnerAncho().getValue();
-						double largo = (Double) getSpinnerLargo().getValue();
-						
-						// Validar área máxima
-						double area = ancho * largo;
-						if (area > 50) {
-							throw new IllegalArgumentException("El área (ancho x largo) no puede superar 50. área actual: " + area);
-						}																				
-						try {					
-							// Agregar vivienda a la lista	
-							if(micons.updateVivienda(nombre, vivienda.getJefeNucleo().getCI(), direccion, documentoLegal, tipologiaHabitacional, tipologiaConstructiva ,facilidadTemporal, largo, ancho, altura, cantidadNinios, cantidadAncianos, cantidadEmbarazadas, totalPersonas)){
-								// Mostrar mensaje de Éxito
-								JOptionPane.showMessageDialog(null, "Vivienda guardada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-								limpiarCampos();
-								dispose();	//cambio: cerrar ventana si se agrega correctamente la vivienda
-								gestion.actualizarTableViviendas();	//actualizar lista viviendas							gestion.setVisible(true);
-								
-							}
-						} catch (IllegalArgumentException ex){ 
-							JOptionPane.showMessageDialog(ModificarVivienda.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-						}
-					} catch (ParseException ex) {
-						JOptionPane.showMessageDialog(null, "Error en los valores numéricos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(null, "Error inesperado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					}
+					modificar();
 				}
 			});
 		}
@@ -675,7 +600,7 @@ public class ModificarVivienda extends JFrame {
 		getSpinnerEmbarazadas().setValue(vivienda.getCantEmbarazadas());;
 		getSpinnerNinios().setValue(vivienda.getCantNinos());;
 	}
-//Metodo 
+	//Metodo 
 	private void limpiarCampos() {
 
 		getTextFieldNombre().setText("");
@@ -697,6 +622,87 @@ public class ModificarVivienda extends JFrame {
 		getSpinnerEmbarazadas().setValue(0);
 		getSpinnerNinios().setValue(0);
 	}
+
+	public void regresar(){
+		dispose();		
+	}
+	public void modificar(){
+		try {
+			// Validar campos de texto no vacÃ­os
+			if (getTextFieldNombre().getText().trim().isEmpty()) {
+				throw new IllegalArgumentException("Debe ingresar el nombre del jefe de núcleo.");
+			}
+			String nombre=getTextFieldNombre().getText().trim();				
+			if (getTextFieldDireccion().getText().trim().isEmpty()) {
+				throw new IllegalArgumentException("Debe ingresar la dirección.");
+			}
+			String direccion=getTextFieldDireccion().getText().trim();
+
+			// Validar que se haya seleccionado un RadioButton (Facilidad Temporal)
+			if (!getRdbtnSi().isSelected() && !getRdbtnNo().isSelected()) {
+				throw new IllegalArgumentException("Debe seleccionar una opción para Facilidad Temporal.");
+			}
+			Boolean facilidadTemporal = getRdbtnSi().isSelected();
+
+			// Validar ComboBoxes (que tengan selección)
+			if (getComboBoxTipologiaConstructiva().getSelectedIndex() == -1) {
+				throw new IllegalArgumentException("Debe seleccionar un tipo de construcción.");
+			}
+			String tipologiaConstructiva=(String) getComboBoxTipologiaConstructiva().getSelectedItem();						
+
+			if (getComboBoxTipologiaHabitacional().getSelectedIndex() == -1) {
+				throw new IllegalArgumentException("Debe seleccionar un tipo habitacional.");
+			}
+			String tipologiaHabitacional=(String) getComboBoxTipologiaHabitacional().getSelectedItem();
+
+			if (getComboBoxDocumentoLegal().getSelectedIndex() == -1) {
+				throw new IllegalArgumentException("Debe seleccionar un documento legal.");
+			}
+			String documentoLegal=(String) getComboBoxDocumentoLegal().getSelectedItem();	
+
+			// Validar spinners con commitEdit para aplicar valor y lanzar excepción si inválido
+			getSpinnerNinios().commitEdit();
+			getSpinnerAncianos().commitEdit();
+			getSpinnerEmbarazadas().commitEdit();
+			getSpinnerTotal().commitEdit();
+			getSpinnerAltura().commitEdit();
+			getSpinnerAncho().commitEdit();
+			getSpinnerLargo().commitEdit();
+
+			// Obtener valores de spinners
+			int cantidadNinios = (Integer) getSpinnerNinios().getValue();
+			int cantidadAncianos = (Integer) getSpinnerAncianos().getValue();
+			int cantidadEmbarazadas = (Integer) getSpinnerEmbarazadas().getValue();
+			int totalPersonas = (Integer) getSpinnerTotal().getValue();
+			double altura = (Double) getSpinnerAltura().getValue();
+			double ancho = (Double) getSpinnerAncho().getValue();
+			double largo = (Double) getSpinnerLargo().getValue();
+
+			// Validar área máxima
+			double area = ancho * largo;
+			if (area > 50) {
+				throw new IllegalArgumentException("El área (ancho x largo) no puede superar 50. área actual: " + area);
+			}																				
+			try {					
+				// Agregar vivienda a la lista	
+				if(micons.updateVivienda(nombre, vivienda.getJefeNucleo().getCI(), direccion, documentoLegal, tipologiaHabitacional, tipologiaConstructiva ,facilidadTemporal, largo, ancho, altura, cantidadNinios, cantidadAncianos, cantidadEmbarazadas, totalPersonas)){
+					// Mostrar mensaje de Éxito
+					JOptionPane.showMessageDialog(modificarVivienda, "Vivienda guardada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);				
+					gestion.actualizarTableViviendas();			
+					gestion.setVisible(true);
+					dispose();
+
+				}
+			} catch (IllegalArgumentException ex){ 
+				JOptionPane.showMessageDialog(modificarVivienda, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		} catch (ParseException ex) {
+			JOptionPane.showMessageDialog(modificarVivienda, "Error en los valores numéricos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(modificarVivienda, "Error inesperado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
 
 }
 

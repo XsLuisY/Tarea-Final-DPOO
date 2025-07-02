@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -24,13 +25,18 @@ import reportes.Reporte_1;
 import reportes.Reporte_2;
 import reportes.Reporte_3;
 import reportes.Reporte_4;
+
 import javax.swing.JLabel;
 
+import java.awt.FlowLayout;
+
+import javax.swing.BoxLayout;
+
 public class Principal extends JFrame {
-	
+
 	private static Principal principal;
 	private MICONS micons;
-
+	private ImageIcon fondo = new ImageIcon(getClass().getResource("/images/fondo.jpeg"));
 	private JPanel contentPane;
 
 	private JMenuBar barraSuperior;
@@ -38,15 +44,13 @@ public class Principal extends JFrame {
 	private JMenuItem mnGestionarViviendas;
 	private JMenuItem mntmGestionarOficinas;
 	private JMenu reportes;
-	private JMenuItem mntmDistribucinPorcentual;
-	private JMenuItem mntmViviendasConMayor;
-	private JMenuItem mntmElementoAfectadoMs;
-	private JMenuItem mntmCubicacionesConMayor; 
+	private JMenuItem mntmRepote_1;
+	private JMenuItem mntmRepote_2;
+	private JMenuItem mntmRepote_3;
+	private JMenuItem mntmRepote_4; 
 	private JMenuItem mntmCerrarSesion; 
-	private JButton btnHacerLevantamiento;
 	private JMenuItem mntmCerrarPrograma;
 	private JMenuItem mntmBuscar;
-	private JTextPane lblnotaElPrograma;
 
 	//Singleton
 	public static Principal getPrincipal(){
@@ -54,27 +58,27 @@ public class Principal extends JFrame {
 			principal=new Principal();
 		return principal;
 	}
-	
+
 	//Constructor
 	private Principal() {
+
+		//setExtendedState(JFrame.MAXIMIZED_BOTH);
+		//	setUndecorated(true);
 		micons=MICONS.getMICONS();	
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 550, 350);
-
 		setContentPane(getContentPane());
-		setJMenuBar(getBarraSuperior());
+		setJMenuBar(getBarraSuperior());	
 	}
-	
+
 	//Atributos
 	public JPanel getContentPane(){
-		if(contentPane==null){			
+		if(contentPane==null){					
 			contentPane = new JPanel();
 			contentPane.setBackground(Color.ORANGE);
 			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 			contentPane.setLayout(null);
-			contentPane.add(getBtnHacerLevantamiento());
-			contentPane.add(getLblnotaElPrograma());
 		}
 		return contentPane;
 	}
@@ -124,8 +128,7 @@ public class Principal extends JFrame {
 			mnGestionarViviendas.setForeground(Color.ORANGE);
 			mnGestionarViviendas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-					GestionViviendas.getGestionViviendas().setVisible(true);
+					gestionarViviendas();
 				}
 			});
 		}
@@ -138,7 +141,7 @@ public class Principal extends JFrame {
 			mntmGestionarOficinas.setForeground(Color.ORANGE);
 			mntmGestionarOficinas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					GestionOficinaTramites.getGestionOficinaTramites().setVisible(true);
+					gestionarOficinaTramites();
 				}
 			});
 		}
@@ -150,67 +153,65 @@ public class Principal extends JFrame {
 			reportes = new JMenu("Reportes");
 			reportes.setBackground(Color.DARK_GRAY);
 			reportes.setForeground(Color.ORANGE);
-			reportes.add(getMntmDistribucinPorcentual());
-			reportes.add(getMntmViviendasConMayor());
-			reportes.add(getMntmElementoAfectadoMs());
-			reportes.add(getMntmCubicacionesConMayor());
+			reportes.add(getMntmRepote_1());
+			reportes.add(getMntmRepote_2());
+			reportes.add(getMntmRepote_3());
+			reportes.add(getMntmRepote_4());
 		}
 		return reportes;
 	}
-	public JMenuItem getMntmDistribucinPorcentual(){ 
-		if(mntmDistribucinPorcentual==null){
-			mntmDistribucinPorcentual = new JMenuItem("Distribuci\u00F3n porcentual de da\u00F1os en viviendas (Tipo I-IV)");
-			mntmDistribucinPorcentual.addActionListener(new ActionListener() {
+	public JMenuItem getMntmRepote_1(){ 
+		if(mntmRepote_1==null){
+			mntmRepote_1 = new JMenuItem("Distribuci\u00F3n porcentual de da\u00F1os en viviendas (Tipo I-IV)");
+			mntmRepote_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					Reporte_1.getReporte_1(micons.buscarAfectacionTipologiaConstructiva()).setVisible(true);
+					reporte_1();
 				}
 			});
-			mntmDistribucinPorcentual.setForeground(Color.ORANGE);
-			mntmDistribucinPorcentual.setBackground(Color.DARK_GRAY);
-			
-		}
-		return  mntmDistribucinPorcentual;
-	}
-	public JMenuItem getMntmViviendasConMayor(){
-		if(mntmViviendasConMayor==null){
-			mntmViviendasConMayor = new JMenuItem("Viviendas con mayor n\u00FAmero de habitantes vulnerables");
-			mntmViviendasConMayor.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					Reporte_2.getReporte_2(micons.buscarViviendasMasVulnerables()).setVisible(true);
-				}
-			});
-			mntmViviendasConMayor.setForeground(Color.ORANGE);
-			mntmViviendasConMayor.setBackground(Color.DARK_GRAY);
-		}
-		return mntmViviendasConMayor;
-	}
-	public JMenuItem getMntmElementoAfectadoMs(){
-		if(mntmElementoAfectadoMs==null){
-			mntmElementoAfectadoMs= new JMenuItem("Elemento afectado m\u00E1s frecuente (techo/pared)");
-			mntmElementoAfectadoMs.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-				Reporte_3.getReporte_3(micons.mostrarCantElementoAfectado()).setVisible(true);
-				}
-			});
-			mntmElementoAfectadoMs.setForeground(Color.ORANGE);
-			mntmElementoAfectadoMs.setBackground(Color.DARK_GRAY);			
-		}
-		return mntmElementoAfectadoMs;
-	}
+			mntmRepote_1.setForeground(Color.ORANGE);
+			mntmRepote_1.setBackground(Color.DARK_GRAY);
 
-
-	public JMenuItem getMntmCubicacionesConMayor(){
-		if(mntmCubicacionesConMayor == null){
-			mntmCubicacionesConMayor = new JMenuItem("Cubicaciones con mayor costo por material");
-			mntmCubicacionesConMayor.addActionListener(new ActionListener() {
+		}
+		return  mntmRepote_1;
+	}
+	public JMenuItem getMntmRepote_2(){
+		if(mntmRepote_2==null){
+			mntmRepote_2 = new JMenuItem("Viviendas con mayor n\u00FAmero de habitantes vulnerables");
+			mntmRepote_2.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					Reporte_4.getReporte_4(micons.mostrarMaterialMasCaro()).setVisible(true);
+					reporte_2();
 				}
 			});
-			mntmCubicacionesConMayor.setForeground(Color.ORANGE);
-			mntmCubicacionesConMayor.setBackground(Color.DARK_GRAY);			
+			mntmRepote_2.setForeground(Color.ORANGE);
+			mntmRepote_2.setBackground(Color.DARK_GRAY);
 		}
-		return mntmCubicacionesConMayor;
+		return mntmRepote_2;
+	}
+	public JMenuItem getMntmRepote_3(){
+		if(mntmRepote_3==null){
+			mntmRepote_3= new JMenuItem("Elemento afectado m\u00E1s frecuente (techo/pared)");
+			mntmRepote_3.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					reporte_3();
+				}
+			});
+			mntmRepote_3.setForeground(Color.ORANGE);
+			mntmRepote_3.setBackground(Color.DARK_GRAY);			
+		}
+		return mntmRepote_3;
+	}
+	public JMenuItem getMntmRepote_4(){
+		if(mntmRepote_4 == null){
+			mntmRepote_4 = new JMenuItem("Cubicaciones con mayor costo por material");
+			mntmRepote_4.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					reporte_4();
+				}
+			});
+			mntmRepote_4.setForeground(Color.ORANGE);
+			mntmRepote_4.setBackground(Color.DARK_GRAY);			
+		}
+		return mntmRepote_4;
 	}
 	public JMenuItem getMntmCerrarSesion(){
 		if(mntmCerrarSesion ==null){
@@ -219,27 +220,11 @@ public class Principal extends JFrame {
 			mntmCerrarSesion.setForeground(Color.ORANGE);
 			mntmCerrarSesion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-					Login login =Login.getLogin();
-					login.setVisible(true);
+					cerrarSesion();
 				}
 			});
 		}
 		return mntmCerrarSesion;
-	}
-	public JButton getBtnHacerLevantamiento(){
-		if(btnHacerLevantamiento==null){
-			btnHacerLevantamiento= new JButton("Hacer Levantamiento");
-			btnHacerLevantamiento.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					GestionOficinaTramites.getGestionOficinaTramites().setVisible(true);
-				}
-			});
-			btnHacerLevantamiento.setBackground(Color.DARK_GRAY);
-			btnHacerLevantamiento.setForeground(Color.ORANGE);
-			btnHacerLevantamiento.setBounds(364, 266, 170, 23);			
-		}
-		return btnHacerLevantamiento;
 	}
 	public JMenuItem getMntmBuscar() {
 		if (mntmBuscar == null) {
@@ -248,21 +233,44 @@ public class Principal extends JFrame {
 			mntmBuscar.setForeground(Color.ORANGE);
 			mntmBuscar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-				Buscar.getBuscar().setVisible(true);
+					Buscar.getBuscar().setVisible(true);
 				}
 			});
-	
+
 		}
 		return mntmBuscar;
 	}
-	public JTextPane getLblnotaElPrograma() {
-		if (lblnotaElPrograma == null) {
-			lblnotaElPrograma = new JTextPane();
-			lblnotaElPrograma.setBackground(Color.DARK_GRAY);
-			lblnotaElPrograma.setForeground(Color.ORANGE);
-			lblnotaElPrograma.setText("Nota: \r\nEl programa es\u00E1 conformado por JPopMenu's con las opciones de agregar, mostrar, etc.\r\n\r\nHay 8 Viviendas inicializadas\r\nOficinas de Tramites inicializadas con materiales\r\nOficina de Tramites \"Arroyo Naranjo\" inicializada con 3 Fichas Tecnicas de Da\u00F1os Ocacionados y sus respectivas Plantillas \r\n");
-			lblnotaElPrograma.setBounds(10, 28, 524, 227);
-		}
-		return lblnotaElPrograma;
+
+	//Metodos
+	public void gestionarViviendas(){
+		GestionViviendas.getGestionViviendas().setVisible(true);
+		//	GestionViviendas.getGestionViviendas().setLocationRelativeTo(Principal.getPrincipal());
+		//getBarraSuperior().setVisible(false); 	//TODO Poner en el resto de interfaces
 	}
+	public void gestionarOficinaTramites(){
+		GestionOficinaTramites.getGestionOficinaTramites().setVisible(true);
+	}
+
+	public void reporte_1(){
+		Reporte_1.getReporte_1(micons.buscarAfectacionTipologiaConstructiva()).setVisible(true);
+	}
+	public void reporte_2(){
+		Reporte_2.getReporte_2(micons.buscarViviendasMasVulnerables()).setVisible(true);
+	}
+	public void reporte_3(){
+		Reporte_3.getReporte_3(micons.mostrarCantElementoAfectado()).setVisible(true);
+	}
+	public void reporte_4(){
+		Reporte_4.getReporte_4(micons.mostrarMaterialMasCaro()).setVisible(true);
+	}
+
+	public void cerrarSesion(){
+		Login.getLogin().setVisible(true);
+		dispose();
+	}
+
+
 }
+
+
+

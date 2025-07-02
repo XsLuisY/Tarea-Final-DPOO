@@ -138,16 +138,7 @@ public class Login extends JFrame {
 			btnIniciar.setBounds(10, 237, 103, 23);
 			btnIniciar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String usuario = getUsuario().getText().trim();
-					String password = new String(getPassword().getPassword()).trim();
-
-					if (usuario.equals("admin") && password.equals("1234")){
-						JOptionPane.showMessageDialog(null, "¡Bienvenido administrador!");
-						dispose();
-						Principal.getPrincipal().setVisible(true);
-					}
-					else 
-						JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.");
+				iniciarSesion();	
 				}
 			});
 		}			
@@ -180,6 +171,20 @@ public class Login extends JFrame {
 			lblUsuarioAdmin.setBounds(10, 36, 103, 81);
 		}
 		return lblUsuarioAdmin;
+	}
+
+	public void iniciarSesion(){
+		String usuario = getUsuario().getText().trim();
+		String password = new String(getPassword().getPassword()).trim();
+
+		if (usuario.equals("admin") && password.equals("1234")){
+			JOptionPane.showMessageDialog(login, "¡Bienvenido administrador!");
+			dispose();
+			Principal.getPrincipal().setVisible(true);
+		}
+		else 
+			JOptionPane.showMessageDialog(login, "Usuario o contraseña incorrectos.");
+	
 	}
 }
 

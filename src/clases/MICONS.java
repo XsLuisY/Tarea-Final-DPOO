@@ -13,9 +13,10 @@ import java.util.UUID;
 public class MICONS {
 	private static MICONS micons = null;
 	private static HashMap<UUID, Identificable> listaId = null;
-
+	private static HashMap<Vivienda, Boolean> listaViviendaAsignada = null;
 	private ArrayList<OficinaTramites> oficinas;
 	private ArrayList<Vivienda> viviendas;
+
 
 	//Singleton
 	public static MICONS getMICONS() {
@@ -29,8 +30,12 @@ public class MICONS {
 		oficinas = new ArrayList<OficinaTramites>();
 		viviendas = new ArrayList<Vivienda>();		
 		listaId = new HashMap<UUID, Identificable>();
+		listaViviendaAsignada = new HashMap<Vivienda, Boolean>();
 	}
 	//Encapsulamiento
+	public HashMap<Vivienda, Boolean> getListaViviendaAsignada(){
+		return listaViviendaAsignada;
+	}
 	public HashMap<UUID, Identificable> getListaId(){
 		return listaId;
 	}
@@ -102,26 +107,26 @@ public class MICONS {
 
 
 	// Metodos CRUD de Vivienda
-	/*Create*/ public Boolean addVivienda(Vivienda viv){
+	/*Create*/ public Boolean addVivienda(Vivienda vivienda){
 		Boolean add= false;
-		Vivienda v= readByIDVivienda(viv.getJefeNucleo().getCI());
-		if(v==null){
-			Vivienda vivienda= viv;
-			if(vivienda!=null){
+
+		if(vivienda!=null){
+			if(readVivienda(vivienda.getJefeNucleo().getCI())==null){
 				viviendas.add(vivienda);
+				getListaViviendaAsignada().put(vivienda, false);
 				add= true;
 			}
+			else throw new IllegalArgumentException("Esta vivienda ya existe");
 		}
-		else throw new IllegalArgumentException("Esta vivienda ya existe");
+		else throw new NullPointerException("La nueva vivienda no puede ser null");
+
 		return add;
 	}
-	/*Read */ public Vivienda readByIDVivienda(String id){
+	/*Read */ public Vivienda readVivienda(String id){
 		Vivienda vivienda= null;
 		int i=0;
-		Boolean found= false;
-		while(i<viviendas.size() && !found){
+		while(i<viviendas.size() && vivienda==null){
 			if(viviendas.get(i).getJefeNucleo().getCI().equals(id)){
-				found= true;
 				vivienda= viviendas.get(i);
 			}
 			i++;
@@ -129,7 +134,7 @@ public class MICONS {
 		return vivienda;
 	}
 	/*Update*/ public Boolean updateVivienda(String newNombreJefeN, String ciJefeN, String newDireccion, String newDocumentoLegal, String newTipologiaHabitacional, String newTipologiaConstructiva, Boolean newFacilidadTemporal, double newLargo, double newAncho, double newAltura, int newCantNinios, int newCantAncianos, int newCantEmbarazadas, int newTotalHabitantes){
-		Vivienda vivienda= readByIDVivienda(ciJefeN);
+		Vivienda vivienda= readVivienda(ciJefeN);
 		Boolean updt= false;
 		if(vivienda != null){
 			vivienda.getJefeNucleo().setNombre(newNombreJefeN);
@@ -150,15 +155,15 @@ public class MICONS {
 		else throw new IllegalArgumentException("Esta vivienda no existe");
 		return updt;
 	}
-	/*Delete*/ public Boolean deleteVivienda(String id){
-		Vivienda vivienda = readByIDVivienda(id);
-		Boolean exit = false;
-		if(vivienda != null){
-			viviendas.remove(vivienda);
-			exit= true;
-		}
-		else throw new IllegalArgumentException("Esta vivienda no existe");
-		return exit;
+	/*Delete*/ public void deleteVivienda(String id){
+		Vivienda vivienda = readVivienda(id);		
+		if(vivienda != null)
+			if(!MICONS.getMICONS().getListaViviendaAsignada().get(vivienda)){
+				MICONS.getMICONS().getListaViviendaAsignada().remove(vivienda);			
+				viviendas.remove(vivienda);				
+			}		
+			else throw new IllegalArgumentException("Esta vivienda tiene dictamenes asociados, para borrarla no debe tener ninguno.");
+		else throw new NullPointerException("Esta vivienda no existe");		
 	}
 
 
@@ -269,7 +274,6 @@ public class MICONS {
 		oficinas.add(new OficinaTramites("La Lisa"));
 	}
 	public void inicializarPlantillaArroyoNaranjo(){
-
 		oficinas.get(0).inicializarFichasTecnicas();
 		oficinas.get(0).inicializarPlantillas();
 
@@ -283,6 +287,8 @@ public class MICONS {
 		viviendas.add(new Vivienda("Pedro Pérez", "04012166621","Calle 12 123", "Propiedad", "Casa", "Tipo II", true, 7, 6, 3, 1, 1, 0,3));
 		viviendas.add(new Vivienda( "Carlos Díaz", "90031212345","Calle Martí 89", "Usufructo", "Casa", "Tipo I",false, 7.5, 4.5, 3, 1, 0, 1,5));
 		viviendas.add(new Vivienda( "Luisa Gómez", "88020312345", "Ave 51 456","Arrendamiento", "Apartamento", "Tipo III",false, 8.0,4, 3, 0, 2, 0, 4));
+		for(Vivienda v: viviendas)
+			MICONS.getMICONS().getListaViviendaAsignada().put(v, false);
 	}
 
 }

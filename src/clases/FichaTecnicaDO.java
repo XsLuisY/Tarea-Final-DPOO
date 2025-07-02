@@ -1,4 +1,6 @@
 package clases;
+import interfaces.Identificable;
+
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Date;
@@ -6,7 +8,7 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 
 
-public class FichaTecnicaDO {
+public class FichaTecnicaDO implements Identificable{
 	//Atributos
 	private static final String TECHO = "Techo";
 	private static final String PARED = "Pared";
@@ -23,8 +25,7 @@ public class FichaTecnicaDO {
 		setId();
 		setVivienda(vivienda);
 		setFechaLevantamiento();
-		setAfectaciones(afectaciones);
-		setMuebles(muebles);
+		tieneAfectaciones(muebles, afectaciones);
 	}
 
 	public FichaTecnicaDO() {				
@@ -34,7 +35,11 @@ public class FichaTecnicaDO {
 
 	//Encapsulamiento
 	public void setVivienda(Vivienda vivienda){
-		this.vivienda= vivienda;		
+		if(vivienda!=null){
+			this.vivienda= vivienda;
+			MICONS.getMICONS().getListaViviendaAsignada().put(vivienda, true);
+		}
+		else throw new NullPointerException("Debes seleccionar una vivienda para asignar.");
 	}
 	public Vivienda getVivienda(){
 		return vivienda;		
@@ -46,13 +51,17 @@ public class FichaTecnicaDO {
 		return fechaLevantamiento;		
 	}	
 	public void setAfectaciones(ArrayList<Afectacion> afectaciones){
-		this.afectaciones=afectaciones;
+		if(afectaciones!=null)
+			this.afectaciones=afectaciones;
+		else throw new NullPointerException("La lista de afectaciones no puede ser null");
 	}
 	public ArrayList<Afectacion> getAfectaciones(){
 		return afectaciones;
 	}
 	public void setMuebles(ArrayList<Mueble> muebles){
-		this.muebles=muebles;
+		if(muebles!=null)
+			this.muebles=muebles;
+		else throw new NullPointerException("La lista de afectaciones no puede ser null");
 	}
 	public ArrayList<Mueble> getMuebles(){
 		return muebles;
@@ -64,7 +73,17 @@ public class FichaTecnicaDO {
 	public void setId() {
 		do
 			id=UUID.randomUUID();
-		while(MICONS.existUUID(id));
+		while(MICONS.getMICONS().getListaId().containsKey(id));
+		MICONS.getMICONS().getListaId().put(id, this);
+	}
+
+	public void tieneAfectaciones(ArrayList<Mueble> muebles, ArrayList<Afectacion> afectaciones){
+		if(afectaciones.isEmpty() && muebles.isEmpty())
+			throw new IllegalArgumentException("La ficha técnica debe contener al menos una afectación o un mueble afectado.");
+		else{
+			setAfectaciones(afectaciones);
+			setMuebles(muebles);
+		}
 	}
 
 	//CRUD-Mueble
@@ -72,11 +91,11 @@ public class FichaTecnicaDO {
 		Boolean add=false;
 		Mueble m= readMueble(nombre);
 		if(m==null){
-		  Mueble mueble= new Mueble(nombre,cantidad);
-		  if(mueble!=null){
-		    muebles.add(mueble);
-		    add= true;
-		  }new NullPointerException("El mueble no puede ser");
+			Mueble mueble= new Mueble(nombre,cantidad);
+			if(mueble!=null){
+				muebles.add(mueble);
+				add= true;
+			}new NullPointerException("El mueble no puede ser null");
 		}
 		else throw new IllegalArgumentException("Este Mueble ya existe");
 		return add;
@@ -96,12 +115,12 @@ public class FichaTecnicaDO {
 		Mueble mueble= readMueble(newNombre);
 		Mueble m= readMueble(nombre);
 		if(m!=null){
-		  if(mueble==null || mueble.getNombre().equals(m.getNombre())){
-		  m.setCantidad(newcantidad);
-		  m.setNombre(newNombre);
-		  updt= true;
-		  }
-		  else throw new IllegalArgumentException("Este nombre de mueble ya existe");
+			if(mueble==null || mueble.getNombre().equals(m.getNombre())){
+				m.setCantidad(newcantidad);
+				m.setNombre(newNombre);
+				updt= true;
+			}
+			else throw new IllegalArgumentException("Este nombre de mueble ya existe");
 		}
 		else throw new IllegalArgumentException("Este Mueble no existe");
 		return updt;
@@ -110,8 +129,8 @@ public class FichaTecnicaDO {
 		Boolean del= false;
 		Mueble m= readMueble(nombre);
 		if(m!=null){
-		  muebles.remove(m);
-		  del= true;
+			muebles.remove(m);
+			del= true;
 		}
 		else throw new IllegalArgumentException("Este Mueble no existe");
 		return del;
@@ -121,21 +140,19 @@ public class FichaTecnicaDO {
 	/*Create*/ 
 	public boolean addAfectacion(String tipo, String material, boolean esDerrumbeTotal) {
 		boolean add = false;
-		if (material==null || material.isEmpty())
-			throw new IllegalArgumentException("Se debe ingresar el material predominante.");
-		else
-			if (tipo.equals(TECHO)) 
-				add =addAfectacionTecho(esDerrumbeTotal, material);
-			else if (tipo.equals(PARED_CARGA)) 
-				add =addAfectacionPared(esDerrumbeTotal, material, true);
-			else if (tipo.equals(PARED)) 
-				add =addAfectacionPared(esDerrumbeTotal, material, false);	       
+
+		if (tipo.equals(TECHO)) 
+			add =addAfectacionTecho(esDerrumbeTotal, material);
+		else if (tipo.equals(PARED_CARGA)) 
+			add =addAfectacionPared(esDerrumbeTotal, material, true);
+		else if (tipo.equals(PARED)) 
+			add =addAfectacionPared(esDerrumbeTotal, material, false);	       
 
 		return add;
 	}
 	public Boolean addAfectacionTecho(Boolean esDerrumbeTotal, String materialPredominante){
 		Boolean add=false;
-		
+
 		if(!existAfectacionTecho(esDerrumbeTotal, materialPredominante)){
 			AfectacionTecho a = new AfectacionTecho(esDerrumbeTotal, materialPredominante);
 			afectaciones.add(a);	
@@ -144,6 +161,7 @@ public class FichaTecnicaDO {
 		else throw new IllegalArgumentException("Esta afectacion ya existe");
 		return add;
 	}
+
 	public Boolean addAfectacionPared(Boolean esDerrumbeTotal, String materialPredominante, Boolean esDeCarga){
 		Boolean add=false;
 
@@ -157,12 +175,11 @@ public class FichaTecnicaDO {
 	}
 	/*Read*/ public Afectacion readAfectacion(UUID id){
 		Afectacion afectacion= null;
-		boolean found=false;
-		for(int i=0; i<afectaciones.size() && !found; i++)
-			if(afectaciones.get(i).getId().equals(id)){
-				afectacion=afectaciones.get(i);
-				found=true;
-			}					
+		for(int i=0; i<afectaciones.size() && afectacion==null; i++)
+			if(afectaciones.get(i).getId().equals(id))
+				afectacion=afectaciones.get(i);			
+
+		if(afectacion==null) throw new NullPointerException("Esta afectacion no existe");
 		return afectacion; 			
 	}
 	/*Update*/ 
@@ -176,6 +193,7 @@ public class FichaTecnicaDO {
 			a.setEsDeCarga(esDeCarga);
 			updt=true;
 		}else throw new IllegalArgumentException("Esta afectacion no existe");
+
 		return updt;
 	}
 	public Boolean updtAfectacionTecho(UUID id, Boolean esDerrumbeTotal, String materialPredominante){
@@ -187,15 +205,14 @@ public class FichaTecnicaDO {
 			a.setMaterialPredominante(materialPredominante);
 			updt=true;
 		}else throw new IllegalArgumentException("Esta afectacion no existe");
+
 		return updt;
 	}
 	/*Delete*/ public Boolean delAfectacion(UUID id){
 		Boolean del=existAfectacion(id);
-
 		if(del)			
 			afectaciones.remove(readAfectacion(id));
 		else throw new IllegalArgumentException("Esta afectacion no existe");
-
 		return del;
 	}
 	public Boolean existAfectacion(UUID id){
@@ -214,7 +231,7 @@ public class FichaTecnicaDO {
 				if(((AfectacionPared)a).getEsDerrumbeTotal().equals(esDerrumbeTotal)
 						&& ((AfectacionPared)a).getMaterialPredominante().equals(materialPredominante)
 						&& ((AfectacionPared)a).getEsDeCarga().equals(esDeCarga))				
-					exist=true;
+					exist=true;				
 		}
 		return exist;
 	}
@@ -224,8 +241,8 @@ public class FichaTecnicaDO {
 			Afectacion a = afectaciones.get(i);
 			if(a instanceof AfectacionTecho)
 				if(((AfectacionTecho)a).getEsDerrumbeTotal().equals(esDerrumbeTotal)
-						&& ((AfectacionTecho)a).getMaterialPredominante().equals(materialPredominante))				
-					exist=true;
+						&& ((AfectacionTecho)a).getMaterialPredominante().equals(materialPredominante))	
+					exist=true;		
 		}
 		return exist;
 	}

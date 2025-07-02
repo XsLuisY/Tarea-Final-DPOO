@@ -34,6 +34,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class SeleccionarViviendas extends JFrame {
+	private static SeleccionarViviendas  seleccionarViviendas=null; 
 	private FichaTecnicaDO ficha;
 	private AsignableVivienda gestion;
 
@@ -45,6 +46,15 @@ public class SeleccionarViviendas extends JFrame {
 	private JPopupMenu popupMenu;
 	private JMenuItem mntmSeleccionar;
 
+	//Singleton 
+	public static SeleccionarViviendas getSeleccionarViviendas(AsignableVivienda gestion,  FichaTecnicaDO ficha){
+		if(seleccionarViviendas==null
+				||	seleccionarViviendas.gestion.equals(gestion) 
+				||	seleccionarViviendas.ficha.equals(ficha))
+			seleccionarViviendas= new SeleccionarViviendas(gestion,ficha);
+		return seleccionarViviendas;
+	}
+	//Constructor
 	public  SeleccionarViviendas(AsignableVivienda gestion,  FichaTecnicaDO ficha) {		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -55,7 +65,8 @@ public class SeleccionarViviendas extends JFrame {
 		this.ficha=ficha;	
 		actualizarTableViviendas();
 	}
-
+	
+	//Atributos
 	public JPanel getContentPane(){
 		if(contentPane==null){
 			contentPane = new JPanel();	
@@ -118,27 +129,15 @@ public class SeleccionarViviendas extends JFrame {
 			mntmSeleccionar = new JMenuItem("Seleccionar");
 			mntmSeleccionar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					Vivienda v = obtenerViviendaSeleccionada();
-					if (v != null) {
-					    ficha.setVivienda(v);
-					    System.out.println("DEBUG: Vivienda asignada: " + ficha.getVivienda());
-					    dispose();
-					    if (gestion != null) 
-					        gestion.actualizarViviendaAsociada();
-					    else 
-					        JOptionPane.showMessageDialog(SeleccionarViviendas.this,"Ocurrió un error: no se pudo actualizar la vivienda asociada.","Aviso",JOptionPane.WARNING_MESSAGE);
-					} else 
-					    JOptionPane.showMessageDialog(SeleccionarViviendas.this,"Debes seleccionar una vivienda antes de continuar.","Aviso",JOptionPane.WARNING_MESSAGE);
-					
-
-}
+					asignar();
+				}
 			});
 		}
 		return mntmSeleccionar;
 	}
 
 
-	//Metodo
+	//Metodos
 	public Vivienda obtenerViviendaSeleccionada(){
 		Vivienda v = null;
 		int pos = getTableViviendas().getSelectedRow();
@@ -156,5 +155,17 @@ public class SeleccionarViviendas extends JFrame {
 			model.addRow(newRow);			
 		}
 		getTableViviendas().setModel(model);
+	}
+
+	public void asignar(){
+		Vivienda v = obtenerViviendaSeleccionada();
+		if (v != null) {
+			gestion.setVivienda(v);	
+			gestion.actualizarViviendaAsociada();
+			dispose();
+		} else 
+			JOptionPane.showMessageDialog(seleccionarViviendas,"Debes seleccionar una vivienda antes de continuar.","Aviso",JOptionPane.WARNING_MESSAGE);
+
+
 	}
 }

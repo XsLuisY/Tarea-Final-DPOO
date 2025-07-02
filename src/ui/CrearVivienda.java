@@ -90,7 +90,8 @@ public class CrearVivienda extends JFrame {
 
 	//Singleton
 	public static CrearVivienda getCrearVivienda(GestionViviendas gestion){
-		if(crearVivienda==null)
+		if(crearVivienda==null
+				|| !crearVivienda.gestion.equals(gestion))
 			crearVivienda=new CrearVivienda(gestion);
 		return crearVivienda;
 	}
@@ -178,8 +179,7 @@ public class CrearVivienda extends JFrame {
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					limpiarCampos();
-					dispose();
+					regresar();
 				}
 			});
 		}
@@ -419,92 +419,7 @@ public class CrearVivienda extends JFrame {
 			btnEnviar.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					try {
-						// Validar campos de texto no vacÃ­os
-						if (getTextFieldNombre().getText().trim().isEmpty()) {
-							throw new IllegalArgumentException("Debe ingresar el nombre del jefe de núcleo.");
-						}
-						if (getTextFieldCI().getText().trim().isEmpty()) {
-							throw new IllegalArgumentException("Debe ingresar el carnet de identidad.");
-						}
-						if (getTextFieldDireccion().getText().trim().isEmpty()) {
-							throw new IllegalArgumentException("Debe ingresar la dirección.");
-						}
-
-						// Validar que se haya seleccionado un RadioButton (Facilidad Temporal)
-						if (!getRdbtnSi().isSelected() && !getRdbtnNo().isSelected()) {
-							throw new IllegalArgumentException("Debe seleccionar una opción para Facilidad Temporal.");
-						}
-						Boolean facilidadTemporal = getRdbtnSi().isSelected();
-
-						// Validar ComboBoxes (que tengan selección)
-						if (getComboBoxTipologiaConstructiva().getSelectedIndex() == -1) {
-							throw new IllegalArgumentException("Debe seleccionar un tipo de construcción.");
-						}
-						if (getComboBoxTipologiaHabitacional().getSelectedIndex() == -1) {
-							throw new IllegalArgumentException("Debe seleccionar un tipo habitacional.");
-						}
-						if (getComboBoxDocumentoLegal().getSelectedIndex() == -1) {
-							throw new IllegalArgumentException("Debe seleccionar un documento legal.");
-						}
-
-						// Validar spinners con commitEdit para aplicar valor y lanzar excepción si inválido
-						getSpinnerNinios().commitEdit();
-						getSpinnerAncianos().commitEdit();
-						getSpinnerEmbarazadas().commitEdit();
-						getSpinnerTotal().commitEdit();
-						getSpinnerAltura().commitEdit();
-						getSpinnerAncho().commitEdit();
-						getSpinnerLargo().commitEdit();
-
-						// Obtener valores de spinners
-						int cantidadNinios = (Integer) getSpinnerNinios().getValue();
-						int cantidadAncianos = (Integer) getSpinnerAncianos().getValue();
-						int cantidadEmbarazadas = (Integer) getSpinnerEmbarazadas().getValue();
-						int totalPersonas = (Integer) getSpinnerTotal().getValue();
-						double altura = (Double) getSpinnerAltura().getValue();
-						double ancho = (Double) getSpinnerAncho().getValue();
-						double largo = (Double) getSpinnerLargo().getValue();
-
-						// Validar área máxima
-						double area = ancho * largo;
-						if (area > 50) {
-							throw new IllegalArgumentException("El área (ancho x largo) no puede superar 50. área actual: " + area);
-						}
-
-						// Si todo está bien, asignar valores a la instancia vivienda
-						vivienda.getJefeNucleo().setNombre(getTextFieldNombre().getText().trim());
-						vivienda.getJefeNucleo().setCI(getTextFieldCI().getText().trim());
-						vivienda.setDireccion(getTextFieldDireccion().getText().trim());
-						vivienda.setFacilidadTemporal(facilidadTemporal);
-						vivienda.setTipologiaConstructiva((String) getComboBoxTipologiaConstructiva().getSelectedItem());
-						vivienda.setTipologiaHabitacional((String) getComboBoxTipologiaHabitacional().getSelectedItem());
-						vivienda.setDocumentoLegal((String) getComboBoxDocumentoLegal().getSelectedItem());
-						vivienda.setCantNinios(cantidadNinios);
-						vivienda.setCantAncianos(cantidadAncianos);
-						vivienda.setCantEmbarazadas(cantidadEmbarazadas);
-						vivienda.setTotalHabitantes(totalPersonas);
-						vivienda.setAltura(altura);
-						vivienda.setAncho(ancho);
-						vivienda.setLargo(largo);
-
-						// Agregar vivienda a la lista
-						if(micons.addVivienda(vivienda)){						
-							JOptionPane.showMessageDialog(null, "Vivienda guardada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);							
-							gestion.actualizarTableViviendas();	//actualizar lista viviendas
-							limpiarCampos();
-							dispose();
-						}
-
-						//TODO Quitar:	vivienda = new Vivienda();
-
-					} catch (ParseException ex) {
-						JOptionPane.showMessageDialog(null, "Error en los valores numéricos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					} catch (IllegalArgumentException ex) {
-						JOptionPane.showMessageDialog(null, ex.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
-					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(null, "Error inesperado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					}
+					addVivienda();
 				}
 			});
 
@@ -554,8 +469,10 @@ public class CrearVivienda extends JFrame {
 	ChangeListener validarArea = new ChangeListener() {
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			double ancho = (Double) spinnerAncho.getValue();
-			double largo = (Double) spinnerLargo.getValue();
+			//.doubleValue() Arregla el eor que daba al castear el valo del spinner 
+			double ancho = ((Number) spinnerAncho.getValue()).doubleValue();
+			double largo = ((Number) spinnerLargo.getValue()).doubleValue();
+
 			double area = ancho * largo;
 
 			if (area > 50) {
@@ -677,6 +594,103 @@ public class CrearVivienda extends JFrame {
 		getSpinnerEmbarazadas().setValue(0);
 		getSpinnerNinios().setValue(0);
 	}
+	public void addVivienda(){
+		try {
+			// Validar campos de texto no vacÃ­os
+			if (getTextFieldNombre().getText().trim().isEmpty()) {
+				throw new IllegalArgumentException("Debe ingresar el nombre del jefe de núcleo.");
+			}
+			if (getTextFieldCI().getText().trim().isEmpty()) {
+				throw new IllegalArgumentException("Debe ingresar el carnet de identidad.");
+			}
+			if (getTextFieldDireccion().getText().trim().isEmpty()) {
+				throw new IllegalArgumentException("Debe ingresar la dirección.");
+			}
 
+			// Validar que se haya seleccionado un RadioButton (Facilidad Temporal)
+			if (!getRdbtnSi().isSelected() && !getRdbtnNo().isSelected()) {
+				throw new IllegalArgumentException("Debe seleccionar una opción para Facilidad Temporal.");
+			}
+			Boolean facilidadTemporal = getRdbtnSi().isSelected();
+
+			// Validar ComboBoxes (que tengan selección)
+			if (getComboBoxTipologiaConstructiva().getSelectedIndex() == -1) {
+				throw new IllegalArgumentException("Debe seleccionar un tipo de construcción.");
+			}
+			if (getComboBoxTipologiaHabitacional().getSelectedIndex() == -1) {
+				throw new IllegalArgumentException("Debe seleccionar un tipo habitacional.");
+			}
+			if (getComboBoxDocumentoLegal().getSelectedIndex() == -1) {
+				throw new IllegalArgumentException("Debe seleccionar un documento legal.");
+			}
+
+			// Validar spinners con commitEdit para aplicar valor y lanzar excepción si inválido
+			getSpinnerNinios().commitEdit();
+			getSpinnerAncianos().commitEdit();
+			getSpinnerEmbarazadas().commitEdit();
+			getSpinnerTotal().commitEdit();
+			getSpinnerAltura().commitEdit();
+			getSpinnerAncho().commitEdit();
+			getSpinnerLargo().commitEdit();
+
+			// Obtener valores de spinners
+			int cantidadNinios = (Integer) getSpinnerNinios().getValue();
+			int cantidadAncianos = (Integer) getSpinnerAncianos().getValue();
+			int cantidadEmbarazadas = (Integer) getSpinnerEmbarazadas().getValue();
+			int totalPersonas = (Integer) getSpinnerTotal().getValue();
+			//puse .doubleValue() para eliminar los errores a la hora de castear los valores de los spinners
+			double altura = ((Number) getSpinnerAltura().getValue()).doubleValue();
+			double ancho = ((Number) getSpinnerAncho().getValue()).doubleValue();
+			double largo = ((Number) getSpinnerLargo().getValue()).doubleValue();
+
+			// Validar área máxima
+			double area = ancho * largo;
+			if (area > 50) {
+				throw new IllegalArgumentException("El área (ancho x largo) no puede superar 50. área actual: " + area);
+			}
+
+			// Si todo está bien, asignar valores a la instancia vivienda
+			vivienda.getJefeNucleo().setNombre(getTextFieldNombre().getText().trim());
+			vivienda.getJefeNucleo().setCI(getTextFieldCI().getText().trim());
+			vivienda.setDireccion(getTextFieldDireccion().getText().trim());
+			vivienda.setFacilidadTemporal(facilidadTemporal);
+			vivienda.setTipologiaConstructiva((String) getComboBoxTipologiaConstructiva().getSelectedItem());
+			vivienda.setTipologiaHabitacional((String) getComboBoxTipologiaHabitacional().getSelectedItem());
+			vivienda.setDocumentoLegal((String) getComboBoxDocumentoLegal().getSelectedItem());
+			vivienda.setCantNinios(cantidadNinios);
+			vivienda.setCantAncianos(cantidadAncianos);
+			vivienda.setCantEmbarazadas(cantidadEmbarazadas);
+			vivienda.setTotalHabitantes(totalPersonas);
+			vivienda.setAltura(altura);
+			vivienda.setAncho(ancho);
+			vivienda.setLargo(largo);
+
+			// Agregar vivienda a la lista
+			if(micons.addVivienda(vivienda)){						
+				JOptionPane.showMessageDialog(crearVivienda, "Vivienda guardada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);							
+				gestion.actualizarTableViviendas();	//actualizar lista viviendas
+				limpiarCampos();				
+			}
+			else JOptionPane.showMessageDialog(crearVivienda, "Error al guardar la vivienda.", "Error", JOptionPane.ERROR_MESSAGE);							
+
+		} catch (ParseException e) {
+			JOptionPane.showMessageDialog(crearVivienda, "Error en los valores numéricos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (IllegalArgumentException e) {
+			JOptionPane.showMessageDialog(crearVivienda, e.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(crearVivienda, "Error inesperado: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	public void regresar(){
+		limpiarCampos();
+		dispose();
+	}
 }
+
+
+
+
+
+
 

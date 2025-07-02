@@ -1,7 +1,9 @@
 package clases;
+import interfaces.Identificable;
+
 import java.util.UUID;
 
-public class Plantilla {
+public class Plantilla implements Identificable{
 
 	//Atributos
 	private Cubicacion cubicacion;
@@ -40,6 +42,7 @@ public class Plantilla {
 		do
 			id=UUID.randomUUID();
 		while(MICONS.existUUID(id));
+		MICONS.getMICONS().getListaId().put(id, this);
 	}
 
 	//Metodos

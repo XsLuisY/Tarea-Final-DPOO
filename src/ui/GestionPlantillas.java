@@ -53,14 +53,15 @@ public class GestionPlantillas extends JFrame {
 
 	//Singleton
 	public static GestionPlantillas getGestionPlantillas(OficinaTramites oficina){
-		if(gestionPlantillas==null)
+		if(gestionPlantillas==null 
+				|| !gestionPlantillas.oficina.equals(oficina))
 			gestionPlantillas = new GestionPlantillas(oficina);
 		return gestionPlantillas;
 	}
 
 	//Constructor
 	private GestionPlantillas(OficinaTramites oficina) {
-		setTitle("Plantillas");
+		setTitle("Plantillas de "+oficina.getConsejoPopular());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 526, 300);
 		micons=MICONS.getMICONS();	
@@ -68,7 +69,7 @@ public class GestionPlantillas extends JFrame {
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 		addPopup(getTablePlantillas(), getPopupMenu());
-		
+
 		actualizarTablePlantillas();
 
 	}
@@ -99,9 +100,7 @@ public class GestionPlantillas extends JFrame {
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-					GestionOficinaTramites g = GestionOficinaTramites.getGestionOficinaTramites( );
-					g.setVisible(true);					
+					regresar();				
 				}
 			});
 		}
@@ -126,7 +125,7 @@ public class GestionPlantillas extends JFrame {
 			tablePlantillas.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					if (e.getClickCount() == 2) 
-						mostrarPlantilla();
+						showPlantilla();
 
 				}
 			});
@@ -152,7 +151,7 @@ public class GestionPlantillas extends JFrame {
 			mntmMostrar.setBackground(Color.DARK_GRAY);
 			mntmMostrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-mostrarPlantilla();
+					showPlantilla();
 				}
 			});
 		}
@@ -166,19 +165,7 @@ mostrarPlantilla();
 			mntmEliminar.setBackground(Color.DARK_GRAY);
 			mntmEliminar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					int pos = tablePlantillas.getSelectedRow();
-					Plantilla p = oficina.getPlantillas().get(pos);
-					if(p!=null){
-						int confirmar = JOptionPane.showConfirmDialog(gestionPlantillas,"¿Seguro que deseas eliminar esta FTDO?","Confirmar eliminación",JOptionPane.YES_NO_OPTION);
-
-						if (confirmar == JOptionPane.YES_OPTION) {
-							oficina.deletePlantilla(p.getId());
-							JOptionPane.showMessageDialog(null, "Plantilla  eliminada con exito.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-							actualizarTablePlantillas();
-
-						}
-					}else 
-						JOptionPane.showMessageDialog(null, "Debe seleccionar una plantilla para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+					delPlantilla();
 				}
 			});
 		}
@@ -204,16 +191,36 @@ mostrarPlantilla();
 	}
 
 	//----------------------------------------------------------------------------
-	public void mostrarPlantilla(){
-		//TODO Hacer metodo obtener plantilla seleccionada
+	public void showPlantilla(){
 		Plantilla p = obtenerPlantillaSeleccionada();
-		MostrarPlantilla m = MostrarPlantilla.getMostrarPlantilla(p);
-		m.setVisible(true);
+		if(p!=null)
+			MostrarPlantilla.getMostrarPlantilla(p).setVisible(true);
+		else 
+			JOptionPane.showMessageDialog(gestionPlantillas, "Debe seleccionar una plantilla para mostrar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+
 	}
+	public void delPlantilla(){
+		Plantilla p = obtenerPlantillaSeleccionada();
+		if(p!=null){
+			int confirmar = JOptionPane.showConfirmDialog(gestionPlantillas,"¿Seguro que deseas eliminar esta FTDO?","Confirmar eliminación",JOptionPane.YES_NO_OPTION);
+
+			if (confirmar == JOptionPane.YES_OPTION) 
+				try{
+					JOptionPane.showMessageDialog(gestionPlantillas, "Plantilla  eliminada con exito.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+					oficina.deletePlantilla(p.getId());
+					actualizarTablePlantillas();
+				}catch (IllegalArgumentException e) {
+					JOptionPane.showMessageDialog(gestionPlantillas, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+		}else 
+			JOptionPane.showMessageDialog(gestionPlantillas, "Debe seleccionar una plantilla para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+
+	}
+
 	public void actualizarTablePlantillas() {
 		ArrayList<Plantilla> plantillas=oficina.getPlantillas();
 		DefaultTableModel model = (DefaultTableModel) getTablePlantillas().getModel();
-		model.setRowCount(0); // Limpiar la tabla
+		model.setRowCount(0);
 		if(plantillas!=null)
 			//"Dirección","Fecha Levantamiento", "ID", "Precio Total"
 			for (int i = 0; i < plantillas.size(); i++) {
@@ -226,6 +233,8 @@ mostrarPlantilla();
 			}
 		getTablePlantillas().setModel(model);
 	}	
+
+
 	public Plantilla obtenerPlantillaSeleccionada(){
 		Plantilla p = null;
 		int pos = getTablePlantillas().getSelectedRow();
@@ -234,7 +243,33 @@ mostrarPlantilla();
 		}
 		return p;
 	}
+
+
+
+	public void regresar(){
+		GestionOficinaTramites g = GestionOficinaTramites.getGestionOficinaTramites();
+		g.setVisible(true);	
+		dispose();
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

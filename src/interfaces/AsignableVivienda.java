@@ -7,5 +7,7 @@ import clases.Vivienda;
 public interface AsignableVivienda {
 
 	void actualizarViviendaAsociada();
+
+	void setVivienda(Vivienda v);
 	
 }

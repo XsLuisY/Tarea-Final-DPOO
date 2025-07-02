@@ -52,7 +52,8 @@ public class MostrarFichaTecnicaDO extends JFrame {
 
 	//Singleton
 	public static MostrarFichaTecnicaDO getMostrarFichaTecnicaDO(FichaTecnicaDO ficha){
-		if(mostrarFichaTecnicaDO==null)
+		if(mostrarFichaTecnicaDO==null
+				|| !mostrarFichaTecnicaDO.ficha.equals(ficha))
 			mostrarFichaTecnicaDO=new MostrarFichaTecnicaDO(ficha);
 		return mostrarFichaTecnicaDO;
 	}
@@ -66,8 +67,7 @@ public class MostrarFichaTecnicaDO extends JFrame {
 		setBounds(100, 100, 320, 550);
 		setContentPane(getContentPane());
 		setJMenuBar(getBarraSuperior());
-		actualizarTableAfectaciones(ficha.getAfectaciones());
-		actualizarTableMuebles(ficha.getMuebles());
+		rellenarFormulario();		
 	}
 
 	//Atributos
@@ -104,12 +104,13 @@ public class MostrarFichaTecnicaDO extends JFrame {
 			mntmRegresar.setBackground(Color.DARK_GRAY);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
+					regresar();
 				}
 			});
 		}
 		return mntmRegresar;
 	}
+
 	public JScrollPane getScrollPaneAfectaciones(){
 		if(scrollPaneAfectaciones==null){
 			scrollPaneAfectaciones = new JScrollPane();
@@ -128,6 +129,7 @@ public class MostrarFichaTecnicaDO extends JFrame {
 		}
 		return tableAfectaciones;
 	}
+
 	public JScrollPane getScrollPaneMuebles(){
 		if(scrollPaneMuebles==null){
 			scrollPaneMuebles = new JScrollPane();
@@ -146,6 +148,7 @@ public class MostrarFichaTecnicaDO extends JFrame {
 		}
 		return tableMuebles;
 	}
+
 	public JLabel getLblAfectacionInmueble(){		
 		if(lblAfectacionInmueble==null){
 			lblAfectacionInmueble = new JLabel("Afectaci\u00F3n al Inmueble:");
@@ -263,5 +266,13 @@ public class MostrarFichaTecnicaDO extends JFrame {
 			}
 		getTableMuebles().setModel(model);
 	}		
-
+	//TODO show UUID & Date
+	public void rellenarFormulario(){
+		actualizarTableAfectaciones(ficha.getAfectaciones());
+		actualizarTableMuebles(ficha.getMuebles());
+	}
+	
+	public void regresar(){
+		dispose();
+	}
 }

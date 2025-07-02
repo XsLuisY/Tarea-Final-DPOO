@@ -1,5 +1,7 @@
 package ui;
 
+import interfaces.Identificable;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -11,11 +13,14 @@ import javax.swing.JMenuItem;
 
 import java.awt.Color;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import clases.Afectacion;
 import clases.AfectacionPared;
@@ -24,6 +29,7 @@ import clases.Cubicacion;
 import clases.FichaTecnicaDO;
 import clases.MICONS;
 import clases.Material;
+import clases.OficinaTramites;
 import clases.Plantilla;
 
 import java.awt.event.ActionListener;
@@ -31,6 +37,8 @@ import java.awt.event.ActionEvent;
 import java.util.UUID;
 
 import javax.swing.JTextPane;
+import javax.swing.JScrollPane;
+import javax.swing.JList;
 
 public class Buscar extends JFrame {
 
@@ -42,8 +50,10 @@ public class Buscar extends JFrame {
 	private JPanel contentPane;
 	private JLabel lblIngreseElId;	
 	private JTextField textField;	
-	private JTextPane txtpn;	
 	private JButton btnBuscar;
+	private JScrollPane scrollPane;
+	private JList listID;
+	private JTextPane textPane;
 
 	//Singleton
 	public static Buscar getBuscar(){
@@ -54,23 +64,30 @@ public class Buscar extends JFrame {
 
 	//Constructor
 	private Buscar() {
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 300, 240);
-		setJMenuBar(getMenuBar_1());
-		contentPane = new JPanel();
-		contentPane.setBackground(Color.ORANGE);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		contentPane.add(getLblIngreseElId());
-		contentPane.add(getTextField());
-		contentPane.add(getBtnBuscar());
-		contentPane.add(getTxtpn());
 		micons=MICONS.getMICONS();
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 338, 500);
+		setJMenuBar(getMenuBar_1());
+		setContentPane(getContentPane());
 	}
 
 	//Atributos
 
+	public JPanel getContentPane(){
+		if(contentPane==null){
+			contentPane = new JPanel();
+			contentPane.setBackground(Color.ORANGE);
+			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+			contentPane.setLayout(null);
+			contentPane.add(getLblIngreseElId());
+			contentPane.add(getTextField());
+			contentPane.add(getBtnBuscar());
+			contentPane.add(getScrollPane());
+			contentPane.add(getTextPane());
+		}
+		return contentPane;
+
+	}
 	public JMenuBar getMenuBar_1() {
 		if (menuBar == null) {
 			menuBar = new JMenuBar();
@@ -87,7 +104,7 @@ public class Buscar extends JFrame {
 			mntmRegresar.setForeground(Color.ORANGE);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
+					regresar();
 				}
 			});
 		}
@@ -97,83 +114,127 @@ public class Buscar extends JFrame {
 		if (lblIngreseElId == null) {
 			lblIngreseElId = new JLabel("Ingrese el ID del objeto a buscar:");
 			lblIngreseElId.setHorizontalAlignment(SwingConstants.CENTER);
-			lblIngreseElId.setBounds(10, 11, 264, 22);
+			lblIngreseElId.setBounds(10, 11, 302, 22);
 		}
 		return lblIngreseElId;
 	}
 	public JTextField getTextField() {
 		if (textField == null) {
 			textField = new JTextField();
-			textField.setBounds(10, 38, 264, 20);
+			textField.setBounds(10, 38, 302, 20);
 			textField.setColumns(10);
 		}
 		return textField;
 	}
-	public JTextPane getTxtpn() {
-		if (txtpn == null) {
-			txtpn = new JTextPane();
-			txtpn.setEditable(false);
-			txtpn.setBackground(Color.DARK_GRAY);
-			txtpn.setForeground(Color.ORANGE);
-			txtpn.setBounds(10, 69, 155, 97);
+	
+
+	public JTextPane getTextPane() {
+		if (textPane == null) {
+			textPane = new JTextPane();
+			textPane.setForeground(Color.ORANGE);
+			textPane.setBackground(Color.DARK_GRAY);
+			textPane.setBounds(10, 69, 302, 90);
 		}
-		return txtpn;
+		return textPane;
 	}
+	
 	public JButton getBtnBuscar() {
 		if (btnBuscar == null) {
 			btnBuscar = new JButton("Buscar");
 			btnBuscar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					buscarID();
-					limpiarCampos();
+					buscarID();				
 				}
 			});
 			btnBuscar.setForeground(Color.ORANGE);
 			btnBuscar.setBackground(Color.DARK_GRAY);
-			btnBuscar.setBounds(185, 143, 89, 23);
+			btnBuscar.setBounds(112, 403, 89, 23);
 		}
 		return btnBuscar;
 	}
 
+
+	public JScrollPane getScrollPane() {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane();
+			scrollPane.setBounds(10, 170, 302, 222);
+			scrollPane.setViewportView(getListID());
+		}
+		return scrollPane;
+	}
+	public JList getListID() {
+
+		if(listID==null){
+			DefaultListModel<String> model = new DefaultListModel<String>();
+			for(UUID id:  micons.getListaId().keySet())
+				model.addElement(id.toString());
+			listID = new JList<String>(model);
+			listID.setForeground(Color.ORANGE);
+			listID.setBackground(Color.DARK_GRAY);
+			listID.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			if (model.isEmpty()) {
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						JOptionPane.showMessageDialog(buscar,
+								"No hay objetos registrados todavia.",
+								"Información", JOptionPane.INFORMATION_MESSAGE);
+					}
+				});
+			}
+		}
+		return listID;
+	}
+
 	//Metodos
+	public void regresar(){
+		dispose();
+		limpiarCampos();
+	}
 	public void buscarID(){
-		UUID id=UUID.fromString(getTextField().getText().trim());
-		if(id!=null)			
-			if(micons.getListaId().containsKey(id))
-				switch(micons.getListaId().get(id).getClass().toString()){
-				case "Material":mostrarMaterial((Material)micons.getListaId().get(id));
-				break;
-				case "Afectacion": mostrarAfectacion((Afectacion)micons.getListaId().get(id));
-				break;
-				case "Plantilla": MostrarPlantilla.getMostrarPlantilla((Plantilla)micons.getListaId().get(id));
-				break;
-				case "FichaTecnicaDO": MostrarFichaTecnicaDO.getMostrarFichaTecnicaDO((FichaTecnicaDO)micons.getListaId().get(id));
-				break;
-				/*TODO: Implementar
-				case "Cubicacion": MostrarCubicacion.getMostrarCubicacion((Cubicacion)micons.getListaId().get(id));
-				break;
-				 */
-				}
-			else
-				JOptionPane.showMessageDialog(buscar, "El id ingresado es incorrecto.", "Aviso", JOptionPane.WARNING_MESSAGE);
-		else 
-			JOptionPane.showMessageDialog(buscar, "Ingresado un id.", "Aviso", JOptionPane.WARNING_MESSAGE);
+		if(getTextField().getText().isEmpty())
+			JOptionPane.showMessageDialog(buscar, "Debes ingresar un ID para buscar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+		else{
+			try{
+				UUID id=UUID.fromString(getTextField().getText().trim());			
+				Identificable doc = micons.getListaId().get(id);
+
+				if(doc instanceof Material)
+					mostrarMaterial((Material)micons.getListaId().get(id));
+				else if(doc instanceof Afectacion)
+					mostrarAfectacion((Afectacion)micons.getListaId().get(id));
+				else if(doc instanceof Plantilla)
+					MostrarPlantilla.getMostrarPlantilla((Plantilla)micons.getListaId().get(id)).setVisible(true);
+				else if(doc instanceof FichaTecnicaDO)
+					MostrarFichaTecnicaDO.getMostrarFichaTecnicaDO((FichaTecnicaDO)micons.getListaId().get(id)).setVisible(true);
+				else if(doc instanceof Cubicacion)
+					MostrarCubicacion.getMostrarCubicacion((Cubicacion)micons.getListaId().get(id)).setVisible(true);
+				else JOptionPane.showMessageDialog(buscar, "El ID ingresado no esta registrado.", "Aviso", JOptionPane.WARNING_MESSAGE);		
+			}catch(IllegalArgumentException e){
+				 JOptionPane.showMessageDialog(buscar, "El ID ingresado no tiene el formato correcto de UUID.","Error de formato", JOptionPane.ERROR_MESSAGE);		
+			}
+		}
 	}
 	public void mostrarMaterial(Material m){		
-		getTxtpn().setText("\tMaterial\nNombre:"+m.getNombre()+"\nUnidad de Medida: "+m.getUnidadMedida()+"\nPrecio Unitario: "+m.getPrecioUnitario());
+		getTextPane().setText("\t   Material\n   Nombre:"+m.getNombre()+"\n   Unidad de Medida: "+m.getUnidadMedida()+"\n\tPrecio Unitario: "+m.getPrecioUnitario());
 	}
 	public void mostrarAfectacion(Afectacion a){	
 		if(a instanceof AfectacionTecho)
-			getTxtpn().setText("\tAfectacion\nTipo: Techo"+"nMaterial Predominante: "+a.getMaterialPredominante());
+			getTextPane().setText("\t   Afectacion\nTipo: Techo"+"\n   Material Predominante: "+a.getMaterialPredominante());
 		else if(((AfectacionPared)a).getEsDeCarga())
-			getTxtpn().setText("\tAfectacion\nTipo: Pared de carga"+"nMaterial Predominante: "+a.getMaterialPredominante());
+			getTextPane().setText("\t   Afectacion\nTipo: Pared de carga"+"\n   Material Predominante: "+a.getMaterialPredominante());
 		else
-			getTxtpn().setText("\tAfectacion\nTipo: Pared"+"nMaterial Predominante: "+a.getMaterialPredominante());
+			getTextPane().setText("\t   Afectacion\nTipo: Pared"+"\n   Material Predominante: "+a.getMaterialPredominante());
 	}
 
 	private void limpiarCampos() {
 		getTextField().setText("");
-		getTxtpn().setText("");
+		getTextPane().setText("");
 	}
 
+
+	
+	
+	
+	
+	
 }
