@@ -25,8 +25,6 @@ import javax.swing.JMenuBar;
 import clases.Material;
 import clases.OficinaTramites;
 
-import com.jgoodies.forms.factories.DefaultComponentFactory;
-
 public class ModificarMaterial extends JFrame {
 	private static ModificarMaterial modificarMaterial;
 	private static final long serialVersionUID = 1L;
@@ -142,7 +140,7 @@ public class ModificarMaterial extends JFrame {
 	}
 	public JLabel getLblPrecioUnitario(){ 
 		if(lblPrecioUnitario==null){
-			lblPrecioUnitario = DefaultComponentFactory.getInstance().createLabel("Precio unitario:");
+			lblPrecioUnitario = new JLabel("Precio unitario:");
 			lblPrecioUnitario.setBounds(10, 64, 120, 14);
 		}
 		return lblPrecioUnitario;

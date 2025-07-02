@@ -22,7 +22,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.JMenuBar;
 import clases.OficinaTramites;
 
-import com.jgoodies.forms.factories.DefaultComponentFactory;
 
 public class CrearMaterial extends JFrame {
 
@@ -47,26 +46,18 @@ public class CrearMaterial extends JFrame {
 
 	private JButton btnAgregar;
 
-	//Singleton
-	public static CrearMaterial getCrearMaterial(GestionMateriales gestion, OficinaTramites oficina){
-		if(crearMaterial==null
-				|| !crearMaterial.gestion.equals(gestion)
-				|| !crearMaterial.oficina.equals(oficina))
-			crearMaterial=new CrearMaterial(gestion, oficina);
-		return crearMaterial;
-	}
 
 	//Constructor
-	private CrearMaterial(GestionMateriales gestion, OficinaTramites oficina) {
+	public CrearMaterial(GestionMateriales gestion, OficinaTramites oficina) {
+		this.oficina=oficina;
+		this.gestion=gestion;
+		oficina.getMateriales();
 		setTitle("Agregar material");
 		setType(Type.UTILITY);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 280, 190);
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getPanelAfectaciones());
-		this.oficina=oficina;
-		this.gestion=gestion;
-		oficina.getMateriales();
 
 	}
 
@@ -136,7 +127,7 @@ public class CrearMaterial extends JFrame {
 	}
 	public JLabel getLblPrecioUnitario(){ 
 		if(lblPrecioUnitario==null){
-			lblPrecioUnitario = DefaultComponentFactory.getInstance().createLabel("Precio unitario:");
+			lblPrecioUnitario = new JLabel("Precio unitario:");
 			lblPrecioUnitario.setBounds(10, 64, 120, 14);
 		}
 		return lblPrecioUnitario;

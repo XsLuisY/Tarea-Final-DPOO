@@ -223,14 +223,14 @@ public class GestionFichaTecnicaDO extends JFrame {
 	public FichaTecnicaDO getSelectedFichaTecnicaDO(){
 		FichaTecnicaDO f = null;
 		int pos = getTableFichas().getSelectedRow();
-		if (pos >= 0 && pos < fichas.size()) {
-			f=fichas.get(pos);
+		if (pos >= 0 && pos < oficina.getFichas().size()) {
+			f=oficina.getFichas().get(pos);
 		}
 		return f;
 	}
 	public void updtTableFichas(ArrayList<FichaTecnicaDO> fichas) {
 		DefaultTableModel model = (DefaultTableModel) getTableFichas().getModel();
-		model.setRowCount(0); //
+		model.setRowCount(0);
 
 		for(FichaTecnicaDO f:  fichas){//TODO Revisar asignacion de direccion
 			String direccion = (f.getVivienda() != null) ? f.getVivienda().getDireccion() : "Sin dirección";
@@ -242,7 +242,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 	}
 
 	public void addFichaTecnicaDO(){					
-		CrearFichaTecnicaDO.getCrearFichaTecnicaDO(gestionFichaTecnicaDO , oficina).setVisible(true);					
+		new CrearFichaTecnicaDO(gestionFichaTecnicaDO , oficina).setVisible(true);					
 	}	
 	public void modFichaTecnicaDO(){
 		FichaTecnicaDO f = getSelectedFichaTecnicaDO();
@@ -257,7 +257,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 		if (f != null)				
 			MostrarFichaTecnicaDO.getMostrarFichaTecnicaDO(f).setVisible(true);
 		else 
-			JOptionPane.showMessageDialog(gestionFichaTecnicaDO, "Debes seleccionar una vivienda para mostrar.", "Aviso", JOptionPane.WARNING_MESSAGE);						
+			JOptionPane.showMessageDialog(gestionFichaTecnicaDO, "Debes seleccionar una FTDO para mostrar.", "Aviso", JOptionPane.WARNING_MESSAGE);						
 	}
 	public void deleteFichaTecnicaDO(){
 		FichaTecnicaDO f = getSelectedFichaTecnicaDO();

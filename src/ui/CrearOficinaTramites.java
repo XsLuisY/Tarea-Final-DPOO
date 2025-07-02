@@ -36,16 +36,9 @@ public class CrearOficinaTramites extends JDialog {
 	private JTextField textField;
 	private JButton btnEnviar;
 
-	//Singleton
-	public static CrearOficinaTramites getCrearOficinaTramites(GestionOficinaTramites gestion){
-		if(crearOficinaTramites==null
-				|| !crearOficinaTramites.gestion.equals(gestion))
-			crearOficinaTramites = new CrearOficinaTramites(gestion);
-		return crearOficinaTramites;
-	}
 
 	//Constructor
-	private CrearOficinaTramites(GestionOficinaTramites gestion) {
+	public CrearOficinaTramites(GestionOficinaTramites gestion) {
 		super(gestion, "Crear Oficina de Trámites", true);
 		micons=MICONS.getMICONS();	
 		this.gestion=gestion;

@@ -232,7 +232,7 @@ public class GestionViviendas extends JFrame {
 		getTableViviendas().setModel(model);
 	}
 	public void addVivienda(){
-		CrearVivienda.getCrearVivienda(gestionViviendas).setVisible(true);
+		new CrearVivienda(gestionViviendas).setVisible(true);
 	}
 	public void showVivienda(){
 		Vivienda v = obtenerViviendaSeleccionada();
