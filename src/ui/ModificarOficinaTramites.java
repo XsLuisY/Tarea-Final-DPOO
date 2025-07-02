@@ -22,21 +22,28 @@ import java.awt.event.ActionEvent;
 
 
 public class ModificarOficinaTramites extends JDialog {
+
 	private static ModificarOficinaTramites modificarOficinaTramites;
 	private MICONS micons;
-
-	private JPanel contentPane;
-	private JTextField textField;
-	private JMenuBar barraSuperior;
-	private JMenuItem mntmRegresar;
-	private JButton btnModificar;
-	private JLabel lblConsejoPopular;
 	private OficinaTramites oficina;
 	private GestionOficinaTramites gestion;
 
+	private JPanel contentPane;
+
+	private JMenuBar barraSuperior;
+	private JMenuItem mntmRegresar;
+
+	private JLabel lblConsejoPopular;
+
+	private JTextField textField;
+
+	private JButton btnModificar;
+
 	//Singleton 
 	public static ModificarOficinaTramites getModificarOficinaTramites(OficinaTramites oficina, GestionOficinaTramites gestion){
-		if(modificarOficinaTramites==null)
+		if(modificarOficinaTramites==null
+				|| !modificarOficinaTramites.oficina.equals(oficina)
+				|| !modificarOficinaTramites.gestion.equals(gestion))
 			modificarOficinaTramites = new ModificarOficinaTramites(oficina, gestion);
 		return modificarOficinaTramites;
 	}
@@ -70,6 +77,7 @@ public class ModificarOficinaTramites extends JDialog {
 		}
 		return contentPane;
 	}
+
 	public JMenuBar getBarraSuperior(){ 
 		if(barraSuperior==null){
 			barraSuperior = new JMenuBar();
@@ -85,43 +93,13 @@ public class ModificarOficinaTramites extends JDialog {
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					limpiarCampos();
-					dispose();
+					regresar();
 				}
 			});
 		}
 		return mntmRegresar;
 	}
-	public JButton getBtnModificar(){
-		if(btnModificar==null){
-			btnModificar = new JButton("Modificar");
-			btnModificar.setBackground(Color.DARK_GRAY);
-			btnModificar.setForeground(Color.ORANGE);
-			btnModificar.setBounds(85, 73, 89, 23);
-			btnModificar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					String oficinaModificar = oficina.getConsejoPopular();
-					String newConsejoPopular = getTextField().getText().trim();					
 
-					if (!oficinaModificar.equalsIgnoreCase(newConsejoPopular)) 				
-						try {
-							micons.updateOficinaTramites(oficinaModificar, newConsejoPopular);
-							gestion.actualizarListaOficinas();
-							JOptionPane.showMessageDialog(null, "Oficina actualizada exitosamente.");
-							 limpiarCampos();
-							 dispose();
-						} catch (IllegalArgumentException ex) {
-							JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al actualizar", JOptionPane.ERROR_MESSAGE);
-						}
-					else   
-						JOptionPane.showMessageDialog(null, "El nuevo nombre es igual al actual.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-
-				}
-			});
-
-		}
-		return btnModificar;
-	}
 	public JLabel getLblConsejoPopular(){
 		if(lblConsejoPopular==null){
 			lblConsejoPopular= new JLabel("Consejo Popular:");
@@ -130,6 +108,7 @@ public class ModificarOficinaTramites extends JDialog {
 		}
 		return lblConsejoPopular;
 	}
+
 	public JTextField getTextField(){
 		if(textField ==null){
 			textField = new JTextField();
@@ -139,10 +118,53 @@ public class ModificarOficinaTramites extends JDialog {
 		}
 		return textField ;
 	}
-//Metodo
+
+	public JButton getBtnModificar(){
+		if(btnModificar==null){
+			btnModificar = new JButton("Modificar");
+			btnModificar.setBackground(Color.DARK_GRAY);
+			btnModificar.setForeground(Color.ORANGE);
+			btnModificar.setBounds(85, 73, 89, 23);
+			btnModificar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					modificar();
+				}
+			});
+
+		}
+		return btnModificar;
+	}
+
+	//Metodo
 	private void limpiarCampos() {
-        getTextField().setText("");
-}
+		getTextField().setText("");
+	}
+
+	public void regresar(){
+		limpiarCampos();
+		dispose();
+	}
+	public void modificar(){
+		String oficinaModificar = oficina.getConsejoPopular();
+		String newConsejoPopular = getTextField().getText().trim();					
+
+		if (!oficinaModificar.equalsIgnoreCase(newConsejoPopular)) 				
+			try {
+				if(micons.updateOficinaTramites(oficinaModificar, newConsejoPopular)){
+					JOptionPane.showMessageDialog(modificarOficinaTramites, "Oficina actualizada exitosamente.");
+					gestion.actualizarListaOficinas();
+					dispose();
+				}
+			} catch (IllegalArgumentException e) {
+				JOptionPane.showMessageDialog(modificarOficinaTramites, e.getMessage(), "Error al actualizar", JOptionPane.ERROR_MESSAGE);
+			}
+		else   
+			JOptionPane.showMessageDialog(modificarOficinaTramites, "El nuevo nombre es igual al actual.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+
+	}
+
+
+
 
 }
 

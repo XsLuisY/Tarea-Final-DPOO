@@ -30,15 +30,16 @@ public class CrearOficinaTramites extends JDialog {
 	private GestionOficinaTramites gestion;
 
 	private JPanel contentPane;
-	private JTextField textField;
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
-	private JButton btnEnviar;
 	private JLabel lblConsejoPopular;
+	private JTextField textField;
+	private JButton btnEnviar;
 
 	//Singleton
 	public static CrearOficinaTramites getCrearOficinaTramites(GestionOficinaTramites gestion){
-		if(crearOficinaTramites==null)
+		if(crearOficinaTramites==null
+				|| !crearOficinaTramites.gestion.equals(gestion))
 			crearOficinaTramites = new CrearOficinaTramites(gestion);
 		return crearOficinaTramites;
 	}
@@ -84,39 +85,13 @@ public class CrearOficinaTramites extends JDialog {
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {					
-					limpiarCampos();
-					dispose();
+					regresar();
 				}
 			});
 		}
 		return mntmRegresar;
 	}
-	public JButton getBtnEnviar(){
-		if(btnEnviar==null){
-			btnEnviar = new JButton("Enviar");
-			btnEnviar.setBackground(Color.DARK_GRAY);
-			btnEnviar.setForeground(Color.ORANGE);
-			btnEnviar.setBounds(85, 73, 89, 23);
-			btnEnviar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					String consejoPopular=getTextField().getText().trim();
 
-					if (!consejoPopular.isEmpty()){					
-						boolean agregado = micons.addOficinaTramites(consejoPopular);
-						if(agregado){									
-							JOptionPane.showMessageDialog(null, "Oficina agregada exitosamente.");			            
-							gestion.actualizarListaOficinas();
-							limpiarCampos();
-							dispose();
-						} else 
-							JOptionPane.showMessageDialog(null, "Ya existe una oficina con ese nombre.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-					}else 
-						JOptionPane.showMessageDialog(null, "Por favor ingresa un Consejo Popular.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-				}
-			});
-		}
-		return btnEnviar;
-	}
 	public JLabel getLblConsejoPopular(){
 		if(lblConsejoPopular==null){
 			lblConsejoPopular= new JLabel("Consejo Popular:");
@@ -134,11 +109,49 @@ public class CrearOficinaTramites extends JDialog {
 		return textField ;
 	}
 
-//Metodos
-	private void limpiarCampos() {
-	        getTextField().setText("");
+	public JButton getBtnEnviar(){
+		if(btnEnviar==null){
+			btnEnviar = new JButton("Enviar");
+			btnEnviar.setBackground(Color.DARK_GRAY);
+			btnEnviar.setForeground(Color.ORANGE);
+			btnEnviar.setBounds(85, 73, 89, 23);
+			btnEnviar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					addOficinaTramites();
+				}
+			});
+		}
+		return btnEnviar;
 	}
 
+	//Metodos
+	public void limpiarCampos() {
+		getTextField().setText("");
+	}
+	public void regresar(){
+		limpiarCampos();
+		dispose();
+	}
+
+	public void addOficinaTramites(){
+		String consejoPopular=getTextField().getText().trim();
+
+		if (!consejoPopular.isEmpty()){					
+			try{									
+				if(micons.addOficinaTramites(consejoPopular)){
+					JOptionPane.showMessageDialog(crearOficinaTramites, "Oficina agregada exitosamente.");			            
+					gestion.actualizarListaOficinas();
+					limpiarCampos();
+				}
+				else	
+					JOptionPane.showMessageDialog(crearOficinaTramites, "No se ha podido agregar la Oficina.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+			} catch(Exception e){
+				JOptionPane.showMessageDialog(crearOficinaTramites, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			}
+
+		}else 
+			JOptionPane.showMessageDialog(crearOficinaTramites, "Por favor ingresa un Consejo Popular.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+	}
 
 }
 

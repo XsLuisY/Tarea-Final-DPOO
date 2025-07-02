@@ -25,26 +25,33 @@ import clases.OficinaTramites;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
 public class CrearMaterial extends JFrame {
+
 	private static CrearMaterial crearMaterial;
 	private static final long serialVersionUID = 1L;
 
 	private OficinaTramites oficina;
 	private GestionMateriales gestion;
 
-	private JTextField textFieldNombre;
+	private JPanel panelAfectaciones;
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
-	private JPanel panelAfectaciones;
-	private JButton btnAgregar;
+
+	private JComboBox<String> comboBox;
+
 	private JLabel lblMaterial;
 	private JLabel lblUnidadDeMedida;
-	private JComboBox<String> comboBox;
 	private JLabel lblPrecioUnitario;
+
+	private JTextField textFieldNombre;
 	private JTextField textFieldPrecioUnitario;
+
+	private JButton btnAgregar;
 
 	//Singleton
 	public static CrearMaterial getCrearMaterial(GestionMateriales gestion, OficinaTramites oficina){
-		if(crearMaterial==null)
+		if(crearMaterial==null
+				|| !crearMaterial.gestion.equals(gestion)
+				|| !crearMaterial.oficina.equals(oficina))
 			crearMaterial=new CrearMaterial(gestion, oficina);
 		return crearMaterial;
 	}
@@ -62,29 +69,8 @@ public class CrearMaterial extends JFrame {
 		oficina.getMateriales();
 
 	}
+
 	//Atributos
-	public JMenuBar getBarraSuperior(){
-		if(barraSuperior==null){
-			barraSuperior = new JMenuBar();
-			barraSuperior.add(getMntmRegresar());
-		}
-		return barraSuperior;
-	}
-	public JMenuItem getMntmRegresar(){
-		if(mntmRegresar==null){
-			mntmRegresar = new JMenuItem("Regresar");
-			mntmRegresar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					limpiarCampos();
-					dispose();
-				}
-			});
-			mntmRegresar.setBackground(Color.DARK_GRAY);
-			mntmRegresar.setForeground(Color.ORANGE);
-			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
-		}
-		return mntmRegresar;
-	}
 	public JPanel getPanelAfectaciones(){
 		if(panelAfectaciones==null){
 			panelAfectaciones=new JPanel();
@@ -100,15 +86,40 @@ public class CrearMaterial extends JFrame {
 			panelAfectaciones.add(getTextFieldPrecioUnitario());
 		}
 		return panelAfectaciones;
-	}
-	public JTextField getTextFieldNombre(){
-		if(textFieldNombre==null){ 
-			textFieldNombre = new JTextField();
-			textFieldNombre.setBounds(96, 11, 158, 20);
-			textFieldNombre.setColumns(10);
-		}
-		return textFieldNombre;
 	}	
+
+	public JMenuBar getBarraSuperior(){
+		if(barraSuperior==null){
+			barraSuperior = new JMenuBar();
+			barraSuperior.add(getMntmRegresar());
+		}
+		return barraSuperior;
+	}
+	public JMenuItem getMntmRegresar(){
+		if(mntmRegresar==null){
+			mntmRegresar = new JMenuItem("Regresar");
+			mntmRegresar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					regresar();
+				}
+			});
+			mntmRegresar.setBackground(Color.DARK_GRAY);
+			mntmRegresar.setForeground(Color.ORANGE);
+			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
+		}
+		return mntmRegresar;
+	}
+
+	public JComboBox<String> getComboBox(){
+		if(comboBox==null){
+			comboBox  = new JComboBox<String>();						
+			comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Metro", "Unidad", "Saco", "Kilogramo", "Litro"}));		
+			comboBox.setBounds(140, 36, 114, 20);
+
+		}
+		return comboBox;
+	}
+
 	public JLabel getLblMaterial(){
 		if(lblMaterial==null){
 			lblMaterial = new JLabel("Material:");
@@ -123,15 +134,6 @@ public class CrearMaterial extends JFrame {
 		}
 		return lblUnidadDeMedida ;
 	}
-	public JComboBox<String> getComboBox(){
-		if(comboBox==null){
-			comboBox  = new JComboBox<String>();						
-			comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Metro", "Unidad", "Saco", "Kilogramo", "Litro"}));		
-			comboBox.setBounds(140, 36, 114, 20);
-
-		}
-		return comboBox;
-	}
 	public JLabel getLblPrecioUnitario(){ 
 		if(lblPrecioUnitario==null){
 			lblPrecioUnitario = DefaultComponentFactory.getInstance().createLabel("Precio unitario:");
@@ -139,6 +141,15 @@ public class CrearMaterial extends JFrame {
 		}
 		return lblPrecioUnitario;
 	}
+
+	public JTextField getTextFieldNombre(){
+		if(textFieldNombre==null){ 
+			textFieldNombre = new JTextField();
+			textFieldNombre.setBounds(96, 11, 158, 20);
+			textFieldNombre.setColumns(10);
+		}
+		return textFieldNombre;
+	}	
 
 	public JTextField getTextFieldPrecioUnitario() {
 		if (textFieldPrecioUnitario == null) {
@@ -148,6 +159,7 @@ public class CrearMaterial extends JFrame {
 		}
 		return textFieldPrecioUnitario;
 	}
+
 	public JButton getBtnAgregar(){
 		if(btnAgregar ==null){
 			btnAgregar = new JButton("Agregar");		
@@ -156,36 +168,7 @@ public class CrearMaterial extends JFrame {
 			btnAgregar.setBounds(165, 93, 89, 23);
 			btnAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					String nombre = getTextFieldNombre().getText().trim();
-					Object selectedItem = getComboBox().getSelectedItem();
-					String unidad = selectedItem != null ? selectedItem.toString().trim() : null;
-					String precioStr = getTextFieldPrecioUnitario().getText().trim();
-					double precio = 0;
-					boolean valido = true;
-
-					if (nombre.isEmpty() || unidad == null || unidad.isEmpty() || precioStr.isEmpty()) {
-						JOptionPane.showMessageDialog(null, "Por favor complete todos los campos.","Campos incompletos", JOptionPane.WARNING_MESSAGE);
-						valido = false;
-					}
-
-					try {
-						precio = Double.parseDouble(precioStr);
-					} catch (NumberFormatException e) {
-						JOptionPane.showMessageDialog(null, "El precio debe ser un número válido.","Error de formato", JOptionPane.ERROR_MESSAGE);
-						valido = false;
-					}
-
-					if (valido) {
-						try {
-							oficina.addMaterial(nombre, unidad, precio);
-							gestion.actualizarTableMateriales(oficina.getMateriales());
-							JOptionPane.showMessageDialog(null, "Material agregado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-							limpiarCampos();
-							dispose();
-						} catch (IllegalArgumentException ex) {
-							JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-						}
-					}
+					addMaterial();
 				}
 			});
 		}
@@ -193,10 +176,38 @@ public class CrearMaterial extends JFrame {
 	}
 
 	//Metodos
-	private void limpiarCampos() {
-	        getTextFieldNombre().setText("");
-	        getComboBox().setSelectedIndex(0);
-	        getTextFieldPrecioUnitario().setText("");
+	public void limpiarCampos() {
+		getTextFieldNombre().setText("");
+		getComboBox().setSelectedIndex(0);
+		getTextFieldPrecioUnitario().setText("");
+	}
+	public void addMaterial(){
+		String nombre = getTextFieldNombre().getText().trim();
+		Object selectedItem = getComboBox().getSelectedItem();
+		String unidad = selectedItem != null ? selectedItem.toString().trim() : null;
+		String precioStr = getTextFieldPrecioUnitario().getText().trim();
+
+		if (nombre.isEmpty() || unidad == null || unidad.isEmpty() || precioStr.isEmpty()) 
+			JOptionPane.showMessageDialog(crearMaterial, "Por favor complete todos los campos.","Campos incompletos", JOptionPane.WARNING_MESSAGE);
+		else {
+			try {
+				double precio = Double.parseDouble(precioStr);
+				oficina.addMaterial(nombre, unidad, precio);
+				gestion.updtTableMateriales(oficina.getMateriales());
+				JOptionPane.showMessageDialog(crearMaterial, "Material agregado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+				limpiarCampos();							
+			}catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(crearMaterial, "El precio debe ser un número válido.","Formato incorrecto", JOptionPane.ERROR_MESSAGE);
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(crearMaterial, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			}
+
+		}
+
+	}
+	public void regresar(){
+		limpiarCampos();
+		dispose();
 	}
 }
 

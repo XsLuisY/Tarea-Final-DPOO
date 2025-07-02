@@ -16,8 +16,8 @@ public class Runner {
 			public void run() {
 				try {		
 					micons=MICONS.getMICONS();		
-					micons.inicializarOficinaTramites();
 					micons.inicializarViviendas();
+					micons.inicializarOficinaTramites();
 					for(OficinaTramites o: micons.getOficinaTramites())
 						o.inicializarMateriales();					
 					micons.inicializarPlantillaArroyoNaranjo();

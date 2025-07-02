@@ -24,6 +24,10 @@ import java.awt.event.ActionEvent;
 import javax.swing.JMenuBar;
 
 import clases.FichaTecnicaDO;
+import java.awt.Dialog.ModalExclusionType;
+import java.awt.Window.Type;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.Component;
 
 // ----------------------------------LISTO------------------------------------------
 public class CrearAfectacion extends JFrame{
@@ -36,38 +40,44 @@ public class CrearAfectacion extends JFrame{
 
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
-	
+
 	private JPanel contentPane;
 	private JPanel panelAfectaciones;
-	
+
 	private JComboBox<String> comboBoxTipoAfectacion;
 	private JComboBox<String> comboBoxEsDerrumbeTotal;
-	
+
 	private JLabel lblTipoAfectacion;
 	private JLabel labelMaterialPredominante;
 	private JLabel lblGravedad;
-	
+
 	private JTextField textFieldMaterialPredominante;
 
 	private JButton btnAgregar;
 
 	//Singleton
 	public static CrearAfectacion getCrearAfectacion(AsignableAfectaciones gestion, FichaTecnicaDO ficha){
-		if(crearAfectacion==null)
+		if(crearAfectacion==null 
+				|| !crearAfectacion.gestion.equals(gestion)
+				|| !crearAfectacion.ficha.equals(ficha))
 			crearAfectacion=new CrearAfectacion(gestion, ficha);
 		return crearAfectacion;
 	}
 
 	//Constructor
 	private CrearAfectacion(AsignableAfectaciones gestion, FichaTecnicaDO ficha) {
+		setAlwaysOnTop(true);
+		setResizable(false);
+		setUndecorated(true);
 		setTitle("Agregar afectaci\u00F3n");
-		setType(Type.UTILITY);
+		setType(Type.POPUP);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 280, 170);		
 		this.ficha = ficha;
 		this.gestion=gestion;
 		setContentPane(getContentPane());
 		setJMenuBar(getBarraSuperior());
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{getContentPane(), getPanelAfectaciones(), getComboBoxTipoAfectacion(), getLblTipoAfectacion(), getLabelMaterialPredominante(), getTextFieldMaterialPredominante(), getBtnAgregar(), getComboBoxEsDerrumbeTotal(), getLblGravedad(), getBarraSuperior(), getMntmRegresar()}));
 	}
 
 	//Atributos
@@ -86,8 +96,7 @@ public class CrearAfectacion extends JFrame{
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					limpiarCampos();
-					dispose();
+					regresar();
 				}
 			});			
 		}
@@ -97,7 +106,7 @@ public class CrearAfectacion extends JFrame{
 	public JPanel getContentPane(){
 		if(contentPane==null){
 			contentPane = new JPanel();
-			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+			contentPane.setBorder(null);
 			contentPane.setLayout(null);
 			contentPane.add(getPanelAfectaciones());
 		}
@@ -107,7 +116,7 @@ public class CrearAfectacion extends JFrame{
 		if (panelAfectaciones==null){
 			panelAfectaciones = new JPanel();
 			panelAfectaciones.setBackground(Color.ORANGE);
-			panelAfectaciones.setBounds(0, 0, 264, 107);
+			panelAfectaciones.setBounds(0, 0, 280, 146);
 			panelAfectaciones.setLayout(null);
 			panelAfectaciones.add(getComboBoxTipoAfectacion());
 			panelAfectaciones.add(getLblTipoAfectacion());
@@ -124,7 +133,7 @@ public class CrearAfectacion extends JFrame{
 		if(comboBoxTipoAfectacion==null){
 			comboBoxTipoAfectacion= new JComboBox<String>();
 			comboBoxTipoAfectacion.setModel(new DefaultComboBoxModel<String>(new String[] {"Pared", "Pared de carga", "Techo"}));
-			comboBoxTipoAfectacion.setBounds(139, 11, 115, 20);
+			comboBoxTipoAfectacion.setBounds(149, 11, 115, 20);
 		}
 		return comboBoxTipoAfectacion;
 	}
@@ -133,7 +142,7 @@ public class CrearAfectacion extends JFrame{
 			comboBoxEsDerrumbeTotal = new JComboBox<String>();
 			comboBoxEsDerrumbeTotal.setModel(new DefaultComboBoxModel<String>(new String[] {"Parcial", "Total"}));
 			comboBoxEsDerrumbeTotal.setForeground(new Color(0, 0, 0));
-			comboBoxEsDerrumbeTotal.setBounds(95, 66, 60, 20);
+			comboBoxEsDerrumbeTotal.setBounds(149, 67, 115, 20);
 		}
 		return comboBoxEsDerrumbeTotal;
 	}
@@ -141,23 +150,23 @@ public class CrearAfectacion extends JFrame{
 	public JLabel getLblTipoAfectacion(){
 		if(lblTipoAfectacion==null){
 			lblTipoAfectacion = new JLabel("Tipo de afectaci\u00F3n:");
-			lblTipoAfectacion.setHorizontalAlignment(SwingConstants.CENTER);
-			lblTipoAfectacion.setBounds(0, 13, 138, 17);
+			lblTipoAfectacion.setHorizontalAlignment(SwingConstants.LEFT);
+			lblTipoAfectacion.setBounds(10, 13, 138, 17);
 		}
 		return lblTipoAfectacion;
 	}
 	public JLabel getLabelMaterialPredominante(){
 		if(labelMaterialPredominante ==null){
 			labelMaterialPredominante = new JLabel("Material predominante:");
-			labelMaterialPredominante.setHorizontalAlignment(SwingConstants.CENTER);
-			labelMaterialPredominante.setBounds(0, 41, 140, 14);
+			labelMaterialPredominante.setHorizontalAlignment(SwingConstants.LEFT);
+			labelMaterialPredominante.setBounds(10, 42, 138, 14);
 		}
 		return labelMaterialPredominante;
 	}
 	public JLabel getLblGravedad() {
 		if (lblGravedad == null) {
 			lblGravedad = new JLabel("Gravedad:");
-			lblGravedad.setBounds(10, 66, 75, 20);
+			lblGravedad.setBounds(10, 67, 138, 20);
 		}
 		return lblGravedad;
 	}
@@ -165,7 +174,7 @@ public class CrearAfectacion extends JFrame{
 	public JTextField getTextFieldMaterialPredominante(){
 		if(textFieldMaterialPredominante==null){
 			textFieldMaterialPredominante = new JTextField();
-			textFieldMaterialPredominante.setBounds(139, 42, 115, 17);			
+			textFieldMaterialPredominante.setBounds(149, 43, 115, 17);			
 			textFieldMaterialPredominante.setColumns(10);
 		}
 		return textFieldMaterialPredominante;
@@ -176,10 +185,10 @@ public class CrearAfectacion extends JFrame{
 			btnAgregar = new JButton("Agregar");
 			btnAgregar.setForeground(Color.ORANGE);
 			btnAgregar.setBackground(Color.DARK_GRAY);
-			btnAgregar.setBounds(165, 73, 89, 23);
+			btnAgregar.setBounds(91, 112, 89, 23);
 			btnAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					agregar();				
+					addAfectacion();				
 				}
 			});
 		}
@@ -187,27 +196,22 @@ public class CrearAfectacion extends JFrame{
 	}
 
 	//Metodos
-	private void agregar(){
-		Object seleccionTipo = getComboBoxTipoAfectacion().getSelectedItem();
-		Object seleccionGravedad = getComboBoxEsDerrumbeTotal().getSelectedItem();
-		String material = getTextFieldMaterialPredominante().getText();
-		boolean add = false;
+	private void addAfectacion(){	
 
 		try {
-			String tipo = seleccionTipo.toString();
-			String materialLimpio = material.trim();
-			boolean esDerrumbeTotal = seleccionGravedad.toString().equals("Total");
-			add = ficha.addAfectacion(tipo, materialLimpio, esDerrumbeTotal);
-			if (add) {
-				JOptionPane.showMessageDialog(CrearAfectacion.this, "Afectación agregada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+			String tipo = getComboBoxTipoAfectacion().getSelectedItem().toString();
+			String material = getTextFieldMaterialPredominante().getText();
+			boolean esDerrumbeTotal = getComboBoxEsDerrumbeTotal().getSelectedItem().toString().equals("Total");
+
+			if (ficha.addAfectacion(tipo, material, esDerrumbeTotal)) {
+				JOptionPane.showMessageDialog(crearAfectacion , "Afectación agregada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 				gestion.actualizarTableAfectaciones(ficha.getAfectaciones());
-				limpiarCampos();
-				dispose();
+				limpiarCampos();				
 			} else {
-				JOptionPane.showMessageDialog(CrearAfectacion.this, "No se pudo agregar la afectación.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(crearAfectacion , "No se pudo agregar la afectación.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 			}
-		} catch (IllegalArgumentException ex) {
-			JOptionPane.showMessageDialog(CrearAfectacion.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(crearAfectacion , e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}	
 	}
 	private void limpiarCampos() {
@@ -215,6 +219,10 @@ public class CrearAfectacion extends JFrame{
 		getTextFieldMaterialPredominante().setText("");	 
 		getComboBoxTipoAfectacion().setSelectedIndex(0);	
 		getComboBoxEsDerrumbeTotal().setSelectedIndex(0);
+	}
+	public void regresar(){
+		limpiarCampos();
+		dispose();
 	}
 }
 

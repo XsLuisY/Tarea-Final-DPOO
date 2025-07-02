@@ -1,9 +1,11 @@
 package clases;
 
+import interfaces.Identificable;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Cubicacion  {
+public class Cubicacion implements Identificable{
 
 	//Atributos	
 	private ArrayList<MaterialACubicar> materiales;
@@ -15,7 +17,7 @@ public class Cubicacion  {
 		setId();
 	}
 	public Cubicacion(ArrayList<MaterialACubicar> materiales){
-		this.materiales = materiales;
+		setMateriales(materiales);
 		setId();
 	}
 
@@ -26,10 +28,13 @@ public class Cubicacion  {
 	public void setId() {		
 		do
 			id=UUID.randomUUID();
-		while(MICONS.existUUID(id));
+		while(MICONS.getMICONS().getListaId().containsKey(id));
+		MICONS.getMICONS().getListaId().put(id, this);
 	}	
 	public void setMateriales(ArrayList<MaterialACubicar> materiales){
-		this.materiales=materiales;
+		if(materiales!=null)
+			this.materiales=materiales;
+		else throw new NullPointerException("La nueva lista de materiales no puede ser null");
 	}		
 	public ArrayList<MaterialACubicar> getMateriales(){
 		return materiales;
@@ -40,11 +45,9 @@ public class Cubicacion  {
 		Boolean add=false;
 		MaterialACubicar m= readMaterialACubicar(material);
 		if(m==null){
-		  MaterialACubicar materialACubicar= new MaterialACubicar(material,cantidad);
-		  if(materialACubicar!=null){
-			  materiales.add(materialACubicar);
-		    add= true;
-		  }	else throw new NullPointerException("El material no puede ser null");
+			MaterialACubicar materialACubicar= new MaterialACubicar(material,cantidad);
+			materiales.add(materialACubicar);
+			add= true;
 		}
 		else throw new IllegalArgumentException("Este Material ya existe");
 		return add;
@@ -52,11 +55,9 @@ public class Cubicacion  {
 	/*Read*/ public MaterialACubicar readMaterialACubicar(Material material){	
 		//Busca y devuelve el objeto, si no lo encuentra devuelve null
 		MaterialACubicar m= null;
-		Boolean found=false;
-		for(int i=0; i<materiales.size() && !found; i++)
+		for(int i=0; i<materiales.size() && m== null; i++)
 			if(materiales.get(i).getMaterial().equals(material)){
 				m = materiales.get(i);
-				found=true;
 			}				
 		return m; 			
 	}
@@ -65,7 +66,7 @@ public class Cubicacion  {
 		MaterialACubicar m= readMaterialACubicar(material);
 		if(m!=null){
 			m.setCantidad(newCantidad);
-		  updt= true;
+			updt= true;
 		}
 		else throw new IllegalArgumentException("Este Material no existe");
 		return updt;
@@ -74,8 +75,8 @@ public class Cubicacion  {
 		Boolean del= false;
 		MaterialACubicar m= readMaterialACubicar(material);
 		if(m!=null){
-		  materiales.remove(m);
-		  del= true;
+			materiales.remove(m);
+			del= true;
 		}
 		else throw new IllegalArgumentException("Este Material no existe");
 		return del;

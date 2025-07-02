@@ -37,11 +37,14 @@ public class GestionFichaTecnicaDO extends JFrame {
 
 	private ArrayList<FichaTecnicaDO> fichas;
 	private OficinaTramites oficina;
+
 	private JMenuBar barraSuperior;
+	private JMenuItem mntmRegresar;
+
 	private JPanel contentPane;
+
 	private JScrollPane scrollPane;
 	private JTable tableFichas;
-	private JMenuItem mntmRegresar;
 	private JPopupMenu popupMenu;
 	private JMenuItem menuItemAgregar;
 	private JMenuItem menuItemMostrar;
@@ -50,7 +53,8 @@ public class GestionFichaTecnicaDO extends JFrame {
 
 	//Singleton
 	public static GestionFichaTecnicaDO getGestionFichaTecnicaDO(OficinaTramites oficina){		
-		if(gestionFichaTecnicaDO==null)
+		if(gestionFichaTecnicaDO==null
+				|| !gestionFichaTecnicaDO.oficina.equals(oficina))
 			gestionFichaTecnicaDO=new GestionFichaTecnicaDO(oficina);
 		return gestionFichaTecnicaDO;
 	}
@@ -65,7 +69,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 		addPopup(getTableFichas(), getPopupMenu());
-		actualizarTableFichas(fichas);
+		updtTableFichas(fichas);
 	}
 
 	//Atributos
@@ -84,14 +88,13 @@ public class GestionFichaTecnicaDO extends JFrame {
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-					GestionOficinaTramites g = GestionOficinaTramites.getGestionOficinaTramites();
-					g.setVisible(true);
+					regresar();
 				}
 			});
 		}
 		return mntmRegresar;
 	}
+
 	public JPanel getContentPane(){
 		if(contentPane==null){
 			contentPane = new JPanel();
@@ -103,6 +106,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 		}
 		return contentPane;
 	}
+
 	public JScrollPane getScrollPane(){
 		if(scrollPane==null){
 			scrollPane = new JScrollPane();
@@ -148,9 +152,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 			menuItemAgregar.setBackground(Color.DARK_GRAY);
 			menuItemAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();					
-					CrearFichaTecnicaDO c =CrearFichaTecnicaDO.getCrearFichaTecnicaDO(gestionFichaTecnicaDO , oficina);
-					c.setVisible(true);					
+					addFichaTecnicaDO();
 				}
 			});
 		}
@@ -164,14 +166,9 @@ public class GestionFichaTecnicaDO extends JFrame {
 			menuItemMostrar.setBackground(Color.DARK_GRAY);			
 			menuItemMostrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					FichaTecnicaDO f = obtenerFichaTecnicaSeleccionada();
-					if (f != null) {				
-						MostrarFichaTecnicaDO m = new MostrarFichaTecnicaDO(f);
-						m.setVisible(true);
-					} else 
-						JOptionPane.showMessageDialog(GestionFichaTecnicaDO.this, "Debes seleccionar una vivienda para mostrar.", "Aviso", JOptionPane.WARNING_MESSAGE);						
+					showFichaTecnicaDO();				
 				}
-			});
+			});			
 		}
 		return menuItemMostrar;
 	}
@@ -183,15 +180,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 			menuItemModificar.setBackground(Color.DARK_GRAY);
 			menuItemModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					FichaTecnicaDO f = obtenerFichaTecnicaSeleccionada();
-					if(f!=null){
-						dispose();
-						ModificarFichaTecnicaDO m = ModificarFichaTecnicaDO.getModificarFichaTecnicaDO(gestionFichaTecnicaDO, oficina, f);
-						m.setVisible(true);
-					}
-
-					else 
-						JOptionPane.showMessageDialog(null, "Debe seleccionar una Ficha Tecnica de Daños Ocacionados para modificar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+					modFichaTecnicaDO();
 				}
 			});
 		}
@@ -205,18 +194,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 			menuItemEliminar.setBackground(Color.DARK_GRAY);
 			menuItemEliminar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					FichaTecnicaDO f = obtenerFichaTecnicaSeleccionada();
-					if(f!=null){
-						int confirmar = JOptionPane.showConfirmDialog(GestionFichaTecnicaDO.this,"¿Seguro que deseas eliminar esta FTDO?","Confirmar eliminación",JOptionPane.YES_NO_OPTION);
-
-						if (confirmar == JOptionPane.YES_OPTION) {
-							oficina.deleteFichaTecnicaDO(f.getId());
-							JOptionPane.showMessageDialog(null, "Ficha Tecnica de Daños Ocacionados  eliminada con exito.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-							actualizarTableFichas(oficina.getFichas());
-
-						}
-					}else 
-						JOptionPane.showMessageDialog(null, "Debe seleccionar una Ficha Tecnica de Daños Ocacionados para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+					deleteFichaTecnicaDO();
 				}
 			});
 		}
@@ -240,8 +218,9 @@ public class GestionFichaTecnicaDO extends JFrame {
 			}
 		});
 	}
+
 	//Metodos
-	public FichaTecnicaDO obtenerFichaTecnicaSeleccionada(){
+	public FichaTecnicaDO getSelectedFichaTecnicaDO(){
 		FichaTecnicaDO f = null;
 		int pos = getTableFichas().getSelectedRow();
 		if (pos >= 0 && pos < fichas.size()) {
@@ -249,7 +228,7 @@ public class GestionFichaTecnicaDO extends JFrame {
 		}
 		return f;
 	}
-	public void actualizarTableFichas(ArrayList<FichaTecnicaDO> fichas) {
+	public void updtTableFichas(ArrayList<FichaTecnicaDO> fichas) {
 		DefaultTableModel model = (DefaultTableModel) getTableFichas().getModel();
 		model.setRowCount(0); //
 
@@ -261,8 +240,47 @@ public class GestionFichaTecnicaDO extends JFrame {
 		}
 		getTableFichas().setModel(model);
 	}
-}
 
+	public void addFichaTecnicaDO(){					
+		CrearFichaTecnicaDO.getCrearFichaTecnicaDO(gestionFichaTecnicaDO , oficina).setVisible(true);					
+	}	
+	public void modFichaTecnicaDO(){
+		FichaTecnicaDO f = getSelectedFichaTecnicaDO();
+
+		if(f!=null)					
+			ModificarFichaTecnicaDO.getModificarFichaTecnicaDO(gestionFichaTecnicaDO, oficina, f).setVisible(true);
+		else 
+			JOptionPane.showMessageDialog(gestionFichaTecnicaDO, "Debe seleccionar una Ficha Tecnica de Daños Ocacionados para modificar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+	}
+	public void showFichaTecnicaDO(){
+		FichaTecnicaDO f = getSelectedFichaTecnicaDO();
+		if (f != null)				
+			MostrarFichaTecnicaDO.getMostrarFichaTecnicaDO(f).setVisible(true);
+		else 
+			JOptionPane.showMessageDialog(gestionFichaTecnicaDO, "Debes seleccionar una vivienda para mostrar.", "Aviso", JOptionPane.WARNING_MESSAGE);						
+	}
+	public void deleteFichaTecnicaDO(){
+		FichaTecnicaDO f = getSelectedFichaTecnicaDO();
+		if(f!=null){
+			int confirmar = JOptionPane.showConfirmDialog(GestionFichaTecnicaDO.this,"¿Seguro que deseas eliminar esta FTDO?","Confirmar eliminación",JOptionPane.YES_NO_OPTION);
+
+			if (confirmar == JOptionPane.YES_OPTION) {
+				try{
+					oficina.deleteFichaTecnicaDO(f.getId());
+					JOptionPane.showMessageDialog(gestionFichaTecnicaDO, "Ficha Tecnica de Daños Ocacionados  eliminada con exito.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+					updtTableFichas(oficina.getFichas());
+				}catch(Exception e){
+					JOptionPane.showMessageDialog(gestionFichaTecnicaDO, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		}else 
+			JOptionPane.showMessageDialog(null, "Debe seleccionar una Ficha Tecnica de Daños Ocacionados para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+	}
+	public void regresar(){
+		dispose();
+		GestionOficinaTramites.getGestionOficinaTramites().setVisible(true);	
+	}
+}
 
 
 

@@ -49,11 +49,12 @@ public class GestionMateriales extends JFrame {
 
 	//Singleton
 	public static GestionMateriales getGestionMateriales(OficinaTramites oficina){
-		if(gestionMateriales==null)
+		if(gestionMateriales==null
+				|| !gestionMateriales.oficina.equals(oficina))
 			gestionMateriales= new GestionMateriales(oficina);
 		return gestionMateriales;
 	}
-	
+
 	//Constructor
 	private GestionMateriales(OficinaTramites oficina) {
 		setTitle("Materiales");
@@ -64,7 +65,7 @@ public class GestionMateriales extends JFrame {
 		addPopup(getTableMateriales(), getPopupMenu());
 		this.oficina=oficina;
 		materiales=oficina.getMateriales();
-		actualizarTableMateriales(materiales);
+		updtTableMateriales(materiales);
 	}
 
 	//Atributos
@@ -83,7 +84,7 @@ public class GestionMateriales extends JFrame {
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
+					regresar();
 				}
 			});
 		}
@@ -143,9 +144,7 @@ public class GestionMateriales extends JFrame {
 			menuItemAgregar.setBackground(Color.DARK_GRAY);
 			menuItemAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					CrearMaterial c =CrearMaterial.getCrearMaterial(gestionMateriales, oficina);
-
-					c.setVisible(true);
+					addMaterial();
 				}
 			});
 		}
@@ -159,13 +158,7 @@ public class GestionMateriales extends JFrame {
 			menuItemModificar.setBackground(Color.DARK_GRAY);
 			menuItemModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					Material m = getMaterialSeleccionado();
-					if (m != null) {
-						ModificarMaterial c = ModificarMaterial.getModificarMaterial(gestionMateriales, oficina, m);
-						c.setVisible(true);
-					} else {
-						JOptionPane.showMessageDialog(GestionMateriales.this, "Debes seleccionar un material para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE);
-					}
+					modMaterial();
 				}
 			});
 		}
@@ -179,22 +172,7 @@ public class GestionMateriales extends JFrame {
 			menuItemEliminar.setBackground(Color.DARK_GRAY);
 			menuItemEliminar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Material m = getMaterialSeleccionado();
-
-					if (m != null) {
-						int confirmar = JOptionPane.showConfirmDialog(GestionMateriales.this,"¿Seguro que deseas eliminar el material \"" + m.getNombre() + "\"?","Confirmar eliminación", JOptionPane.YES_NO_OPTION);
-						if (confirmar == JOptionPane.YES_OPTION) {
-							try {
-								oficina.deleteMaterial(m.getId());
-								actualizarTableMateriales(oficina.getMateriales());
-							} catch (IllegalArgumentException ex) {
-								JOptionPane.showMessageDialog(GestionMateriales.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-							}
-						}
-
-					} else {
-						JOptionPane.showMessageDialog(GestionMateriales.this, "Debes seleccionar un material para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE);
-					}
+					deleteMaterial();
 				}
 			});
 		}
@@ -217,6 +195,8 @@ public class GestionMateriales extends JFrame {
 			}
 		});
 	}
+
+	//Metodos
 	public void cargarMateriales() {
 		DefaultTableModel modelo = (DefaultTableModel) tableMateriales.getModel();
 		modelo.setRowCount(0); // Limpiar tabla
@@ -226,7 +206,7 @@ public class GestionMateriales extends JFrame {
 			});
 		}
 	}
-	public void actualizarTableMateriales(ArrayList<Material> material) {
+	public void updtTableMateriales(ArrayList<Material> material) {
 		DefaultTableModel model = (DefaultTableModel) tableMateriales.getModel();
 		model.setRowCount(0); // Limpiar la tabla
 
@@ -241,11 +221,51 @@ public class GestionMateriales extends JFrame {
 		}
 		getTableMateriales().setModel(model);
 	}
-	public Material getMaterialSeleccionado (){
+	public Material getSelectedMaterial (){
 		Material m=null;
 		int pos = getTableMateriales().getSelectedRow();
 		if (pos >= 0 && pos < materiales.size())
 			m=materiales.get(pos);
 		return m;
 	}
+	public void addMaterial(){
+		CrearMaterial.getCrearMaterial(gestionMateriales, oficina).setVisible(true);
+	}
+	public void modMaterial(){
+		Material m = getSelectedMaterial();
+		if (m != null) 
+			ModificarMaterial.getModificarMaterial(gestionMateriales, oficina, m).setVisible(true);
+		else 
+			JOptionPane.showMessageDialog(gestionMateriales, "Debes seleccionar un material para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+
+	}
+	public void deleteMaterial(){
+		Material m = getSelectedMaterial();
+
+		if (m != null) {
+			int confirmar = JOptionPane.showConfirmDialog(gestionMateriales,"¿Seguro que deseas eliminar el material \"" + m.getNombre() + "\"?","Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+			if (confirmar == JOptionPane.YES_OPTION) {
+				try {
+					oficina.deleteMaterial(m.getId());
+					updtTableMateriales(oficina.getMateriales());
+				} catch (IllegalArgumentException ex) {
+					JOptionPane.showMessageDialog(gestionMateriales, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		} else {
+			JOptionPane.showMessageDialog(gestionMateriales, "Debes seleccionar un material para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+		}		
+	}
+
+
+	public void regresar(){
+		dispose();
+	}
 }
+
+
+
+
+
+
+

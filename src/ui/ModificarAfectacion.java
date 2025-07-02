@@ -39,23 +39,30 @@ public class ModificarAfectacion extends JFrame{
 
 	private JPanel contentPane;
 	private JPanel panelAfectaciones;
-	private JTextField textFieldMaterialPredominante;
+
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
+
 	private JComboBox<String> comboBoxTipoAfectacion;
+	private JComboBox<String> comboBoxEsDerrumbeTotal;
 	private JLabel lblTipoAfectacion;
 	private JLabel labelMaterialPredominante;
-	private JButton btnModificar;
-	private JComboBox<String> comboBoxEsDerrumbeTotal;
 	private JLabel lblGravedad;
+
+	private JTextField textFieldMaterialPredominante;
+
+	private JButton btnModificar;
 
 	//Singleton
 	public static ModificarAfectacion getModificarAfectacion(AsignableAfectaciones gestion, FichaTecnicaDO ficha, Afectacion afectacion){
-		if(modificarAfectacion==null)
+		if(modificarAfectacion==null
+				|| !modificarAfectacion.gestion.equals(gestion)
+				|| !modificarAfectacion.ficha.equals(ficha)
+				|| !modificarAfectacion.afectacion.equals(afectacion))
 			modificarAfectacion= new ModificarAfectacion(gestion,ficha,afectacion);
 		return modificarAfectacion;
 	}
-	
+
 	//Constructor
 	private ModificarAfectacion(AsignableAfectaciones gestion, FichaTecnicaDO ficha, Afectacion afectacion) {
 		setTitle("Modificar afectación");
@@ -71,7 +78,7 @@ public class ModificarAfectacion extends JFrame{
 
 		rellenarFormulario();
 	}
-	
+
 	//Atributos
 	public JPanel getContentPane(){
 		if(contentPane==null){
@@ -81,28 +88,6 @@ public class ModificarAfectacion extends JFrame{
 			contentPane.add(getPanelAfectaciones());
 		}
 		return contentPane;
-	}
-	public JMenuBar getBarraSuperior(){
-		if (barraSuperior==null){
-			barraSuperior = new JMenuBar();
-			barraSuperior.add(getMntmRegresar());		
-		}
-		return barraSuperior;
-	}
-	public JMenuItem getMntmRegresar(){
-		if(mntmRegresar==null){
-			mntmRegresar = new JMenuItem("Regresar");
-			mntmRegresar.setBackground(Color.DARK_GRAY);
-			mntmRegresar.setForeground(Color.ORANGE);
-			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
-			mntmRegresar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					limpiarCampos();
-					dispose();
-				}
-			});			
-		}
-		return mntmRegresar;
 	}
 	public JPanel getPanelAfectaciones(){
 		if (panelAfectaciones==null){
@@ -121,7 +106,38 @@ public class ModificarAfectacion extends JFrame{
 		return panelAfectaciones;
 	}
 
+	public JMenuBar getBarraSuperior(){
+		if (barraSuperior==null){
+			barraSuperior = new JMenuBar();
+			barraSuperior.add(getMntmRegresar());		
+		}
+		return barraSuperior;
+	}
+	public JMenuItem getMntmRegresar(){
+		if(mntmRegresar==null){
+			mntmRegresar = new JMenuItem("Regresar");
+			mntmRegresar.setBackground(Color.DARK_GRAY);
+			mntmRegresar.setForeground(Color.ORANGE);
+			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
+			mntmRegresar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					regresar();
+				}
+			});			
+		}
+		return mntmRegresar;
+	}
 
+	public JComboBox<String> getComboBoxEsDerrumbeTotal() {
+		if (comboBoxEsDerrumbeTotal == null) {
+			comboBoxEsDerrumbeTotal = new JComboBox<String>();
+			comboBoxEsDerrumbeTotal.setModel(new DefaultComboBoxModel<String>(new String[] {"Parcial", "Total"}));
+			comboBoxEsDerrumbeTotal.setForeground(new Color(0, 0, 0));
+			comboBoxEsDerrumbeTotal.setBounds(95, 66, 60, 20);
+
+		}
+		return comboBoxEsDerrumbeTotal;
+	}
 	public JComboBox<String> getComboBoxTipoAfectacion(){
 		if(comboBoxTipoAfectacion==null){
 			comboBoxTipoAfectacion= new JComboBox<String>();
@@ -130,6 +146,7 @@ public class ModificarAfectacion extends JFrame{
 		}
 		return comboBoxTipoAfectacion;
 	}
+
 	public JLabel getLblTipoAfectacion(){
 		if(lblTipoAfectacion==null){
 			lblTipoAfectacion = new JLabel("Tipo de afectaci\u00F3n:");
@@ -146,6 +163,14 @@ public class ModificarAfectacion extends JFrame{
 		}
 		return labelMaterialPredominante;
 	}
+	public JLabel getLblGravedad() {
+		if (lblGravedad == null) {
+			lblGravedad = new JLabel("Gravedad:");
+			lblGravedad.setBounds(10, 66, 75, 20);
+		}
+		return lblGravedad;
+	}
+
 	public JTextField getTextFieldMaterialPredominante(){
 		if(textFieldMaterialPredominante==null){
 			textFieldMaterialPredominante = new JTextField();
@@ -154,6 +179,7 @@ public class ModificarAfectacion extends JFrame{
 		}
 		return textFieldMaterialPredominante;
 	}
+
 	public JButton getBtnModificar() {
 		if (btnModificar == null) {
 			btnModificar = new JButton("Modificar");
@@ -162,58 +188,11 @@ public class ModificarAfectacion extends JFrame{
 			btnModificar.setBounds(165, 73, 89, 23);
 			btnModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Object seleccionTipo = getComboBoxTipoAfectacion().getSelectedItem();
-					Object seleccionGravedad = getComboBoxEsDerrumbeTotal().getSelectedItem();
-					String material = getTextFieldMaterialPredominante().getText();
-
-					if (seleccionTipo == null || seleccionTipo.toString().trim().isEmpty()) {
-						JOptionPane.showMessageDialog(ModificarAfectacion.this, "Debes seleccionar un tipo de afectación.", "Validación", JOptionPane.WARNING_MESSAGE);
-					} else if (seleccionGravedad == null) {
-						JOptionPane.showMessageDialog(ModificarAfectacion.this, "Debes seleccionar la gravedad del derrumbe.", "Validación", JOptionPane.WARNING_MESSAGE);
-					} else if (material == null || material.trim().isEmpty()) {
-						JOptionPane.showMessageDialog(ModificarAfectacion.this, "Debes ingresar el material predominante.", "Validación", JOptionPane.WARNING_MESSAGE);
-					} else {
-						try {
-							String tipo = seleccionTipo.toString();
-							String materialLimpio = material.trim();
-							boolean esDerrumbeTotal = seleccionGravedad.toString().equals("Total");
-						
-							afectacion.setMaterialPredominante(materialLimpio);
-							afectacion.setEsDerrumbeTotal(esDerrumbeTotal);
-
-							if (afectacion instanceof AfectacionPared) {
-								AfectacionPared pared = (AfectacionPared) afectacion;
-								pared.setEsDeCarga(tipo.equals("Pared de carga"));
-							}						
-							JOptionPane.showMessageDialog(ModificarAfectacion.this, "Afectación modificada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-							gestion.actualizarTableAfectaciones(ficha.getAfectaciones());
-							limpiarCampos();
-							dispose();
-						} catch (Exception ex) {
-							JOptionPane.showMessageDialog(ModificarAfectacion.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-						}
-					}
+					modMaterial();
 				}
 			});
 		}
 		return btnModificar;
-	}
-	public JComboBox<String> getComboBoxEsDerrumbeTotal() {
-		if (comboBoxEsDerrumbeTotal == null) {
-			comboBoxEsDerrumbeTotal = new JComboBox<String>();
-			comboBoxEsDerrumbeTotal.setModel(new DefaultComboBoxModel<String>(new String[] {"Parcial", "Total"}));
-			comboBoxEsDerrumbeTotal.setForeground(new Color(0, 0, 0));
-			comboBoxEsDerrumbeTotal.setBounds(95, 66, 60, 20);
-
-		}
-		return comboBoxEsDerrumbeTotal;
-	}
-	public JLabel getLblGravedad() {
-		if (lblGravedad == null) {
-			lblGravedad = new JLabel("Gravedad:");
-			lblGravedad.setBounds(10, 66, 75, 20);
-		}
-		return lblGravedad;
 	}
 
 	//Metodos
@@ -228,10 +207,67 @@ public class ModificarAfectacion extends JFrame{
 			getComboBoxTipoAfectacion().setSelectedItem(((AfectacionPared)afectacion).getEsDeCarga() ? "Pared de carga" : "Pared");
 	}
 	private void limpiarCampos() {
-		  
-        getTextFieldMaterialPredominante().setText("");	 
-        getComboBoxTipoAfectacion().setSelectedIndex(0);	
-    	getComboBoxEsDerrumbeTotal().setSelectedIndex(0);
+
+		getTextFieldMaterialPredominante().setText("");	 
+		getComboBoxTipoAfectacion().setSelectedIndex(0);	
+		getComboBoxEsDerrumbeTotal().setSelectedIndex(0);
+	}
+	public void modMaterial(){
+		Object seleccionTipo = getComboBoxTipoAfectacion().getSelectedItem();
+		Object seleccionGravedad = getComboBoxEsDerrumbeTotal().getSelectedItem();
+		String material = getTextFieldMaterialPredominante().getText();
+
+		if (seleccionTipo == null || seleccionTipo.toString().trim().isEmpty()) {
+			JOptionPane.showMessageDialog(modificarAfectacion, "Debes seleccionar un tipo de afectación.", "Validación", JOptionPane.WARNING_MESSAGE);
+		} else if (seleccionGravedad == null) {
+			JOptionPane.showMessageDialog(modificarAfectacion, "Debes seleccionar la gravedad del derrumbe.", "Validación", JOptionPane.WARNING_MESSAGE);
+		} else if (material == null || material.trim().isEmpty()) {
+			JOptionPane.showMessageDialog(modificarAfectacion, "Debes ingresar el material predominante.", "Validación", JOptionPane.WARNING_MESSAGE);
+		} else {
+			try {
+				String tipo = seleccionTipo.toString();
+				String materialLimpio = material.trim();
+				boolean esDerrumbeTotal = seleccionGravedad.toString().equals("Total");
+
+				afectacion.setMaterialPredominante(materialLimpio);
+				afectacion.setEsDerrumbeTotal(esDerrumbeTotal);
+
+				if (afectacion instanceof AfectacionPared) {
+					AfectacionPared pared = (AfectacionPared) afectacion;
+					pared.setEsDeCarga(tipo.equals("Pared de carga"));
+				}						
+				JOptionPane.showMessageDialog(modificarAfectacion, "Afectación modificada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+				gestion.actualizarTableAfectaciones(ficha.getAfectaciones());			
+				dispose();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(modificarAfectacion, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+	public void regresar(){
+		limpiarCampos();
+		dispose();
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
-}
+
+
+
+
+
+
+
+
 

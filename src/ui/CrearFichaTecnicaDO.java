@@ -31,6 +31,7 @@ import clases.AfectacionTecho;
 import clases.FichaTecnicaDO;
 import clases.Mueble;
 import clases.OficinaTramites;
+import clases.Vivienda;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -44,39 +45,46 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 
 	private static final long serialVersionUID = 1L;
 	private static CrearFichaTecnicaDO crearFichaTecnicaDO;
-
-	private OficinaTramites oficina;
-	private FichaTecnicaDO ficha;
 	private GestionFichaTecnicaDO gestion;
+	private FichaTecnicaDO ficha;
+	private OficinaTramites oficina;
 	private ArrayList<Afectacion> afectaciones;
 	private ArrayList<Mueble> muebles;	
+	private Vivienda vivienda;
 
-	private JPanel contentPane;
-	private JTable tableMuebles;
-	private JTable tableAfectaciones;
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
+
+	private JPanel contentPane;
+
 	private JScrollPane scrollPaneAfectaciones;
+	private JTable tableAfectaciones;
 	private JPopupMenu popupMenuAfectaciones;
 	private JMenuItem mntmAgregarAfectacion;
 	private JMenuItem mntmModificarAfectacion;
 	private JMenuItem mntmEliminarAfectacion;
+
 	private JScrollPane scrollPaneMuebles;
+	private JTable tableMuebles;
 	private JPopupMenu popupMenuMuebles;
 	private JMenuItem mntmAgregarMueble ;
 	private JMenuItem mntmModificarMueble;
 	private JMenuItem mntmEliminarMueble;
+
 	private JLabel lblAfectacionInmueble; 
 	private JLabel lblAfectacinVivienda; 
 	private JLabel lblViviendaAsociada; 
-	private JButton btnEnviar;
+
 	private JTextField textDireccion;
 
 	private JButton btnAsignarVivienda;
+	private JButton btnEnviar;
 
 	//Singleton
 	public static CrearFichaTecnicaDO getCrearFichaTecnicaDO(GestionFichaTecnicaDO gestion, OficinaTramites oficina){
-		if(crearFichaTecnicaDO==null)
+		if(crearFichaTecnicaDO==null
+				|| !crearFichaTecnicaDO.gestion.equals(gestion)
+				|| !crearFichaTecnicaDO.oficina.equals(oficina))
 			crearFichaTecnicaDO=new CrearFichaTecnicaDO(gestion, oficina);
 		return crearFichaTecnicaDO;
 	}
@@ -99,6 +107,29 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 	}
 
 	//Atributos
+
+	public JMenuBar getBarraSuperior(){
+		if(barraSuperior==null){
+			barraSuperior = new JMenuBar();
+			barraSuperior.add(getMntmRegresar());
+
+		}
+		return barraSuperior;
+	}
+	public JMenuItem getMntmRegresar(){
+		if(mntmRegresar==null){
+			mntmRegresar= new JMenuItem("Regresar");
+			mntmRegresar.setForeground(Color.ORANGE);
+			mntmRegresar.setBackground(Color.DARK_GRAY);
+			mntmRegresar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					regresar();
+				}
+			});
+		}
+		return mntmRegresar;
+	}
+
 	public JPanel getContentPane(){
 		if(contentPane==null){
 			contentPane = new JPanel();
@@ -117,28 +148,7 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 		}
 		return contentPane;
 	}
-	public JMenuBar getBarraSuperior(){
-		if(barraSuperior==null){
-			barraSuperior = new JMenuBar();
-			barraSuperior.add(getMntmRegresar());
 
-		}
-		return barraSuperior;
-	}
-	public JMenuItem getMntmRegresar(){
-		if(mntmRegresar==null){
-			mntmRegresar= new JMenuItem("Regresar");
-			mntmRegresar.setForeground(Color.ORANGE);
-			mntmRegresar.setBackground(Color.DARK_GRAY);
-			mntmRegresar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					limpiarCampos();
-					dispose();
-				}
-			});
-		}
-		return mntmRegresar;
-	}
 	public JScrollPane getScrollPaneAfectaciones(){
 		if(scrollPaneAfectaciones==null){
 			scrollPaneAfectaciones = new JScrollPane();
@@ -237,7 +247,6 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 		}
 		return scrollPaneMuebles;
 	}
-
 	public JTable getTableMuebles(){
 		if(tableMuebles==null){
 			tableMuebles = new JTable();
@@ -320,6 +329,7 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 		}
 		return mntmEliminarMueble;
 	}
+
 	public JLabel getLblAfectacionInmueble(){		
 		if(lblAfectacionInmueble==null){
 			lblAfectacionInmueble = new JLabel("Afectaci\u00F3n al Inmueble:");
@@ -335,6 +345,23 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 			lblAfectacinVivienda.setBounds(10, 11, 284, 15);
 		}
 		return lblAfectacinVivienda;
+	}
+	public JLabel getLblViviendaAsociada(){
+		if(lblViviendaAsociada==null){
+			lblViviendaAsociada= new JLabel("Vivienda asociada:");
+			lblViviendaAsociada.setBounds(10, 362, 116, 14);		
+		}
+		return lblViviendaAsociada;
+	}
+
+	public JTextField getTextDireccion(){
+		if(textDireccion==null){
+			textDireccion = new JTextField("No hay una vivienda asignada");
+			textDireccion.setEditable(false);
+			textDireccion.setBounds(136, 362, 156, 20);
+			textDireccion.setColumns(10);
+		}
+		return textDireccion;
 	}
 
 	public JButton getBtnAsignarVivienda(){
@@ -352,23 +379,6 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 		}
 		return btnAsignarVivienda;
 	}
-	public JTextField getTextDireccion(){
-		if(textDireccion==null){
-			textDireccion = new JTextField();
-			textDireccion.setEditable(false);
-			textDireccion.setBounds(136, 362, 156, 20);
-			textDireccion.setColumns(10);
-		}
-		return textDireccion;
-	}
-	public JLabel getLblViviendaAsociada(){
-		if(lblViviendaAsociada==null){
-			lblViviendaAsociada= new JLabel("Vivienda asociada:");
-			lblViviendaAsociada.setBounds(10, 362, 116, 14);		
-		}
-		return lblViviendaAsociada;
-	}
-
 	public JButton getBtnEnviar(){
 		if(btnEnviar==null){
 			btnEnviar = new JButton("Enviar");			
@@ -377,30 +387,9 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 			btnEnviar.setBounds(205, 403, 89, 23);
 			btnEnviar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					try{
-						if (ficha.getAfectaciones().isEmpty() && ficha.getMuebles().isEmpty())
-							JOptionPane.showMessageDialog(CrearFichaTecnicaDO.this,"La ficha técnica debe contener al menos una afectación o un mueble.","Validación", JOptionPane.WARNING_MESSAGE);						
-						else
-							if(ficha.getVivienda()==null)
-								JOptionPane.showMessageDialog(CrearFichaTecnicaDO.this,"La ficha técnica debe Estar asociada a una vivienda.","Validación", JOptionPane.WARNING_MESSAGE);
-							else
-							{														
-								boolean add = oficina.addFichaTecnicaDO(ficha.getVivienda(), ficha.getAfectaciones(), ficha.getMuebles());
-								if(add){									
-									JOptionPane.showMessageDialog(null, "Ficha Tecnica de Daños Ocacionados agregada exitosamente.");			            
-									gestion.actualizarTableFichas(oficina.getFichas());								
-									limpiarCampos();
-									dispose();
-								} else 
-									JOptionPane.showMessageDialog(null, "Ya existe una Ficha Tecnica de Daños Ocacionados asociada a esta vivienda.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-							}
-					}catch (IllegalArgumentException ex) {
-						JOptionPane.showMessageDialog(CrearFichaTecnicaDO.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					}
+					addFichaTecnicaDO();
 				}
-			}
-
-					);
+			});
 		}		
 		return btnEnviar; 
 	}
@@ -465,6 +454,11 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 		}
 		getTableMuebles().setModel(model);
 	}
+	public void actualizarViviendaAsociada(){
+		if(vivienda!=null)
+			getTextDireccion().setText(vivienda.getDireccion());
+		
+	}	
 	public Afectacion getAfectacionSeleccionada(){
 		Afectacion a=null;
 		int pos = getTableAfectaciones().getSelectedRow();
@@ -479,9 +473,31 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 			m=muebles.get(pos);
 		return m;
 	}
-	private void limpiarCampos() {
-	
-			getTextDireccion().setText("");
+
+	public void addFichaTecnicaDO(){
+		try{
+
+			if (ficha.getAfectaciones().isEmpty() && ficha.getMuebles().isEmpty())
+				JOptionPane.showMessageDialog(crearFichaTecnicaDO,"La ficha técnica debe contener al menos una afectación o un mueble.","Validación", JOptionPane.WARNING_MESSAGE);						
+			else
+				if(vivienda==null)
+					JOptionPane.showMessageDialog(crearFichaTecnicaDO,"La ficha técnica debe Estar asociada a una vivienda.","Validación", JOptionPane.WARNING_MESSAGE);
+				else{																			
+					if(oficina.addFichaTecnicaDO(vivienda, ficha.getAfectaciones(), ficha.getMuebles())){									
+						JOptionPane.showMessageDialog(crearFichaTecnicaDO, "Ficha Tecnica de Daños Ocacionados agregada exitosamente.");			            
+						gestion.updtTableFichas(oficina.getFichas());								
+						limpiarCampos();
+						dispose();
+					} else 
+						JOptionPane.showMessageDialog(crearFichaTecnicaDO, "Ha ocurrido un error en la creación de la Ficha Tecnica de Daños Ocasionados.", "Error", JOptionPane.WARNING_MESSAGE);
+				}
+		}catch (Exception e) {
+			JOptionPane.showMessageDialog(crearFichaTecnicaDO, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	public void limpiarCampos() {
+
+		getTextDireccion().setText("");
 
 		if (getTableAfectaciones() != null) {
 			DefaultTableModel model = (DefaultTableModel) tableAfectaciones.getModel();
@@ -493,8 +509,19 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 			model.setRowCount(0);
 		}
 	}
-	public void actualizarViviendaAsociada(){
-		getTextDireccion().setText(ficha.getVivienda().getDireccion());
+	public void regresar(){
+		limpiarCampos();
+		dispose();
 	}
+
+	@Override
+	public void setVivienda(Vivienda vivienda){		
+		this.vivienda=vivienda;
+	}
+
+
 }
+
+
+
 

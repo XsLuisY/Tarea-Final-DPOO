@@ -1,7 +1,9 @@
 package clases;
+import interfaces.Identificable;
+
 import java.util.UUID;
 
-public class Material {
+public class Material implements Identificable {
 	//Atributos
 	private String nombre;
 	private String unidadMedida;
@@ -35,11 +37,13 @@ public class Material {
 	public String getUnidadMedida(){
 		return unidadMedida;		
 	}
-	public void setPrecioUnitario(double precioUnitario){	
-		if(precioUnitario>0)
+	public void setPrecioUnitario(Double precioUnitario){	
+			
+		if(precioUnitario>0)		
 			this.precioUnitario=precioUnitario;
 		else throw new IllegalArgumentException("El precio debe ser mayor que 0");
 	}
+	
 	public Double getPrecioUnitario(){
 		return precioUnitario;
 	}
@@ -50,7 +54,8 @@ public class Material {
 	public void setId() {
 		do
 			id=UUID.randomUUID();
-		while(MICONS.existUUID(id));
+		while(MICONS.getMICONS().getListaId().containsKey(id));
+		MICONS.getMICONS().getListaId().put(id, this);
 	}
 
 	//Metodos

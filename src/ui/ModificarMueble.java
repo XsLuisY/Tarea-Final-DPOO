@@ -33,18 +33,26 @@ public class ModificarMueble extends JFrame {
 	private AsignableMuebles gestion;
 	private Mueble mueble;
 
-	private JPanel contentPane;
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
+
+	private JPanel contentPane;
+
 	private JTextField textFieldNombre;
+
 	private JLabel lblCantidadAfectada;
 	private JLabel lblMueble;
+
 	private JSpinner spinnerCantidad; 
+
 	private JButton buttonModificar;
 
 	//Singleton
 	public static ModificarMueble getModificarMueble(AsignableMuebles gestion, FichaTecnicaDO ficha, Mueble mueble){
-		if(modificarMueble==null)
+		if(modificarMueble==null
+				|| !modificarMueble.gestion.equals(gestion)
+				|| !modificarMueble.ficha.equals(ficha)
+				|| !modificarMueble.mueble.equals(mueble))
 			modificarMueble= new ModificarMueble(gestion, ficha, mueble);
 		return modificarMueble;
 	}
@@ -80,13 +88,13 @@ public class ModificarMueble extends JFrame {
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					limpiarCampos();
-					dispose();
+					regresar();
 				}
 			});
 		}
 		return mntmRegresar;
 	}
+
 	public JPanel getContentPane(){
 		if(contentPane==null){
 			contentPane = new JPanel();
@@ -101,6 +109,7 @@ public class ModificarMueble extends JFrame {
 		}
 		return contentPane;
 	}
+
 	public JLabel getLblCantidadAfectada(){
 		if(lblCantidadAfectada==null){
 			lblCantidadAfectada = new JLabel("Cantidad\r\n:");
@@ -118,6 +127,7 @@ public class ModificarMueble extends JFrame {
 		}
 		return lblMueble;
 	}
+
 	public JTextField getTextFieldNombre(){
 		if(textFieldNombre ==null){
 			textFieldNombre = new JTextField();
@@ -126,6 +136,7 @@ public class ModificarMueble extends JFrame {
 		}
 		return textFieldNombre ;
 	}
+
 	public JSpinner getSpinnerCantidad(){
 		if(spinnerCantidad==null){
 			spinnerCantidad = new JSpinner();
@@ -133,6 +144,7 @@ public class ModificarMueble extends JFrame {
 		}
 		return spinnerCantidad;
 	}		
+
 	public JButton getButtonModificar(){
 		if(buttonModificar==null){
 			buttonModificar = new JButton("Modificar");
@@ -141,26 +153,7 @@ public class ModificarMueble extends JFrame {
 			buttonModificar.setBounds(165, 73, 89, 23);
 			buttonModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					String nombre = getTextFieldNombre().getText().trim();
-					int cantidad = (int) getSpinnerCantidad().getValue();
-
-					if (nombre.isEmpty()) {
-						JOptionPane.showMessageDialog(ModificarMueble.this, "Debes ingresar el nombre del mueble.", "Validación", JOptionPane.WARNING_MESSAGE);
-					} else if (cantidad <= 0) {
-						JOptionPane.showMessageDialog(ModificarMueble.this, "La cantidad debe ser mayor que cero.", "Validación", JOptionPane.WARNING_MESSAGE);
-					} else {
-						try {
-							boolean updt = ficha.updtMueble(mueble.getNombre(), nombre, cantidad);
-							if (updt) {
-								JOptionPane.showMessageDialog(ModificarMueble.this, "Mueble modificardo exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-								gestion.actualizarTableMuebles(ficha.getMuebles());
-								limpiarCampos();
-								dispose();
-							}
-						} catch (IllegalArgumentException ex) {
-							JOptionPane.showMessageDialog(ModificarMueble.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-						}
-					}
+					modificar();
 				}
 			});
 
@@ -175,8 +168,38 @@ public class ModificarMueble extends JFrame {
 		getSpinnerCantidad().setValue(mueble.getCantidad());
 	}
 	private void limpiarCampos() {
-        getTextFieldNombre().setText("");
-        getSpinnerCantidad().setValue(1);
-}
+		getTextFieldNombre().setText("");
+		getSpinnerCantidad().setValue(1);
+	}
+
+	public void regresar(){
+		limpiarCampos();
+		dispose();
+	}
+
+	public void modificar(){
+		String nombre = getTextFieldNombre().getText().trim();
+		int cantidad = (int) getSpinnerCantidad().getValue();
+
+		if (nombre.isEmpty()) {
+			JOptionPane.showMessageDialog(modificarMueble, "Debes ingresar el nombre del mueble.", "Validación", JOptionPane.WARNING_MESSAGE);
+		} else 
+			try {	
+				if(ficha.updtMueble(mueble.getNombre(), nombre, cantidad)){
+					JOptionPane.showMessageDialog(modificarMueble, "Mueble modificardo exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+					gestion.actualizarTableMuebles(ficha.getMuebles());					
+					dispose();
+				}
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(modificarMueble, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			}
+
+	}
+
+
+
+
+
+
 
 }
