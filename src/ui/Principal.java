@@ -10,6 +10,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
+import javax.swing.JOptionPane;
 
 import java.awt.Color;
 import java.awt.event.ActionListener;
@@ -252,16 +253,44 @@ public class Principal extends JFrame {
 	}
 
 	public void reporte_1(){
+	  try{
 		Reporte_1.getReporte_1(micons.buscarAfectacionTipologiaConstructiva()).setVisible(true);
+	  } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, 
+            "No hay datos suficientes para generar el reporte.\n" + e.getMessage(),
+            "Error al generar reporte",
+            JOptionPane.ERROR_MESSAGE);
+    }
 	}
 	public void reporte_2(){
+	  try{
 		Reporte_2.getReporte_2(micons.buscarViviendasMasVulnerables()).setVisible(true);
+	  } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, 
+            "No hay datos suficientes para generar el reporte.\n" + e.getMessage(),
+            "Error al generar reporte",
+            JOptionPane.ERROR_MESSAGE);
+    }
 	}
 	public void reporte_3(){
+	  try{
 		Reporte_3.getReporte_3(micons.mostrarCantElementoAfectado()).setVisible(true);
+	  } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, 
+            "No hay datos suficientes para generar el reporte.\n" + e.getMessage(),
+            "Error al generar reporte",
+            JOptionPane.ERROR_MESSAGE);
+    }
 	}
 	public void reporte_4(){
+	  try{
 		Reporte_4.getReporte_4(micons.mostrarMaterialMasCaro()).setVisible(true);
+	  } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, 
+            "No hay datos suficientes para generar el reporte.\n" + e.getMessage(),
+            "Error al generar reporte",
+            JOptionPane.ERROR_MESSAGE);
+    }
 	}
 
 	public void cerrarSesion(){
