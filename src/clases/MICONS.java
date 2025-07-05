@@ -1,6 +1,6 @@
 package clases;
 
-import interfaces.Identificable;
+import interfaces.Identificador;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class MICONS {
 	private static MICONS micons = null;
-	private static HashMap<UUID, Identificable> listaId = null;
+	private static HashMap<UUID, Identificador> listaId = null;
 	private static HashMap<Vivienda, Boolean> listaViviendaAsignada = null;
 	private ArrayList<OficinaTramites> oficinas;
 	private ArrayList<Vivienda> viviendas;
@@ -29,14 +29,14 @@ public class MICONS {
 	private MICONS(){
 		oficinas = new ArrayList<OficinaTramites>();
 		viviendas = new ArrayList<Vivienda>();		
-		listaId = new HashMap<UUID, Identificable>();
+		listaId = new HashMap<UUID, Identificador>();
 		listaViviendaAsignada = new HashMap<Vivienda, Boolean>();
 	}
 	//Encapsulamiento
 	public HashMap<Vivienda, Boolean> getListaViviendaAsignada(){
 		return listaViviendaAsignada;
 	}
-	public HashMap<UUID, Identificable> getListaId(){
+	public HashMap<UUID, Identificador> getListaId(){
 		return listaId;
 	}
 	public ArrayList<OficinaTramites> getOficinaTramites(){
@@ -99,6 +99,18 @@ public class MICONS {
 		OficinaTramites oficina= readOficinaTramites(consejoPopular);
 		if(oficina!=null){
 			oficinas.remove(oficina);
+			for(Material m : oficina.getMateriales())
+				listaId.remove(m.getId());
+			for(Plantilla p : oficina.getPlantillas())
+				listaId.remove(p.getId());
+			for(Cubicacion c : oficina.getCubicaciones())
+				listaId.remove(c.getId());
+			for(FichaTecnicaDO f : oficina.getFichas()){
+				for(Afectacion a: f.getAfectaciones())
+					listaId.remove(a.getId());
+				listaId.remove(f.getId());
+				listaViviendaAsignada.put(f.getVivienda(), false);				
+			}
 			del= true;
 		}
 		else throw new IllegalArgumentException("Esta OficinaTramites no existe");
@@ -230,80 +242,74 @@ public class MICONS {
 			throw new IllegalArgumentException("Debe existir al menos una oficina de tramites");
 		else
 			for (OficinaTramites o : micons.getOficinaTramites())
-				if(o.getFichas()==null || o.getFichas().isEmpty())
-					throw new IllegalArgumentException("Debe existir al menos una ficha técnica");
-				else
-					for (FichaTecnicaDO f : o.getFichas())
-						if(f.getAfectaciones()==null || f.getAfectaciones().isEmpty())
-							throw new IllegalArgumentException("Debe existir al menos una afectacion");
-						else
-							for (Afectacion a : f.getAfectaciones()){
-								String tipo = a.getClass().getSimpleName();
-								int cantidad = totalPorAfectacion.getOrDefault(tipo, 0);
-								totalPorAfectacion.put(tipo, cantidad + 1);  
-							}				
-				return totalPorAfectacion;
-			}
+				for (FichaTecnicaDO f : o.getFichas())
+					for (Afectacion a : f.getAfectaciones()){
+						String tipo = a.getClass().getSimpleName();
+						int cantidad = totalPorAfectacion.getOrDefault(tipo, 0);
+						totalPorAfectacion.put(tipo, cantidad + 1);  
+					}				
+		return totalPorAfectacion;
+	}
 
-		//4.........................................
+	//4.........................................
 
-		public ArrayList<Cubicacion> mostrarMaterialMasCaro(){
-				double costoM=0;			
-				double auxCostoM;
-				ArrayList<Cubicacion> cubicaciones = new ArrayList<Cubicacion>();
-				ArrayList<Cubicacion> auxCubicaciones = new ArrayList<Cubicacion>();
-				if(micons.getOficinaTramites()==null || micons.getOficinaTramites().isEmpty())
-					throw new IllegalArgumentException("Debe existir al menos una oficina de tramites");
-				else
-				for (OficinaTramites o : oficinas) {
-					auxCubicaciones = o.buscarCubicacionesMayorCosto();
+	public ArrayList<Cubicacion> mostrarMaterialMasCaro(){
+		double costoM=0;			
+		double auxCostoM;
+		ArrayList<Cubicacion> cubicaciones = new ArrayList<Cubicacion>();
+		ArrayList<Cubicacion> auxCubicaciones = new ArrayList<Cubicacion>();
+		if(micons.getOficinaTramites()==null || micons.getOficinaTramites().isEmpty())
+			throw new IllegalArgumentException("Debe existir al menos una oficina de tramites");
+		else
+			for (OficinaTramites o : oficinas) {
+				auxCubicaciones = o.buscarCubicacionesMayorCosto();
 
-					if (!auxCubicaciones.isEmpty()) {
-						auxCostoM = auxCubicaciones.get(0).calcularPrecioTotal();
+				if (!auxCubicaciones.isEmpty()) {
+					auxCostoM = auxCubicaciones.get(0).calcularPrecioTotal();
 
-						if (auxCostoM > costoM) {
-							costoM = auxCostoM;
-							cubicaciones.clear();
-							cubicaciones.addAll(auxCubicaciones); 
-						} else if (auxCostoM == costoM) {
-							cubicaciones.addAll(auxCubicaciones);
-						}
+					if (auxCostoM > costoM) {
+						costoM = auxCostoM;
+						cubicaciones.clear();
+						cubicaciones.addAll(auxCubicaciones); 
+					} else if (auxCostoM == costoM) {
+						cubicaciones.addAll(auxCubicaciones);
 					}
 				}
-			return cubicaciones;
-		}
+			}
+		return cubicaciones;
+	}
 
 
-		//-------------------------------------Inicializar Datos-----------------------------------------------------
-		//----------Oficinas de Tramites
-		public void inicializarOficinaTramites(){
-			oficinas.add(new OficinaTramites("Arroyo Naranjo"));	
-			oficinas.add(new OficinaTramites("Boyeros"));	
-			oficinas.add(new OficinaTramites("Vedado"));	
-			oficinas.add(new OficinaTramites("Diez de Octubre"));	
-			oficinas.add(new OficinaTramites("Cotorro"));	
-			oficinas.add(new OficinaTramites("Cerro"));	
-			oficinas.add(new OficinaTramites("La Lisa"));
-		}
-		public void inicializarPlantillaArroyoNaranjo(){
-			oficinas.get(0).inicializarFichasTecnicas();
-			oficinas.get(0).inicializarPlantillas();
-
-		}
-		public void inicializarViviendas(){
-			viviendas.add(new Vivienda("Paco","05012045762","Calle J entre L y K","Propiedad","Casa","Tipo II",true,4,5,2,2,3,1,6));
-			viviendas.add(new Vivienda("Luis","05011045061","Calle 20 entre 23 y 21","Propiedad","Casa","Tipo I",false,4,5,2,2,1,1,5));
-			viviendas.add(new Vivienda("Ernesto","03061545181","Calle Fernanda entre C y B","Usufructo","Apartamento","Tipo III",true,4,4,3,1,0,1,3));
-			viviendas.add(new Vivienda("Diana","02092317632","Calle A entre D y C","Arrendamiento","Otro","Tipo IV",false,4,5,3,3,0,0,8));
-			viviendas.add(new Vivienda("Ana","01120564637","Calle Balear entre Piedra y Soto","Providencia","Bohio","Tipo V",false,4,7,2,2,0,1,7));		
-			viviendas.add(new Vivienda("Pedro Pï¿½rez", "04012166621","Calle 12 123", "Propiedad", "Casa", "Tipo II", true, 7, 6, 3, 1, 1, 0,3));
-			viviendas.add(new Vivienda( "Carlos Dï¿½az", "90031212345","Calle Martï¿½ 89", "Usufructo", "Casa", "Tipo I",false, 7.5, 4.5, 3, 1, 0, 1,5));
-			viviendas.add(new Vivienda( "Luisa Gï¿½mez", "88020312345", "Ave 51 456","Arrendamiento", "Apartamento", "Tipo III",false, 8.0,4, 3, 0, 2, 0, 4));
-			for(Vivienda v: viviendas)
-				MICONS.getMICONS().getListaViviendaAsignada().put(v, false);
-		}
+	//-------------------------------------Inicializar Datos-----------------------------------------------------
+	//----------Oficinas de Tramites
+	public void inicializarOficinaTramites(){
+		oficinas.add(new OficinaTramites("Arroyo Naranjo"));	
+		oficinas.add(new OficinaTramites("Boyeros"));	
+		oficinas.add(new OficinaTramites("Vedado"));	
+		oficinas.add(new OficinaTramites("Diez de Octubre"));	
+		oficinas.add(new OficinaTramites("Cotorro"));	
+		oficinas.add(new OficinaTramites("Cerro"));	
+		oficinas.add(new OficinaTramites("La Lisa"));
+	}
+	public void inicializarPlantillaArroyoNaranjo(){
+		oficinas.get(0).inicializarFichasTecnicas();
+		oficinas.get(0).inicializarPlantillas();
 
 	}
+	public void inicializarViviendas(){
+		viviendas.add(new Vivienda("Paco","05012045762","Calle J entre L y K","Propiedad","Casa","Tipo II",true,4,5,2,2,3,1,6));
+		viviendas.add(new Vivienda("Luis","05011045061","Calle 20 entre 23 y 21","Propiedad","Casa","Tipo I",false,4,5,2,2,1,1,5));
+		viviendas.add(new Vivienda("Ernesto","03061545181","Calle Fernanda entre C y B","Usufructo","Apartamento","Tipo III",true,4,4,3,1,0,1,3));
+		viviendas.add(new Vivienda("Diana","02092317632","Calle A entre D y C","Arrendamiento","Otro","Tipo IV",false,4,5,3,3,0,0,8));
+		viviendas.add(new Vivienda("Ana","01120564637","Calle Balear entre Piedra y Soto","Providencia","Bohio","Tipo V",false,4,7,2,2,0,1,7));		
+		viviendas.add(new Vivienda("Pedro Perez", "04012166621","Calle 12 123", "Propiedad", "Casa", "Tipo II", true, 7, 6, 3, 1, 1, 0,3));
+		viviendas.add(new Vivienda( "Carlos Diaz", "90031212345","Calle Martin 89", "Usufructo", "Casa", "Tipo I",false, 7.5, 4.5, 3, 1, 0, 1,5));
+		viviendas.add(new Vivienda( "Luisa Gomez", "88020312345", "Ave 51 456","Arrendamiento", "Apartamento", "Tipo III",false, 8.0,4, 3, 0, 2, 0, 4));
+		for(Vivienda v: viviendas)
+			MICONS.getMICONS().getListaViviendaAsignada().put(v, false);
+	}
+
+}
 
 
 

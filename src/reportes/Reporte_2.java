@@ -119,7 +119,15 @@ public class Reporte_2 extends JFrame {
 		if (tableViviendas == null) {
 			tableViviendas = new JTable();
 			tableViviendas.setModel(new DefaultTableModel(
-					new Object[][] {},new String[] {"Jefe de Nucleo", "Direccion", "CI"}));
+					new Object[][] {},new String[] {"Jefe de Nucleo", "Direccion", "CI"}) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false; 
+				}
+			});
 		}
 		return tableViviendas;
 	}

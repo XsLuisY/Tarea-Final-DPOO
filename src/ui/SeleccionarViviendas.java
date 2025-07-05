@@ -1,4 +1,4 @@
-package utils;
+package ui;
 
 import interfaces.AsignableVivienda;
 
@@ -27,8 +27,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JMenuItem;
-
-import ui.CrearFichaTecnicaDO;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -86,7 +84,15 @@ public class SeleccionarViviendas extends JFrame {
 			table.setBackground(Color.DARK_GRAY);
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			table.setModel(new DefaultTableModel(
-					new Object[][] {},new String[] {"Jefe de Nucleo", "Direccion", "CI"}));
+					new Object[][] {},new String[] {"Jefe de Nucleo", "Direccion", "CI"}) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false; 
+				}
+			});
 			addPopup(table, getPopupMenu());
 		}
 		return table;

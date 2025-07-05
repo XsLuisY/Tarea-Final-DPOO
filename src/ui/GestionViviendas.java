@@ -31,10 +31,10 @@ import java.util.ArrayList;
 public class GestionViviendas extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static GestionViviendas gestionViviendas;
-	
+
 	private MICONS micons;
 	private ArrayList<Vivienda> viviendas;
-	
+
 	private JMenuBar barraSuperior;
 	private JMenuItem mntmRegresar;
 	private JPanel contentPane;
@@ -49,10 +49,10 @@ public class GestionViviendas extends JFrame {
 	//Singleton
 	public static GestionViviendas getGestionViviendas(){
 		if(gestionViviendas==null)
-		gestionViviendas = new GestionViviendas();
+			gestionViviendas = new GestionViviendas();
 		return gestionViviendas;
 	}
-	
+
 	//Constructor
 	private GestionViviendas() {
 		setTitle("Gestion de Viviendas");
@@ -84,7 +84,7 @@ public class GestionViviendas extends JFrame {
 			mntmRegresar.setHorizontalAlignment(SwingConstants.LEFT);
 			mntmRegresar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-				regresar();
+					regresar();
 				}
 			});
 		}
@@ -121,7 +121,15 @@ public class GestionViviendas extends JFrame {
 					new String[] {
 							"Jefe de Nï¿½cleo", "Direcciï¿½n", "ID"
 					}
-					));
+					) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false; 
+				}
+			});
 		}
 		return table;
 	}
@@ -159,7 +167,7 @@ public class GestionViviendas extends JFrame {
 			menuItemMostrar.setBackground(Color.DARK_GRAY);
 			menuItemMostrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-				showVivienda();
+					showVivienda();
 				}
 			});
 		}
@@ -173,7 +181,7 @@ public class GestionViviendas extends JFrame {
 			menuItemModificar.setBackground(Color.DARK_GRAY);
 			menuItemModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-				updtVivienda();
+					updtVivienda();
 				}
 			});
 
@@ -189,7 +197,7 @@ public class GestionViviendas extends JFrame {
 			menuItemEliminar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					delVivienda();
-					}
+				}
 			});
 		}
 		return menuItemEliminar;
@@ -253,17 +261,22 @@ public class GestionViviendas extends JFrame {
 	}
 	public void delVivienda(){
 		Vivienda v = obtenerViviendaSeleccionada();
+
+
 		if(v!=null){
 			int confirmar = JOptionPane.showConfirmDialog(gestionViviendas,"¿Seguro que deseas eliminar esta FTDO?","Confirmar eliminación",JOptionPane.YES_NO_OPTION);
-
-			if (confirmar == JOptionPane.YES_OPTION) {
-				micons.deleteVivienda(v.getJefeNucleo().getCI());
-				JOptionPane.showMessageDialog(gestionViviendas, "Ficha Tecnica de Daños Ocacionados  eliminada con exito.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-				actualizarTableViviendas();
+			try{
+				if (confirmar == JOptionPane.YES_OPTION) {
+					micons.deleteVivienda(v.getJefeNucleo().getCI());
+					JOptionPane.showMessageDialog(gestionViviendas, "Vivienda eliminada con exito.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+					actualizarTableViviendas();
+				}
+			}catch(Exception e){
+				JOptionPane.showMessageDialog(gestionViviendas, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}else 
-			JOptionPane.showMessageDialog(gestionViviendas, "Debe seleccionar una Ficha Tecnica de Daños Ocacionados para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-	
+			JOptionPane.showMessageDialog(gestionViviendas, "Debe seleccionar una vivienda para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+
 	}
 	public void regresar(){
 		dispose();

@@ -1,9 +1,9 @@
 package clases;
-import interfaces.Identificable;
+import interfaces.Identificador;
 
 import java.util.UUID;
 
-public class Material implements Identificable {
+public class Material implements Identificador {
 	//Atributos
 	private String nombre;
 	private String unidadMedida;

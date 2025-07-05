@@ -1,9 +1,9 @@
 package clases;
-import interfaces.Identificable;
+import interfaces.Identificador;
 
 import java.util.UUID;
 
-public class Plantilla implements Identificable{
+public class Plantilla implements Identificador{
 
 	//Atributos
 	private Cubicacion cubicacion;

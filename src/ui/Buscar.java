@@ -1,6 +1,6 @@
 package ui;
 
-import interfaces.Identificable;
+import interfaces.Identificador;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -196,7 +196,7 @@ public class Buscar extends JFrame {
 		else{
 			try{
 				UUID id=UUID.fromString(getTextField().getText().trim());			
-				Identificable doc = micons.getListaId().get(id);
+				Identificador doc = micons.getListaId().get(id);
 
 				if(doc instanceof Material)
 					mostrarMaterial((Material)micons.getListaId().get(id));

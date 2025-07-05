@@ -125,7 +125,15 @@ public class MostrarFichaTecnicaDO extends JFrame {
 			tableAfectaciones.setFillsViewportHeight(true);
 			tableAfectaciones.setForeground(Color.ORANGE);
 			tableAfectaciones.setBackground(Color.DARK_GRAY);
-			tableAfectaciones.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Tipo", "Material Predominante"}));			
+			tableAfectaciones.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Tipo", "Material Predominante"}) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false; 
+				}
+			});			
 		}
 		return tableAfectaciones;
 	}
@@ -141,7 +149,15 @@ public class MostrarFichaTecnicaDO extends JFrame {
 	public JTable getTableMuebles(){
 		if(tableMuebles==null){
 			tableMuebles = new JTable();
-			tableMuebles.setModel(new DefaultTableModel(new Object[][] {}, new String[] {"Mueble", "Cantidad"}));
+			tableMuebles.setModel(new DefaultTableModel(new Object[][] {}, new String[] {"Mueble", "Cantidad"}) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false; 
+				}
+			});
 			tableMuebles.setFillsViewportHeight(true);
 			tableMuebles.setForeground(Color.ORANGE);
 			tableMuebles.setBackground(Color.DARK_GRAY);

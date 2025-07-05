@@ -1,7 +1,7 @@
 package clases;
 
 
-import interfaces.Identificable;
+import interfaces.Identificador;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,8 +59,15 @@ public class OficinaTramites{
 
 		return add;
 	}
+
+	public boolean addFichaTecnicaDO(FichaTecnicaDO f) {
+		if(f!=null)
+			dictamenes.put(f, null);
+		else throw new NullPointerException("La ficha no puede ser null");
+		return true;
+	}
 	/*Read*/ public FichaTecnicaDO readFichaTecnicaDO(UUID id){	
-		Identificable ficha=MICONS.getMICONS().getListaId().get(id);
+		Identificador ficha=MICONS.getMICONS().getListaId().get(id);
 
 		if(!(ficha instanceof FichaTecnicaDO))
 			throw new ClassCastException("Este ID ("+id.toString()+") no está asignado a una Ficha Tecnica de Daños Ocacionados.");
@@ -106,7 +113,7 @@ public class OficinaTramites{
 		return add;
 	}
 	/*Read*/ public Cubicacion readCubicacion(UUID id){
-		Identificable cubicacion=MICONS.getMICONS().getListaId().get(id);
+		Identificador cubicacion=MICONS.getMICONS().getListaId().get(id);
 
 		if(!(cubicacion instanceof Cubicacion))
 			throw new ClassCastException("Este ID ("+id.toString()+") no está asignado a ninguna Cubicacion.");
@@ -147,7 +154,7 @@ public class OficinaTramites{
 		return add;
 	}
 	/*Read*/ public Material readMaterial(UUID id){
-		Identificable material=MICONS.getMICONS().getListaId().get(id);
+		Identificador material=MICONS.getMICONS().getListaId().get(id);
 		if(!(material instanceof Material))
 			throw new ClassCastException("Este ID ("+id.toString()+") no está asignado a ningun material.");
 		return (Material) material; 	
@@ -213,7 +220,7 @@ public class OficinaTramites{
 		return add;
 	}
 	/*Read*/ public Plantilla readPlantilla(UUID id){
-		Identificable plantilla=MICONS.getMICONS().getListaId().get(id);
+		Identificador plantilla=MICONS.getMICONS().getListaId().get(id);
 		if(!(plantilla instanceof Plantilla))
 			throw new ClassCastException("Este ID ("+id.toString()+") no está asignado a una Plantilla.");
 		return (Plantilla) plantilla; 	
@@ -360,5 +367,10 @@ public class OficinaTramites{
 		}				
 
 	}
+
+	public HashMap<FichaTecnicaDO, Cubicacion> getDictamenes() {
+		return dictamenes;
+	}
+
 
 }

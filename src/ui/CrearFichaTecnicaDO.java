@@ -39,8 +39,6 @@ import java.util.ArrayList;
 
 import javax.swing.JTextField;
 
-import utils.SeleccionarViviendas;
-
 public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones, AsignableMuebles, AsignableVivienda {	
 
 	private static final long serialVersionUID = 1L;
@@ -164,10 +162,18 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 			tableAfectaciones.setForeground(Color.ORANGE);
 			tableAfectaciones.setBackground(Color.DARK_GRAY);
 			tableAfectaciones.setModel(new DefaultTableModel(
-					new Object[][] {
-					},
+					new Object[][] {},
 					new String[] { "Tipo", "Material", "Derrumbe", "Carga" }
-					));			
+					) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false; 
+				}
+			});
+
 		}
 		return tableAfectaciones;
 	}
@@ -250,7 +256,15 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 	public JTable getTableMuebles(){
 		if(tableMuebles==null){
 			tableMuebles = new JTable();
-			tableMuebles.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Mueble", "Cantidad"}));
+			tableMuebles.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Mueble", "Cantidad"}) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false; 
+				}
+			});
 			tableMuebles.setFillsViewportHeight(true);
 			tableMuebles.setForeground(Color.ORANGE);
 			tableMuebles.setBackground(Color.DARK_GRAY);
@@ -415,7 +429,7 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 	//Metodos
 	public void actualizarTableAfectaciones(ArrayList<Afectacion> afectaciones) {
 		DefaultTableModel model = (DefaultTableModel) tableAfectaciones.getModel();
-		model.setRowCount(0); // Limpiar la tabla
+		model.setRowCount(0); 
 
 		String tipo;
 		String materialPredominante;
@@ -443,8 +457,7 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 	}
 	public void actualizarTableMuebles(ArrayList<Mueble> muebles) {
 		DefaultTableModel model = (DefaultTableModel) tableMuebles.getModel();
-		model.setRowCount(0); // Limpiar la tabla
-
+		model.setRowCount(0);
 		for (int i = 0; i < muebles.size(); i++) {
 			Mueble m = muebles.get(i);
 			String nombre=m.getNombre();
@@ -457,7 +470,7 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 	public void actualizarViviendaAsociada(){
 		if(vivienda!=null)
 			getTextDireccion().setText(vivienda.getDireccion());
-		
+
 	}	
 	public Afectacion getAfectacionSeleccionada(){
 		Afectacion a=null;
@@ -483,9 +496,11 @@ public class CrearFichaTecnicaDO extends JFrame implements AsignableAfectaciones
 				if(vivienda==null)
 					JOptionPane.showMessageDialog(crearFichaTecnicaDO,"La ficha técnica debe Estar asociada a una vivienda.","Validación", JOptionPane.WARNING_MESSAGE);
 				else{																			
-					if(oficina.addFichaTecnicaDO(vivienda, ficha.getAfectaciones(), ficha.getMuebles())){									
+					FichaTecnicaDO f=new FichaTecnicaDO(vivienda, ficha.getAfectaciones(), ficha.getMuebles());
+					if(oficina.addFichaTecnicaDO(f)){									
 						JOptionPane.showMessageDialog(crearFichaTecnicaDO, "Ficha Tecnica de Daños Ocacionados agregada exitosamente.");			            
-						gestion.updtTableFichas(oficina.getFichas());								
+						oficina.addCubicacion(f);
+						oficina.addPlantilla(oficina.getDictamenes().get(f), f );
 						limpiarCampos();
 						dispose();
 					} else 

@@ -171,7 +171,15 @@ public class MostrarPlantilla extends JFrame {
 			tableAfectaciones.setFillsViewportHeight(true);
 			tableAfectaciones.setForeground(Color.ORANGE);
 			tableAfectaciones.setBackground(Color.DARK_GRAY);
-			tableAfectaciones.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Tipo", "Material Predominante"}));
+			tableAfectaciones.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Tipo", "Material Predominante"}) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false; 
+				}
+			});
 		}
 		return tableAfectaciones ;
 	}
@@ -190,7 +198,15 @@ public class MostrarPlantilla extends JFrame {
 			tableMuebles.setFillsViewportHeight(true);
 			tableMuebles.setForeground(Color.ORANGE);
 			tableMuebles.setBackground(Color.DARK_GRAY);
-			tableMuebles.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Mueble", "Cantidad"}));
+			tableMuebles.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Mueble", "Cantidad"}) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false; 
+				}
+			});
 		}
 		return tableMuebles ;
 	}
@@ -209,7 +225,15 @@ public class MostrarPlantilla extends JFrame {
 			tableCubicacion.setBackground(Color.DARK_GRAY);
 			tableCubicacion.setForeground(Color.ORANGE);
 			tableCubicacion.setFillsViewportHeight(true);
-			tableCubicacion.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Nombre", "u/medida", "Precio unitario", "Cantidad", "Precio Total"}));
+			tableCubicacion.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Nombre", "u/medida", "Precio unitario", "Cantidad", "Precio Total"}) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false; 
+				}
+			});
 		}
 		return tableCubicacion;
 	}

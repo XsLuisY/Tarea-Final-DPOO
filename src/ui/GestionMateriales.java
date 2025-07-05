@@ -121,7 +121,15 @@ public class GestionMateriales extends JFrame {
 					new String[] {
 							"Nombre", "u/medida", "Precio"
 					}
-					));
+					) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false; 
+				}
+			});
 		}
 		return tableMateriales;
 	}

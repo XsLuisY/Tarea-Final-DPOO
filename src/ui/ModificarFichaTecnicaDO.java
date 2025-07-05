@@ -43,8 +43,6 @@ import java.util.ArrayList;
 
 import javax.swing.JTextField;
 
-import utils.SeleccionarViviendas;
-
 public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaciones, AsignableMuebles, AsignableVivienda {	
 
 	private static ModificarFichaTecnicaDO modificarFichaTecnicaDO;
@@ -162,7 +160,15 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 			tableAfectaciones.setFillsViewportHeight(true);
 			tableAfectaciones.setForeground(Color.ORANGE);
 			tableAfectaciones.setBackground(Color.DARK_GRAY);
-			tableAfectaciones.setModel(new DefaultTableModel(new Object[][] {},new String[] { "Tipo", "Material", "Derrumbe", "Carga" }));			
+			tableAfectaciones.setModel(new DefaultTableModel(new Object[][] {},new String[] { "Tipo", "Material", "Derrumbe", "Carga" }) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false; 
+				}
+			});			
 		}
 		return tableAfectaciones;
 	}
@@ -230,7 +236,15 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 	public JTable getTableMuebles(){
 		if(tableMuebles==null){
 			tableMuebles = new JTable();
-			tableMuebles.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Mueble", "Cantidad"}));
+			tableMuebles.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Mueble", "Cantidad"}) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false; 
+				}
+			});
 			tableMuebles.setFillsViewportHeight(true);
 			tableMuebles.setForeground(Color.ORANGE);
 			tableMuebles.setBackground(Color.DARK_GRAY);
@@ -533,7 +547,7 @@ public class ModificarFichaTecnicaDO extends JFrame implements AsignableAfectaci
 				{																			
 					if(oficina.updateFichaTecnicaDO(ficha.getId(), vivienda)){									
 						JOptionPane.showMessageDialog(modificarFichaTecnicaDO , "Ficha Tecnica de Daños Ocacionados modificada exitosamente.");			            
-						gestion.updtTableFichas(oficina.getFichas());												
+						gestion.updtTableFichas();												
 						dispose();
 					} 
 				}
