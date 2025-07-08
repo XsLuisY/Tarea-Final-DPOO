@@ -1,6 +1,6 @@
 package clases;
 
-import interfaces.Identificable;
+import interfaces.Identificador;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class MICONS {
 	private static MICONS micons = null;
-	private static HashMap<UUID, Identificable> listaId = null;
+	private static HashMap<UUID, Identificador> listaId = null;
 	private static HashMap<Vivienda, Boolean> listaViviendaAsignada = null;
 	private ArrayList<OficinaTramites> oficinas;
 	private ArrayList<Vivienda> viviendas;
@@ -29,14 +29,14 @@ public class MICONS {
 	private MICONS(){
 		oficinas = new ArrayList<OficinaTramites>();
 		viviendas = new ArrayList<Vivienda>();		
-		listaId = new HashMap<UUID, Identificable>();
+		listaId = new HashMap<UUID, Identificador>();
 		listaViviendaAsignada = new HashMap<Vivienda, Boolean>();
 	}
 	//Encapsulamiento
 	public HashMap<Vivienda, Boolean> getListaViviendaAsignada(){
 		return listaViviendaAsignada;
 	}
-	public HashMap<UUID, Identificable> getListaId(){
+	public HashMap<UUID, Identificador> getListaId(){
 		return listaId;
 	}
 	public ArrayList<OficinaTramites> getOficinaTramites(){
@@ -99,6 +99,18 @@ public class MICONS {
 		OficinaTramites oficina= readOficinaTramites(consejoPopular);
 		if(oficina!=null){
 			oficinas.remove(oficina);
+			for(Material m : oficina.getMateriales())
+				listaId.remove(m.getId());
+			for(Plantilla p : oficina.getPlantillas())
+				listaId.remove(p.getId());
+			for(Cubicacion c : oficina.getCubicaciones())
+				listaId.remove(c.getId());
+			for(FichaTecnicaDO f : oficina.getFichas()){
+				for(Afectacion a: f.getAfectaciones())
+					listaId.remove(a.getId());
+				listaId.remove(f.getId());
+				listaViviendaAsignada.put(f.getVivienda(), false);				
+			}
 			del= true;
 		}
 		else throw new IllegalArgumentException("Esta OficinaTramites no existe");
@@ -172,41 +184,40 @@ public class MICONS {
 	//Anthony
 	// 1
 	public Map<String, Double> buscarAfectacionTipologiaConstructiva() {
-	  if(viviendas==null || viviendas.isEmpty())
-	    throw new IllegalArgumentException("Debe existir al menos una vivienda");
-	    else{
-		Map<String, Integer> conteoPorTipo = new LinkedHashMap<>();
-		String[] tipos = {"Tipo I", "Tipo II", "Tipo III", "Tipo IV", "Tipo V"};
-		for (String tipo : tipos) {
-			conteoPorTipo.put(tipo, 0);
-		}
-
-		int totalViviendas = viviendas.size();
-
-		for (Vivienda v : viviendas) {
-			String tipo = v.getTipologiaConstructiva();		      
-			conteoPorTipo.put(tipo, conteoPorTipo.get(tipo) + 1);		       
-		}
-
 		Map<String, Double> porcentajes = new LinkedHashMap<>();
-		for (String tipo : conteoPorTipo.keySet()) {
-			int cantidad = conteoPorTipo.get(tipo);
-			double porcentaje = totalViviendas > 0 ? (cantidad * 100.0) / totalViviendas : 0.0;
-			porcentajes.put(tipo, porcentaje);
+		if(viviendas==null || viviendas.isEmpty())
+			throw new IllegalArgumentException("Debe existir al menos una vivienda");
+		else{
+			Map<String, Integer> conteoPorTipo = new LinkedHashMap<>();
+			String[] tipos = {"Tipo I", "Tipo II", "Tipo III", "Tipo IV", "Tipo V"};
+			for (String tipo : tipos) {
+				conteoPorTipo.put(tipo, 0);
+			}
+
+			int totalViviendas = viviendas.size();
+
+			for (Vivienda v : viviendas) {
+				String tipo = v.getTipologiaConstructiva();		      
+				conteoPorTipo.put(tipo, conteoPorTipo.get(tipo) + 1);		       
+			}
+			for (String tipo : conteoPorTipo.keySet()) {
+				int cantidad = conteoPorTipo.get(tipo);
+				double porcentaje = totalViviendas > 0 ? (cantidad * 100.0) / totalViviendas : 0.0;
+				porcentajes.put(tipo, porcentaje);
+			}
 		}
-}
 		return porcentajes;
 	}
 
 
 	// 2
 	public ArrayList<Vivienda> buscarViviendasMasVulnerables(){
-	  if(viviendas==null || viviendas.isEmpty())
-	    throw new IllegalArgumentException("Debe existir al menos una vivienda");
-	    else{
 		ArrayList<Vivienda> vulnerables= new ArrayList<Vivienda>();
-		int mayor= 0;
-		int mayoraux;
+		if(viviendas==null || viviendas.isEmpty())
+			throw new IllegalArgumentException("Debe existir al menos una vivienda");
+		else{
+			int mayor= 0;
+			int mayoraux;
 			for(Vivienda v: viviendas){
 				mayoraux= v.getCantNinos()+v.getCantAncianos()+v.getCantEmbarazadas();
 				if (mayoraux > mayor) {
@@ -223,59 +234,48 @@ public class MICONS {
 	//Luis
 
 	//3.........................................
-	public Map<String, Integer> mostrarCantElementoAfectado(){	
-	  if(oficinas==null || oficinas.isEmpty())
-	     throw new IllegalArgumentException("Debe existir al menos una oficina de tramites");
-	     else 
-	        if(oficinas.getFichas()==null || oficinas.getFichas().isEmpty())
-	         throw new IllegalArgumentException("Debe existir al menos una ficha técnica");
-	         else
-	           if(oficinas.getFichas().getAfectaciones()==null || oficinas.getFichas().getAfectaciones().isEmpty())
-	           throw new IllegalArgumentException("Debe existir al menos una afectacion");
-	           else{
+	public Map<String, Integer> mostrarCantElementoAfectado(){
 		Map<String, Integer> totalPorAfectacion = new HashMap<>();
-
 		totalPorAfectacion.put("AfectacionPared", 0);
 		totalPorAfectacion.put("AfectacionTecho", 0);
-
-		for (OficinaTramites o : micons.getOficinaTramites()) 
-			for (FichaTecnicaDO f : o.getFichas())	    
-				for (Afectacion a : f.getAfectaciones()){
-					String tipo = a.getClass().getSimpleName();
-					int cantidad = totalPorAfectacion.getOrDefault(tipo, 0);
-					totalPorAfectacion.put(tipo, cantidad + 1);  
-				}				
-	    }
+		if(micons.getOficinaTramites()==null || micons.getOficinaTramites().isEmpty())
+			throw new IllegalArgumentException("Debe existir al menos una oficina de tramites");
+		else
+			for (OficinaTramites o : micons.getOficinaTramites())
+				for (FichaTecnicaDO f : o.getFichas())
+					for (Afectacion a : f.getAfectaciones()){
+						String tipo = a.getClass().getSimpleName();
+						int cantidad = totalPorAfectacion.getOrDefault(tipo, 0);
+						totalPorAfectacion.put(tipo, cantidad + 1);  
+					}				
 		return totalPorAfectacion;
 	}
 
 	//4.........................................
 
 	public ArrayList<Cubicacion> mostrarMaterialMasCaro(){
-	  if(oficinas==null || oficinas.isEmpty())
-	     throw new IllegalArgumentException("Debe existir al menos una oficina de tramites");
-	     else{
 		double costoM=0;			
 		double auxCostoM;
 		ArrayList<Cubicacion> cubicaciones = new ArrayList<Cubicacion>();
 		ArrayList<Cubicacion> auxCubicaciones = new ArrayList<Cubicacion>();
+		if(micons.getOficinaTramites()==null || micons.getOficinaTramites().isEmpty())
+			throw new IllegalArgumentException("Debe existir al menos una oficina de tramites");
+		else
+			for (OficinaTramites o : oficinas) {
+				auxCubicaciones = o.buscarCubicacionesMayorCosto();
 
-		for (OficinaTramites o : oficinas) {
-			auxCubicaciones = o.buscarCubicacionesMayorCosto();
+				if (!auxCubicaciones.isEmpty()) {
+					auxCostoM = auxCubicaciones.get(0).calcularPrecioTotal();
 
-			if (!auxCubicaciones.isEmpty()) {
-				auxCostoM = auxCubicaciones.get(0).calcularPrecioTotal();
-
-				if (auxCostoM > costoM) {
-					costoM = auxCostoM;
-					cubicaciones.clear();
-					cubicaciones.addAll(auxCubicaciones); 
-				} else if (auxCostoM == costoM) {
-					cubicaciones.addAll(auxCubicaciones);
+					if (auxCostoM > costoM) {
+						costoM = auxCostoM;
+						cubicaciones.clear();
+						cubicaciones.addAll(auxCubicaciones); 
+					} else if (auxCostoM == costoM) {
+						cubicaciones.addAll(auxCubicaciones);
+					}
 				}
 			}
-		}
-	 }
 		return cubicaciones;
 	}
 
@@ -302,9 +302,9 @@ public class MICONS {
 		viviendas.add(new Vivienda("Ernesto","03061545181","Calle Fernanda entre C y B","Usufructo","Apartamento","Tipo III",true,4,4,3,1,0,1,3));
 		viviendas.add(new Vivienda("Diana","02092317632","Calle A entre D y C","Arrendamiento","Otro","Tipo IV",false,4,5,3,3,0,0,8));
 		viviendas.add(new Vivienda("Ana","01120564637","Calle Balear entre Piedra y Soto","Providencia","Bohio","Tipo V",false,4,7,2,2,0,1,7));		
-		viviendas.add(new Vivienda("Pedro P�rez", "04012166621","Calle 12 123", "Propiedad", "Casa", "Tipo II", true, 7, 6, 3, 1, 1, 0,3));
-		viviendas.add(new Vivienda( "Carlos D�az", "90031212345","Calle Mart� 89", "Usufructo", "Casa", "Tipo I",false, 7.5, 4.5, 3, 1, 0, 1,5));
-		viviendas.add(new Vivienda( "Luisa G�mez", "88020312345", "Ave 51 456","Arrendamiento", "Apartamento", "Tipo III",false, 8.0,4, 3, 0, 2, 0, 4));
+		viviendas.add(new Vivienda("Pedro Perez", "04012166621","Calle 12 123", "Propiedad", "Casa", "Tipo II", true, 7, 6, 3, 1, 1, 0,3));
+		viviendas.add(new Vivienda( "Carlos Diaz", "90031212345","Calle Martin 89", "Usufructo", "Casa", "Tipo I",false, 7.5, 4.5, 3, 1, 0, 1,5));
+		viviendas.add(new Vivienda( "Luisa Gomez", "88020312345", "Ave 51 456","Arrendamiento", "Apartamento", "Tipo III",false, 8.0,4, 3, 0, 2, 0, 4));
 		for(Vivienda v: viviendas)
 			MICONS.getMICONS().getListaViviendaAsignada().put(v, false);
 	}

@@ -92,7 +92,15 @@ public class MostrarCubicacion extends JFrame {
 			tableCubicacion.setBackground(Color.DARK_GRAY);
 			tableCubicacion.setForeground(Color.ORANGE);
 			tableCubicacion.setFillsViewportHeight(true);
-			tableCubicacion.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Nombre", "u/medida", "Precio unitario", "Cantidad", "Precio Total"}));
+			tableCubicacion.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Nombre", "u/medida", "Precio unitario", "Cantidad", "Precio Total"}) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false; 
+				}
+			});
 		}
 		return tableCubicacion;
 	}

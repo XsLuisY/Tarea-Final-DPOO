@@ -1,5 +1,7 @@
-/auxiliares
 /clases
 /interfaces
+/org
+/reportes
 /runner
 /ui
+/utils

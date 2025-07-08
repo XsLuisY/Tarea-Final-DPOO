@@ -1,5 +1,5 @@
 package clases;
-import interfaces.Identificable;
+import interfaces.Identificador;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -8,7 +8,7 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 
 
-public class FichaTecnicaDO implements Identificable{
+public class FichaTecnicaDO implements Identificador{
 	//Atributos
 	private static final String TECHO = "Techo";
 	private static final String PARED = "Pared";

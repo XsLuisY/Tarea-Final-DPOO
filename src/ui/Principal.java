@@ -37,7 +37,6 @@ public class Principal extends JFrame {
 
 	private static Principal principal;
 	private MICONS micons;
-	private ImageIcon fondo = new ImageIcon(getClass().getResource("/images/fondo.jpeg"));
 	private JPanel contentPane;
 
 	private JMenuBar barraSuperior;

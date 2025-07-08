@@ -1,6 +1,6 @@
 package clases;
 
-import interfaces.Identificable;
+import interfaces.Identificador;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 

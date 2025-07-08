@@ -1,7 +1,7 @@
-package clases;
+8package clases;
 
 
-import interfaces.Identificable;
+import interfaces.Identificador;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class OficinaTramites{
 	//Encapsulamiento
 	public void setConsejoPopular(String consejoPopular){
 		if(consejoPopular!=null && !consejoPopular.trim().isEmpty())
-			if(consejoPopular.matches("[a-zA-Z·ÈÌÛ˙¡…Õ”⁄Ò— ]+"))
+			if(consejoPopular.matches("[a-zA-Z√°√©√≠√≥√∫√Å√â√ç√ì√ö√±√ë ]+"))
 				this.consejoPopular=consejoPopular.trim().replaceAll("\\s+", " ");		
 			else throw new IllegalArgumentException("El nombre del Consejo Popular no puede contener numeros o caracteres no validos.");
 		else throw new NullPointerException("El nombre del Consejo Popular no puede estar vacio.");
@@ -58,20 +58,27 @@ public class OficinaTramites{
 			dictamenes.put(new FichaTecnicaDO(vivienda, afectaciones, muebles), null); 			
 			MICONS.getMICONS().getListaViviendaAsignada().put(vivienda, true);
 			add=true;
-		} else throw new IllegalArgumentException("Esta vivienda ya tiene una Ficha Tecnica de DaÒos Ocacionados asociada");
+		} else throw new IllegalArgumentException("Esta vivienda ya tiene una Ficha Tecnica de Da√±os Ocacionados asociada");
 
 		return add;
 	}
+
+	public boolean addFichaTecnicaDO(FichaTecnicaDO f) {
+		if(f!=null)
+			dictamenes.put(f, null);
+		else throw new NullPointerException("La ficha no puede ser null");
+		return true;
+	}
 	/*Read*/ public FichaTecnicaDO readFichaTecnicaDO(UUID id){	
-		Identificable ficha=MICONS.getMICONS().getListaId().get(id);
+		Identificador ficha=MICONS.getMICONS().getListaId().get(id);
 
 		if(!(ficha instanceof FichaTecnicaDO))
-			throw new ClassCastException("Este ID ("+id.toString()+") no est· asignado a una Ficha Tecnica de DaÒos Ocacionados.");
+			throw new ClassCastException("Este ID ("+id.toString()+") no est√° asignado a una Ficha Tecnica de Da√±os Ocacionados.");
 
 		return (FichaTecnicaDO) ficha; 			
 	}
 	/*Update*/ public Boolean updateFichaTecnicaDO(UUID id, Vivienda vivienda){
-		//TODO Validar si la vivienda ya est· asignada
+		//TODO Validar si la vivienda ya est√° asignada
 		Boolean updt=false;
 		FichaTecnicaDO ficha = readFichaTecnicaDO(id);
 
@@ -81,7 +88,7 @@ public class OficinaTramites{
 
 			updt=true;
 		}
-		else throw new IllegalArgumentException("Esta vivienda ya tiene una Ficha Tecnica de DaÒos Ocacionados asignada");		
+		else throw new IllegalArgumentException("Esta vivienda ya tiene una Ficha Tecnica de Da√±os Ocacionados asignada");		
 		return updt;
 	}	
 	/*Delete*/ public void deleteFichaTecnicaDO(UUID id){
@@ -104,15 +111,15 @@ public class OficinaTramites{
 			MICONS.getMICONS().getListaId().put(dictamenes.get(ficha).getId(), dictamenes.get(ficha));
 			add=true;
 		}
-		else throw new NullPointerException("La Ficha Tecnica de DaÒos Ocacionados esta vacia.");
+		else throw new NullPointerException("La Ficha Tecnica de Da√±os Ocacionados esta vacia.");
 
 		return add;
 	}
 	/*Read*/ public Cubicacion readCubicacion(UUID id){
-		Identificable cubicacion=MICONS.getMICONS().getListaId().get(id);
+		Identificador cubicacion=MICONS.getMICONS().getListaId().get(id);
 
 		if(!(cubicacion instanceof Cubicacion))
-			throw new ClassCastException("Este ID ("+id.toString()+") no est· asignado a ninguna Cubicacion.");
+			throw new ClassCastException("Este ID ("+id.toString()+") no est√° asignado a ninguna Cubicacion.");
 
 		return (Cubicacion) cubicacion; 			
 	}
@@ -150,9 +157,9 @@ public class OficinaTramites{
 		return add;
 	}
 	/*Read*/ public Material readMaterial(UUID id){
-		Identificable material=MICONS.getMICONS().getListaId().get(id);
+		Identificador material=MICONS.getMICONS().getListaId().get(id);
 		if(!(material instanceof Material))
-			throw new ClassCastException("Este ID ("+id.toString()+") no est· asignado a ningun material.");
+			throw new ClassCastException("Este ID ("+id.toString()+") no est√° asignado a ningun material.");
 		return (Material) material; 	
 
 	}
@@ -216,9 +223,9 @@ public class OficinaTramites{
 		return add;
 	}
 	/*Read*/ public Plantilla readPlantilla(UUID id){
-		Identificable plantilla=MICONS.getMICONS().getListaId().get(id);
+		Identificador plantilla=MICONS.getMICONS().getListaId().get(id);
 		if(!(plantilla instanceof Plantilla))
-			throw new ClassCastException("Este ID ("+id.toString()+") no est· asignado a una Plantilla.");
+			throw new ClassCastException("Este ID ("+id.toString()+") no est√° asignado a una Plantilla.");
 		return (Plantilla) plantilla; 	
 
 	}
@@ -285,10 +292,10 @@ public class OficinaTramites{
 		double cantidad = 1.0;
 
 		//TODO: Arreglar asignacion 
-		if (a instanceof AfectacionTecho)   // AproximaciÛn de techo 
+		if (a instanceof AfectacionTecho)   // Aproximaci√≥n de techo 
 			cantidad = Math.ceil(area / 2); 
 		else
-			cantidad = Math.ceil((area * 2.5) / 10); // AproximaciÛn de pared
+			cantidad = Math.ceil((area * 2.5) / 10); // Aproximaci√≥n de pared
 
 		return cantidad;
 	}
@@ -363,5 +370,10 @@ public class OficinaTramites{
 		}				
 
 	}
+
+	public HashMap<FichaTecnicaDO, Cubicacion> getDictamenes() {
+		return dictamenes;
+	}
+
 
 }

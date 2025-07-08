@@ -121,7 +121,15 @@ public class GestionPlantillas extends JFrame {
 			tablePlantillas.setForeground(Color.ORANGE);
 			tablePlantillas.setFillsViewportHeight(true);
 			tablePlantillas.setBackground(Color.DARK_GRAY);
-			tablePlantillas.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Dirección","Fecha Levantamiento", "ID", "Precio Total"}));
+			tablePlantillas.setModel(new DefaultTableModel(new Object[][] {},new String[] {"Dirección","Fecha Levantamiento", "ID", "Precio Total"}) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false; 
+				}
+			});
 			tablePlantillas.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					if (e.getClickCount() == 2) 

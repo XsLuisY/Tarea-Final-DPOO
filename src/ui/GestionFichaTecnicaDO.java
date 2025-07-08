@@ -9,6 +9,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JPopupMenu;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent; 
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -23,11 +25,13 @@ import javax.swing.table.DefaultTableModel;
 
 import clases.FichaTecnicaDO;
 import clases.MICONS;
+import clases.Mueble;
 import clases.OficinaTramites;
 import clases.Vivienda;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -65,11 +69,10 @@ public class GestionFichaTecnicaDO extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 400, 300);
 		this.oficina=oficina;
-		fichas=oficina.getFichas();
 		setJMenuBar(getBarraSuperior());
 		setContentPane(getContentPane());
 		addPopup(getTableFichas(), getPopupMenu());
-		updtTableFichas(fichas);
+		updtTableFichas();
 	}
 
 	//Atributos
@@ -128,7 +131,15 @@ public class GestionFichaTecnicaDO extends JFrame {
 					new String[] {
 							"Direcci\u00F3n", "Fecha Levantamiento","ID"
 					}
-					));
+					) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false; 
+				}
+			});
 		}
 		return tableFichas;
 	}
@@ -228,30 +239,52 @@ public class GestionFichaTecnicaDO extends JFrame {
 		}
 		return f;
 	}
-	public void updtTableFichas(ArrayList<FichaTecnicaDO> fichas) {
-		DefaultTableModel model = (DefaultTableModel) getTableFichas().getModel();
-		model.setRowCount(0);
 
-		for(FichaTecnicaDO f:  fichas){//TODO Revisar asignacion de direccion
-			String direccion = (f.getVivienda() != null) ? f.getVivienda().getDireccion() : "Sin direcci�n";
-			Date fechaLevantamiento=f.getFechaLevantamiento();
-			Object[] newRow = new Object[]{direccion, fechaLevantamiento.getDate()+"/"+fechaLevantamiento.getMonth()+"/"+fechaLevantamiento.getYear(), f.getId()};
-			model.addRow(newRow);			
-		}
-		getTableFichas().setModel(model);
+	public void updtTableFichas() { 
+	    	    this.fichas = oficina.getFichas(); 
+
+	    DefaultTableModel model = (DefaultTableModel) getTableFichas().getModel();
+	    model.setRowCount(0); 
+
+	    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+	    for (FichaTecnicaDO f : fichas) {
+	        String direccion = (f.getVivienda() != null) ? f.getVivienda().getDireccion() : "Sin dirección";
+	        String fechaFormateada = sdf.format(f.getFechaLevantamiento());
+	        Object[] newRow = new Object[]{direccion, fechaFormateada, f.getId().toString()};
+	        model.addRow(newRow);
+	    }
 	}
 
 	public void addFichaTecnicaDO(){					
-		new CrearFichaTecnicaDO(gestionFichaTecnicaDO , oficina).setVisible(true);					
-	}	
-	public void modFichaTecnicaDO(){
-		FichaTecnicaDO f = getSelectedFichaTecnicaDO();
+		CrearFichaTecnicaDO crearForm = CrearFichaTecnicaDO.getCrearFichaTecnicaDO(gestionFichaTecnicaDO , oficina);
+		 crearForm.setVisible(true);
+		 crearForm.addWindowListener(new WindowAdapter() {
+		        @Override
+		        public void windowClosed(WindowEvent e) {
+		            updtTableFichas(); 
+		        }
+		    });								
+}	
 
-		if(f!=null)					
-			ModificarFichaTecnicaDO.getModificarFichaTecnicaDO(gestionFichaTecnicaDO, oficina, f).setVisible(true);
-		else 
-			JOptionPane.showMessageDialog(gestionFichaTecnicaDO, "Debe seleccionar una Ficha Tecnica de Da�os Ocacionados para modificar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+	public void modFichaTecnicaDO(){
+	    FichaTecnicaDO f = getSelectedFichaTecnicaDO();
+
+	    if(f!=null) {
+	        ModificarFichaTecnicaDO modForm = ModificarFichaTecnicaDO.getModificarFichaTecnicaDO(gestionFichaTecnicaDO, oficina, f);
+	        modForm.setVisible(true);
+	        
+	        modForm.addWindowListener(new WindowAdapter() {
+	            @Override
+	            public void windowClosed(WindowEvent e) {
+	                updtTableFichas(); 
+	            }
+	        });
+	    } else {
+	        JOptionPane.showMessageDialog(gestionFichaTecnicaDO, "Debe seleccionar una Ficha Tecnica de Daños Ocasionados para modificar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+	    }
 	}
+
 	public void showFichaTecnicaDO(){
 		FichaTecnicaDO f = getSelectedFichaTecnicaDO();
 		if (f != null)				
@@ -260,25 +293,30 @@ public class GestionFichaTecnicaDO extends JFrame {
 			JOptionPane.showMessageDialog(gestionFichaTecnicaDO, "Debes seleccionar una FTDO para mostrar.", "Aviso", JOptionPane.WARNING_MESSAGE);						
 	}
 	public void deleteFichaTecnicaDO(){
-		FichaTecnicaDO f = getSelectedFichaTecnicaDO();
-		if(f!=null){
-			int confirmar = JOptionPane.showConfirmDialog(GestionFichaTecnicaDO.this,"�Seguro que deseas eliminar esta FTDO?","Confirmar eliminaci�n",JOptionPane.YES_NO_OPTION);
+	    FichaTecnicaDO f = getSelectedFichaTecnicaDO();
+	    if(f!=null){
+	        int confirmar = JOptionPane.showConfirmDialog(GestionFichaTecnicaDO.this,"¿Seguro que deseas eliminar esta FTDO?","Confirmar eliminación",JOptionPane.YES_NO_OPTION);
 
-			if (confirmar == JOptionPane.YES_OPTION) {
-				try{
-					oficina.deleteFichaTecnicaDO(f.getId());
-					JOptionPane.showMessageDialog(gestionFichaTecnicaDO, "Ficha Tecnica de Da�os Ocacionados  eliminada con exito.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-					updtTableFichas(oficina.getFichas());
-				}catch(Exception e){
-					JOptionPane.showMessageDialog(gestionFichaTecnicaDO, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		}else 
-			JOptionPane.showMessageDialog(null, "Debe seleccionar una Ficha Tecnica de Da�os Ocacionados para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+	        if (confirmar == JOptionPane.YES_OPTION) {
+	            try{
+	                oficina.deleteFichaTecnicaDO(f.getId());
+	                JOptionPane.showMessageDialog(gestionFichaTecnicaDO, "Ficha Tecnica de Daños Ocasionados eliminada con exito.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+	                updtTableFichas(); // Llamada sin parámetros
+	            }catch(Exception e){
+	                JOptionPane.showMessageDialog(gestionFichaTecnicaDO, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+	            }
+	        }
+	    }else 
+	        JOptionPane.showMessageDialog(null, "Debe seleccionar una Ficha Tecnica de Daños Ocasionados para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 	}
+
 	public void regresar(){
 		dispose();
 		GestionOficinaTramites.getGestionOficinaTramites().setVisible(true);	
+	}
+
+	public OficinaTramites getOficina() {
+		return oficina;
 	}
 }
 

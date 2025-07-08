@@ -1,11 +1,11 @@
 package clases;
 import java.util.UUID;
 
-import interfaces.Identificable;
+import interfaces.Identificador;
 
 
 
-public abstract class Afectacion implements Identificable{
+public abstract class Afectacion implements Identificador{
 	//Atributos
 	protected Boolean esDerrumbeTotal;
 	protected String materialPredominante;

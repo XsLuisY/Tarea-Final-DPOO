@@ -1,11 +1,11 @@
 package clases;
 
-import interfaces.Identificable;
+import interfaces.Identificador;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Cubicacion implements Identificable{
+public class Cubicacion implements Identificador{
 
 	//Atributos	
 	private ArrayList<MaterialACubicar> materiales;
