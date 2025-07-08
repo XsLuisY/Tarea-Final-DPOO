@@ -88,16 +88,8 @@ public class CrearVivienda extends JFrame {
 
 	private JButton btnEnviar;
 
-	//Singleton
-	public static CrearVivienda getCrearVivienda(GestionViviendas gestion){
-		if(crearVivienda==null
-				|| !crearVivienda.gestion.equals(gestion))
-			crearVivienda=new CrearVivienda(gestion);
-		return crearVivienda;
-	}
-
 	//Constructor
-	private CrearVivienda(GestionViviendas gestion) {
+	public CrearVivienda(GestionViviendas gestion) {
 		//FIX: posible error a la hora de rectificar el nombre, eliminado: this.gestionV= gestionV;
 		vivienda= new Vivienda();
 		setType(Type.UTILITY);

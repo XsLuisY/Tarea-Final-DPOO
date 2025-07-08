@@ -55,17 +55,9 @@ public class CrearAfectacion extends JFrame{
 
 	private JButton btnAgregar;
 
-	//Singleton
-	public static CrearAfectacion getCrearAfectacion(AsignableAfectaciones gestion, FichaTecnicaDO ficha){
-		if(crearAfectacion==null 
-				|| !crearAfectacion.gestion.equals(gestion)
-				|| !crearAfectacion.ficha.equals(ficha))
-			crearAfectacion=new CrearAfectacion(gestion, ficha);
-		return crearAfectacion;
-	}
-
+	
 	//Constructor
-	private CrearAfectacion(AsignableAfectaciones gestion, FichaTecnicaDO ficha) {
+	public CrearAfectacion(AsignableAfectaciones gestion, FichaTecnicaDO ficha) {
 		setAlwaysOnTop(true);
 		setResizable(false);
 		setUndecorated(true);

@@ -34,6 +34,9 @@ public class OficinaTramites{
 	public String getConsejoPopular(){
 		return consejoPopular;		
 	}	
+	public HashMap<FichaTecnicaDO, Cubicacion>  getDictamenes(){
+		return dictamenes;
+	}
 	public ArrayList<FichaTecnicaDO> getFichas(){
 		return new ArrayList<FichaTecnicaDO>(dictamenes.keySet());
 	}
@@ -52,7 +55,7 @@ public class OficinaTramites{
 		Boolean add=false;
 
 		if(!MICONS.getMICONS().getListaViviendaAsignada().get(vivienda)){
-			dictamenes.put(new FichaTecnicaDO(vivienda, afectaciones, muebles), null);
+			dictamenes.put(new FichaTecnicaDO(vivienda, afectaciones, muebles), null); 			
 			MICONS.getMICONS().getListaViviendaAsignada().put(vivienda, true);
 			add=true;
 		} else throw new IllegalArgumentException("Esta vivienda ya tiene una Ficha Tecnica de Daños Ocacionados asociada");
@@ -82,7 +85,7 @@ public class OficinaTramites{
 		if(!MICONS.getMICONS().getListaViviendaAsignada().get(vivienda) || ficha.getVivienda().equals(vivienda)){
 			MICONS.getMICONS().getListaViviendaAsignada().put(ficha.getVivienda(), false);
 			ficha.setVivienda(vivienda);
-	
+
 			updt=true;
 		}
 		else throw new IllegalArgumentException("Esta vivienda ya tiene una Ficha Tecnica de Daños Ocacionados asignada");		
@@ -165,12 +168,12 @@ public class OficinaTramites{
 		Material m = readMaterial(id);
 		if(m!=null)
 			if(!existMaterial(nombre, unidadMedida, precioUnitario)){
-			m.setNombre(nombre);
-			m.setPrecioUnitario(precioUnitario);
-			m.setUnidadMedida(unidadMedida);	
-			updt=true;
+				m.setNombre(nombre);
+				m.setPrecioUnitario(precioUnitario);
+				m.setUnidadMedida(unidadMedida);	
+				updt=true;
 			}else throw new IllegalArgumentException("Este material ya existe");
-			else throw new IllegalArgumentException("Este material no existe");
+		else throw new IllegalArgumentException("Este material no existe");
 		return updt;
 	}	
 	/*Delete*/ public void deleteMaterial(UUID id){

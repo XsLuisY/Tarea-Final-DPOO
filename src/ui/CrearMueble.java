@@ -40,17 +40,8 @@ public class CrearMueble extends JFrame {
 	private JSpinner spinnerCantidad; 
 	private JButton buttonAgregar;
 
-	//Singleton
-	public static CrearMueble getCrearMueble(AsignableMuebles gestion, FichaTecnicaDO ficha){
-		if(crearMueble==null
-				|| !crearMueble.gestion.equals(gestion)
-				|| !crearMueble.ficha.equals(ficha))
-			crearMueble=new CrearMueble(gestion,ficha);
-		return crearMueble;
-	}
-
 	//Constructor
-	private CrearMueble(AsignableMuebles gestion, FichaTecnicaDO ficha) {
+	public CrearMueble(AsignableMuebles gestion, FichaTecnicaDO ficha) {
 		this.gestion=gestion;
 		this.ficha=ficha;
 
